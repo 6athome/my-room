@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V3.3</title>
+<title>MY ROOM V3.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V3.3 — retention + participation layers */
+/* V3.4 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V3.3 local account/save prototype */
+/* V3.4 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V3.3 visitor-first flow */
+/* V3.4 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V3.3 — actual mini-home room */
+/* V3.4 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V3.3 — MBTI room showcase + stronger character presence */
+/* V3.4 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V3.3 — restore original V0.7 character language */
+/* V3.4 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V3.3 — MBTI personality room details */
+/* V3.4 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -961,7 +961,7 @@ body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
-/* V3.3 core polish */
+/* V3.4 core polish */
 .owner-avatar-stage{
   left:50%;bottom:48px;width:118px;height:168px;
   transform:translateX(-50%);transform-origin:bottom center;
@@ -1006,7 +1006,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .room-scene{min-height:330px}
 
 
-/* V3.3 — distinct 16 MBTI silhouettes */
+/* V3.4 — distinct 16 MBTI silhouettes */
 .owner-avatar-stage .pixel-person{
   transform:scale(.58)!important; /* approx 0.8x from previous .72 */
   transform-origin:bottom center!important;
@@ -1104,7 +1104,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .character-review-grid button{border:1px solid #111;border-radius:8px;background:#fff;padding:6px 2px;font-size:8px;font-weight:850}
 .character-review-grid button.on{background:#111;color:#fff}
 
-/* V3.3 character differentiation */
+/* V3.4 character differentiation */
 .pixel-person.mbti-INTJ .pixel-body{background:#20242B!important}
 .pixel-person.mbti-INTJ .pixel-leg{background:#B9C7FF!important}
 .pixel-person.mbti-INTP .pixel-body{background:#4B6CB7!important}
@@ -1156,7 +1156,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .pixel-person.hook-heart::after{font-size:29px!important}
 
 
-/* V3.3 — final 16 MBTI code-drawn chibi characters */
+/* V3.4 — final 16 MBTI code-drawn chibi characters */
 .pixel-person{display:none!important}
 .svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
 .svg-avatar svg{width:104px;height:150px;overflow:visible}
@@ -1182,7 +1182,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .shared-special-actions .primary-action{background:#111;color:#fff}
 
 
-/* V3.3 — test-friendly auth */
+/* V3.4 — test-friendly auth */
 .email-auth-box{margin-top:10px;padding-top:10px;border-top:1px dashed #bbb}
 .email-auth-box input{
   width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:10px;
@@ -1201,6 +1201,223 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   font-size:8px;font-weight:900
 }
 
+
+/* V3.4 — character visibility repair */
+#profileAvatarCard{
+  display:block!important;
+  position:relative!important;
+  width:120px!important;
+  height:180px!important;
+  overflow:visible!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+#profileAvatarCard .svg-avatar{
+  display:flex!important;
+  position:relative!important;
+  width:120px!important;
+  height:180px!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+#profileAvatarCard .svg-avatar svg{
+  display:block!important;
+  width:92px!important;
+  height:148px!important;
+  overflow:visible!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+.visitor-character{
+  overflow:visible!important;
+}
+.visitor-character .svg-avatar{
+  display:flex!important;
+  position:absolute!important;
+  left:50%!important;
+  bottom:8px!important;
+  width:70px!important;
+  height:90px!important;
+  transform:translateX(-50%) scale(.54)!important;
+  transform-origin:bottom center!important;
+  overflow:visible!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+
+/* V3.4 — landing default character + existing account link */
+.landing-avatar{
+  width:100%;height:170px;display:flex;align-items:flex-end;justify-content:center;
+  margin:2px 0 8px;overflow:visible
+}
+.landing-char{position:relative;width:92px;height:152px}
+.landing-char .lc-head{
+  position:absolute;left:25px;top:23px;width:43px;height:43px;border-radius:46% 46% 44% 44%;
+  background:#f1c4a7;border:2.5px solid #171717;z-index:3
+}
+.landing-char .lc-hair{
+  position:absolute;left:22px;top:15px;width:49px;height:31px;border-radius:48% 52% 35% 35%;
+  background:#27231f;border:2.5px solid #171717;z-index:4
+}
+.landing-char .lc-hair:after{
+  content:"";position:absolute;left:4px;right:4px;bottom:-7px;height:15px;
+  background:#27231f;clip-path:polygon(0 0,17% 55%,32% 15%,49% 62%,64% 18%,82% 58%,100% 0,100% 28%,0 28%)
+}
+.landing-char .lc-eye{
+  position:absolute;top:42px;width:3.5px;height:3.5px;background:#171717;border-radius:50%;z-index:5
+}
+.landing-char .lc-eye.e1{left:39px}.landing-char .lc-eye.e2{left:54px}
+.landing-char .lc-body{
+  position:absolute;left:25px;top:67px;width:43px;height:51px;border:2.5px solid #171717;
+  border-radius:12px 12px 7px 7px;background:#1f1f1f;z-index:2
+}
+.landing-char .lc-arm{
+  position:absolute;top:74px;width:12px;height:42px;background:#f1c4a7;border:2.5px solid #171717;border-radius:7px;z-index:1
+}
+.landing-char .lc-arm.a1{left:15px;transform:rotate(8deg)}.landing-char .lc-arm.a2{right:13px;transform:rotate(-8deg)}
+.landing-char .lc-leg{
+  position:absolute;top:115px;width:15px;height:30px;background:#ded7ce;border:2.5px solid #171717;z-index:1
+}
+.landing-char .lc-leg.l1{left:30px}.landing-char .lc-leg.l2{left:51px}
+.landing-char .lc-shoe{
+  position:absolute;top:141px;width:19px;height:9px;background:#222;border:2.5px solid #171717;border-radius:4px
+}
+.landing-char .lc-shoe.s1{left:27px}.landing-char .lc-shoe.s2{left:50px}
+.existing-login-link{
+  margin-top:10px;text-align:center;font-size:10px;color:#666
+}
+.existing-login-link button{
+  border:0;background:transparent;padding:2px 4px;text-decoration:underline;
+  color:#111;font-size:10px;font-weight:850;cursor:pointer
+}
+
+
+/* V3.4 — simple pixel default character on landing */
+.landing-avatar{
+  width:100%;
+  height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:4px 0 10px;
+  overflow:visible;
+}
+.pixel-default-char{
+  position:relative;
+  width:118px;
+  height:210px;
+}
+.pixel-default-char *{box-sizing:border-box}
+.pdc-hair{
+  position:absolute;
+  left:24px;
+  top:14px;
+  width:70px;
+  height:56px;
+  background:#111;
+  box-shadow:
+    -10px 10px 0 #111,
+    10px 10px 0 #111,
+    0 -8px 0 #111;
+  z-index:4;
+}
+.pdc-ear{
+  position:absolute;
+  top:52px;
+  width:14px;
+  height:34px;
+  background:#171717;
+  z-index:3;
+}
+.pdc-ear.left{left:16px}
+.pdc-ear.right{right:16px}
+.pdc-face{
+  position:absolute;
+  left:32px;
+  top:44px;
+  width:54px;
+  height:54px;
+  background:#efb180;
+  border:6px solid #111;
+  z-index:5;
+}
+.pdc-eye{
+  position:absolute;
+  top:18px;
+  width:6px;
+  height:16px;
+  background:#111;
+}
+.pdc-eye.e1{left:13px}
+.pdc-eye.e2{right:13px}
+.pdc-body{
+  position:absolute;
+  left:28px;
+  top:96px;
+  width:62px;
+  height:66px;
+  background:#151515;
+  border:6px solid #111;
+  z-index:3;
+}
+.pdc-leg{
+  position:absolute;
+  top:158px;
+  width:28px;
+  height:42px;
+  background:#171717;
+  border:6px solid #111;
+  z-index:2;
+}
+.pdc-leg.l1{left:29px}
+.pdc-leg.l2{right:29px}
+.pdc-shoe{
+  position:absolute;
+  top:194px;
+  width:39px;
+  height:14px;
+  background:#111;
+  z-index:2;
+}
+.pdc-shoe.s1{left:19px}
+.pdc-shoe.s2{right:19px}
+
+/* existing-account entry */
+.existing-login-link{
+  margin-top:10px;
+  text-align:center;
+  font-size:10px;
+  color:#777;
+}
+.existing-login-link button{
+  border:0;
+  background:transparent;
+  padding:2px 4px;
+  text-decoration:underline;
+  color:#111;
+  font-size:10px;
+  font-weight:850;
+  cursor:pointer;
+}
+
+
+.hero-blob{position:relative}
+.hero-blob:before,.hero-blob:after{
+  content:"✦";
+  position:absolute;
+  font-size:18px;
+  font-weight:900;
+  color:#111;
+  z-index:2;
+}
+.hero-blob:before{left:28%;top:29%}
+.hero-blob:after{right:18%;top:23%}
+
 </style>
 </head>
 <body>
@@ -1211,7 +1428,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V3.3</div>
+    <div class="micro">V3.4</div>
   </div>
 
   <div class="hero-blob">
@@ -1252,7 +1469,26 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <p class="lead">디자인은 고르지 않아도 돼요.<br>MBTI에 따라 캐릭터의 행동과 ROOM 내용도 달라져요.</p>
 
   <div class="form-card">
-    <div class="field">
+    
+<div class="landing-avatar" aria-hidden="true">
+  <div class="pixel-default-char">
+    <div class="pdc-hair"></div>
+    <div class="pdc-ear left"></div>
+    <div class="pdc-ear right"></div>
+    <div class="pdc-face">
+      <span class="pdc-eye e1"></span>
+      <span class="pdc-eye e2"></span>
+    </div>
+    <div class="pdc-body"></div>
+    <div class="pdc-leg l1"></div>
+    <div class="pdc-leg l2"></div>
+    <div class="pdc-shoe s1"></div>
+    <div class="pdc-shoe s2"></div>
+  </div>
+</div>
+</div>
+
+<div class="field">
       <label>닉네임</label>
       <input id="ownerName" value="JISU" maxlength="12">
     </div>
@@ -1267,6 +1503,11 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     </div>
   </div>
   <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
+<div class="existing-login-link">
+  이미 계정이 있나요?
+  <button type="button" onclick="openExistingLogin()">로그인하기</button>
+</div>
+
   <p class="hint">ROOM을 만들면 이 브라우저에 자동으로 임시 저장돼요.</p>
 </section>
 
@@ -1622,6 +1863,18 @@ function currentRedirectUrl(){
 }
 
 
+
+function openExistingLogin(){
+  const modal=document.getElementById("loginModal");
+  if(modal){
+    modal.classList.add("show");
+    const title=modal.querySelector("h3");
+    const desc=modal.querySelector("p");
+    if(title) title.innerHTML="이미 계정이 있나요?<br>로그인해 주세요.";
+    if(desc) desc.textContent="기존 ROOM이 있다면 로그인 후 바로 내 ROOM으로 이동해요.";
+  }
+}
+
 function emailAuthMessage(msg,isError=false){
   const el=document.getElementById("emailAuthMsg");
   if(!el) return;
@@ -1745,10 +1998,16 @@ function syncRealAuthUI(){
 }
 
 function startRealSave(){
+  const modal=document.getElementById("loginModal");
+  if(modal){
+    const title=modal.querySelector("h3");
+    const desc=modal.querySelector("p");
+    if(title) title.innerHTML="내 ROOM을 저장하려면<br>로그인이 필요해요.";
+    if(desc) desc.textContent="로그인하면 ROOM이 저장되고 자동으로 친구용 링크가 만들어져요.";
+  }
   if(currentAuthUser){
     persistRoomToSupabase();
   }else{
-    const modal=document.getElementById("loginModal");
     if(modal) modal.classList.add("show");
   }
 }
@@ -2747,7 +3006,11 @@ function mbtiCharacterSVG(m){
  </svg></div>`;
 }
 function renderMbtiCharacter(container,mbti){
- if(container) container.innerHTML=mbtiCharacterSVG(mbti);
+  if(!container) return;
+  container.style.display="block";
+  container.style.visibility="visible";
+  container.style.opacity="1";
+  container.innerHTML=mbtiCharacterSVG(mbti);
 }
 
 function buildCharacterReview(){
@@ -2778,8 +3041,7 @@ function renderMiniHome(){
   if(zip) zip.textContent=(owner.mbti||"ISTP").toLowerCase()+".zip";
   if(label) label.textContent=(owner.name||"JISU").toUpperCase()+"'S ROOM";
 
-const av=document.querySelector("#profileAvatarCard .pixel-person");
-  renderMbtiCharacter(document.getElementById("profileAvatarCard"),owner.mbti);
+renderMbtiCharacter(document.getElementById("profileAvatarCard"),owner.mbti);
 
   const friends=getRecentFriends();
   const avatars=document.getElementById("visitorAvatars");
