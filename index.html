@@ -200,6 +200,26 @@ input:focus,select:focus{border-color:#111}
   border-radius:9px;padding:9px;font-size:10px;font-weight:800
 }
 
+
+.pixel-person .prop{position:absolute;display:none;z-index:5}
+.pixel-person.mbti-INFP .prop-headset{display:block;left:14px;top:17px;width:92px;height:55px;border:6px solid #222;border-bottom:0;border-radius:48px 48px 0 0}
+.pixel-person.mbti-INFP .prop-book{display:block;left:18px;top:105px;width:82px;height:42px;background:#fff4c9;border:4px solid #111;transform:rotate(-4deg)}
+.pixel-person.mbti-INFP .prop-book:after{content:"DIARY";position:absolute;left:18px;top:10px;font:700 8px monospace}
+
+.pixel-person.mbti-ENTP .prop-pointer{display:block;left:93px;top:68px;width:6px;height:88px;background:#222;transform:rotate(-18deg);transform-origin:top}
+.pixel-person.mbti-ENTP .prop-board{display:block;left:-28px;top:78px;width:55px;height:42px;background:#fff;border:4px solid #111;transform:rotate(-5deg)}
+.pixel-person.mbti-ENTP .prop-board:after{content:"WHY?";position:absolute;left:8px;top:10px;font:900 10px monospace}
+
+.pixel-person.mbti-INTJ .prop-tablet{display:block;left:78px;top:87px;width:45px;height:58px;background:#dfeeff;border:4px solid #111;transform:rotate(5deg)}
+.pixel-person.mbti-INTJ .prop-tablet:after{content:"01\\A02\\A03";white-space:pre;position:absolute;left:9px;top:8px;font:800 8px/1.5 monospace}
+.pixel-person.mbti-INTJ .pixel-body{background:#30343a}
+
+.pixel-person.mbti-ESFP .prop-phone{display:block;left:91px;top:74px;width:27px;height:48px;background:#ffd9e2;border:4px solid #111;transform:rotate(-12deg)}
+.pixel-person.mbti-ESFP .prop-glasses{display:block;left:37px;top:35px;width:48px;height:14px;border-top:5px solid #111}
+.pixel-person.mbti-ESFP .prop-glasses:before,.pixel-person.mbti-ESFP .prop-glasses:after{content:"";position:absolute;top:-4px;width:18px;height:13px;border:3px solid #111;border-radius:50%}
+.pixel-person.mbti-ESFP .prop-glasses:before{left:0}.pixel-person.mbti-ESFP .prop-glasses:after{right:0}
+.pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
+
 /* FRIEND FORM */
 .friend-intro{
   background:var(--sky);border:1.5px solid #111;border-radius:24px;padding:22px;margin:16px 0
@@ -280,6 +300,9 @@ input:focus,select:focus{border-color:#111}
 
     <div class="hero-avatar">
       <div class="pixel-person">
+          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
         <div class="pixel-hair"></div>
         <div class="pixel-head"></div>
         <div class="pixel-eye eye1"></div>
@@ -305,7 +328,7 @@ input:focus,select:focus{border-color:#111}
     <div class="micro">MAKE MY ROOM</div>
   </div>
   <h2 class="section-title">세 가지만 알려줘.</h2>
-  <p class="lead">디자인은 고르지 않아도 돼요.<br>MBTI와 생일로 자동으로 만들어드릴게요.</p>
+  <p class="lead">디자인은 고르지 않아도 돼요.<br>MBTI에 따라 캐릭터의 행동과 ROOM 내용도 달라져요.</p>
 
   <div class="form-card">
     <div class="field">
@@ -355,6 +378,9 @@ input:focus,select:focus{border-color:#111}
         <div class="avatar-card">
           <div class="avatar-small">
             <div class="pixel-person">
+          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
               <div class="pixel-hair"></div><div class="pixel-head"></div>
               <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
               <div class="pixel-body"></div><div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
@@ -468,14 +494,20 @@ input:focus,select:focus{border-color:#111}
 
     <div class="result-pair">
       <div class="avatar-result">
-        <div class="pixel-person">
+        <div class="pixel-person" id="ownerResultAvatar">
+          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
           <div class="pixel-hair"></div><div class="pixel-head"></div>
           <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
           <div class="pixel-body"></div>
         </div>
       </div>
       <div class="avatar-result" style="filter:hue-rotate(300deg) saturate(.8)">
-        <div class="pixel-person">
+        <div class="pixel-person" id="friendResultAvatar">
+          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
           <div class="pixel-hair"></div><div class="pixel-head"></div>
           <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
           <div class="pixel-body"></div>
@@ -651,8 +683,18 @@ function monthMood(birth){
   const moods=["ICE","SKY","MINT","LEMON","CORAL","BLUE","NAVY","SKY","OLIVE","CREAM","PINK","SILVER"];
   return moods[m-1];
 }
+function setAvatarMbti(root, mbti){
+  if(!root) return;
+  root.className=[...root.classList].filter(x=>!x.startsWith("mbti-")).join(" ");
+  root.classList.add("mbti-"+mbti);
+}
+function refreshAvatars(){
+  document.querySelectorAll(".hero-avatar .pixel-person, .avatar-card .pixel-person").forEach(el=>setAvatarMbti(el,state.owner.mbti));
+}
+
 function renderRoom(){
   const o=state.owner;
+  refreshAvatars();
   document.getElementById("roomNameTop").textContent=o.name;
   document.getElementById("roomName").textContent=o.name;
   document.getElementById("roomMbti").textContent=o.mbti;
@@ -725,6 +767,8 @@ function calcChemistry(){
 }
 function renderResult(){
   const o=state.owner,f=state.latest;
+  setAvatarMbti(document.getElementById("ownerResultAvatar"),o.mbti);
+  setAvatarMbti(document.getElementById("friendResultAvatar"),f.mbti);
   ["resultOwner","rankOwner"].forEach(id=>document.getElementById(id).textContent=o.name);
   document.getElementById("resultFriend").textContent=f.name;
   document.getElementById("resultOwnerMbti").textContent=o.mbti;
