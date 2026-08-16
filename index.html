@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V1.2</title>
+<title>MY ROOM V1.2.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V1.2: generated-room-only MBTI visual exaggeration */
+/* V1.2.2: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V1.2 — all 16 MBTI character skins */
+/* V1.2.2 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V1.2 — retention + participation layers */
+/* V1.2.2 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V1.2 local account/save prototype */
+/* V1.2.2 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -544,7 +544,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.2</div>
+    <div class="micro">V1.2.2</div>
   </div>
 
   <div class="hero-blob">
@@ -749,10 +749,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
     <b>FRIENDS 2 / 5</b><br>
     친구 5명이 참여하면 <b>내 친구 관계 타입</b>이 열려요.
   </div>
-
-  
-  
-    <h3>내 ROOM 주소 정하기</h3>
+<h3>내 ROOM 주소 정하기</h3>
     <p>표시 이름은 같아도 괜찮아요. ROOM 주소만 고유하게 사용하면 됩니다.</p>
     <div class="handle-row"><span>myroom.kr/</span><input id="handleInput" maxlength="18" oninput="checkHandle()"></div>
     <div id="handleStatus" class="handle-status ok">사용 가능한 주소예요.</div>
@@ -762,7 +759,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 <div class="save-card" id="realSaveCard">
   <div class="micro">SAVE MY ROOM</div>
   <h3 id="realSaveTitle">이 ROOM을 내 것으로 저장할까요?</h3>
-  <p id="realSaveDesc">카카오 로그인 후 Supabase에 ROOM을 저장하면 공유 가능한 고유 주소가 만들어져요.</p>
+  <p id="realSaveDesc">ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.</p>
   <button class="primary" id="realSaveBtn" style="margin-top:10px" onclick="startRealSave()">카카오 로그인하고 ROOM 저장하기</button>
 </div>
 <div class="handle-card" id="realHandleCard" style="display:none">
@@ -774,7 +771,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
   <button class="primary" style="margin-top:10px" onclick="persistRoomToSupabase()">이 주소로 저장하기</button>
 </div>
 <div class="room-actions">
-    <button class="primary" onclick="go('friend')">친구 초대하기</button>
+    <button class="primary" onclick="go('friend')">친구 화면 미리보기</button>
     <button class="soft" onclick="openShareInvite()">링크 공유</button>
   </div>
   <p class="small-link" id="fakeUrl">myroom.kr/jisu</p>
@@ -900,21 +897,9 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 </div>
 
 
-<div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeLogin()">
-  <div class="login-sheet">
-    <div class="micro">SAVE MY ROOM</div>
-    <h3>내 ROOM으로 저장하려면<br>로그인이 필요해요.</h3>
-    <p>V1.2 프로토타입에서는 실제 소셜 로그인을 대신해 이 브라우저에 로그인 상태를 저장합니다. Supabase 연결 후에는 Google/Kakao 등 실제 로그인으로 교체합니다.</p>
-    <button class="login-option dark" onclick="completeDemoLogin()">이 기기에서 로그인하기</button>
-    <button class="login-option" onclick="closeLogin()">나중에 할게요</button>
-  </div>
-</div>
-
 <div class="toast" id="toast">복사했어요</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-bootSupabase();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 const SUPABASE_URL="https://gfpdjxdoxjonramxrlgi.supabase.co";
@@ -979,7 +964,7 @@ function syncRealAuthUI(){
       ? `내 ROOM 주소: <b>${currentRemoteRoom.slug}</b>`
       : currentAuthUser
         ? "카카오 로그인이 완료됐어요. 이제 고유 주소를 정하면 ROOM을 저장할 수 있어요."
-        : "카카오 로그인 후 Supabase에 ROOM을 저장하면 공유 가능한 고유 주소가 만들어져요.";
+        : "ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.";
   }
 }
 
@@ -1164,6 +1149,19 @@ function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){console.warn(e);return false}}
 function safeRemove(k){try{localStorage.removeItem(k)}catch(e){}}
 
+function isLoggedIn(){return safeGet(LOGIN_STORE_KEY)==="1"}
+
+function storeCurrentRoom(){
+  const payload={
+    name:(document.getElementById("ownerName")?.value||state.owner.name||"JISU").trim().toUpperCase(),
+    birth:document.getElementById("ownerBirth")?.value||state.owner.birth||"1993-08-06",
+    mbti:document.getElementById("ownerMbti")?.value||state.owner.mbti||"ENFP",
+    updatedAt:new Date().toISOString()
+  };
+  state.owner={name:payload.name,birth:payload.birth,mbti:payload.mbti};
+  safeSet(ROOM_STORE_KEY,JSON.stringify(payload));
+  return payload;
+}
 function readStoredRoom(){
   try{
     const raw=safeGet(ROOM_STORE_KEY);
@@ -1222,6 +1220,19 @@ function openHandleCard(){
   }
   checkHandle();
   card?.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function checkHandle(){
+  const input=document.getElementById("handleInput");
+  const status=document.getElementById("handleStatus");
+  if(!input||!status)return false;
+  let v=input.value.toLowerCase().replace(/[^a-z0-9._-]/g,"");
+  input.value=v;
+  let ok=true,msg="사용 가능한 주소예요.";
+  if(v.length<3){ok=false;msg="3자 이상 입력해 주세요."}
+  else if(RESERVED_HANDLES.includes(v)){ok=false;msg="이 주소는 사용할 수 없어요."}
+  status.className="handle-status "+(ok?"ok":"bad");
+  status.textContent=msg;
+  return ok;
 }
 function saveMyRoom(){
   if(!isLoggedIn()){startSaveFlow();return}
@@ -1290,16 +1301,13 @@ function makeRoom(persist=true){
   setTimeout(()=>{
     try{
       renderRoom();
-      initRetentionLayer();
-      syncAccountUI();
-      go("room");
     }catch(err){
       console.error("MY ROOM render error:",err);
-      go("room");
-      const note=document.getElementById("shareNote");
-      if(note) note.innerHTML="<b>일부 기능을 불러오지 못했어요.</b><br>새로고침 후 다시 시도해 주세요.";
     }
-  },900);
+    try{ if(typeof initRetentionLayer==="function") initRetentionLayer(); }catch(err){ console.warn(err); }
+    try{ if(typeof syncAccountUI==="function") syncAccountUI(); }catch(err){ console.warn(err); }
+    go("room");
+  },650);
 }
 
 
@@ -1626,11 +1634,13 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V1.2 startup
+// V1.2.2 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
 }
+
+window.addEventListener("DOMContentLoaded",()=>{ bootSupabase().catch(console.error); });
 </script>
 </body>
 </html>
