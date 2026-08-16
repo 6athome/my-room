@@ -512,6 +512,7 @@ input:focus,select:focus{border-color:#111}
     </div>
   </div>
   <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
+  <p class="hint">ROOM을 만들면 이 브라우저에 자동으로 임시 저장돼요.</p>
 </section>
 
 <!-- LOADING -->
@@ -755,6 +756,11 @@ buildMbtiGrid("ownerMbtiGrid","ownerMbti","ENFP");
 buildMbtiGrid("friendMbtiGrid","friendMbti","INFP");
 
 function go(id){
+  if(id==="landing"){
+    document.querySelectorAll(".hero-avatar .pixel-person").forEach(el=>{
+      el.className="pixel-person";
+    });
+  }
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   window.scrollTo(0,0);
@@ -821,7 +827,8 @@ function setAvatarMbti(root, mbti){
   root.classList.add("mbti-"+mbti);
 }
 function refreshAvatars(){
-  document.querySelectorAll(".hero-avatar .pixel-person, .avatar-card .pixel-person").forEach(el=>setAvatarMbti(el,state.owner.mbti));
+  // Landing hero stays as the neutral black default character.
+  document.querySelectorAll(".avatar-card .pixel-person").forEach(el=>setAvatarMbti(el,state.owner.mbti));
 }
 
 
