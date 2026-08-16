@@ -2,819 +2,270 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V0.2</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MY ROOM — MBTI V0.5</title>
 <style>
 :root{
-  --cream:#f7f4ed;
-  --paper:#fffdf9;
-  --sky:#a9d8ff;
-  --sky2:#dfeeff;
-  --pink:#ffd9e2;
-  --yellow:#fff1c9;
-  --ink:#111315;
-  --muted:#6d7075;
-  --line:#d9d8d2;
+  --cream:#f7f4ed; --paper:#fffdfa; --ink:#121416; --muted:#6d7075;
+  --sky:#a9d8ff; --pink:#ff91bc; --lav:#c9b9ff; --gray:#dce0e4;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  background:#121212;
-  color:var(--ink);
-  font-family:Inter, Pretendard, "Noto Sans KR", Arial, sans-serif;
+body{margin:0;background:#111;color:var(--ink);font-family:Inter,Pretendard,"Noto Sans KR",Arial,sans-serif}
+button,input{font:inherit} button{cursor:pointer}
+.app{max-width:480px;margin:auto;min-height:100vh;background:var(--cream)}
+.page{display:none;min-height:100vh;padding:22px}.page.active{display:block}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{font-weight:950;font-size:19px;letter-spacing:.01em}
+.micro{font:11px ui-monospace,monospace;letter-spacing:.08em;color:#555}
+.hero{background:var(--sky);border:1.5px solid #111;border-radius:28px;padding:22px;margin:24px 0}
+.hero h1{font-size:40px;line-height:1.04;letter-spacing:-.05em;margin:8px 0 12px}
+.lead{font-size:14px;line-height:1.65;color:#4e5052}
+.primary,.secondary{width:100%;padding:16px;border-radius:14px;font-weight:850}
+.primary{background:#111;color:#fff;border:0}.secondary{background:transparent;border:1.5px solid #111}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.type{
+  min-height:124px;border:1.5px solid #111;border-radius:20px;background:#fff;padding:15px;text-align:left;
+  position:relative;overflow:hidden
 }
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{
-  width:min(100%, 480px);
-  margin:auto;
-  min-height:100vh;
-  background:var(--cream);
-}
-.page{min-height:100vh;padding:22px;display:none}
-.page.active{display:block}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin-bottom:16px
-}
-.brand{
-  font-weight:900;letter-spacing:.02em;font-size:18px
-}
-.micro{
-  font:11px ui-monospace, SFMono-Regular, Menlo, monospace;
-  letter-spacing:.08em;color:#555
-}
-.chip{
-  border:1px solid #191919;border-radius:999px;
-  padding:7px 10px;background:#fff;font-size:11px;font-weight:700
-}
-.hero-blob{
-  margin-top:24px;height:250px;position:relative;
-  background:var(--sky);
-  border:1.5px solid var(--ink);
-  border-radius:38% 62% 48% 52% / 58% 45% 55% 42%;
-  overflow:hidden;
-}
-.hero-avatar{
-  position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
-  width:118px;height:168px;image-rendering:pixelated
-}
-.pixel-person{
-  width:100%;height:100%;position:relative;
-  filter:drop-shadow(0 8px 0 rgba(0,0,0,.08))
-}
-.pixel-head{position:absolute;left:29px;top:14px;width:62px;height:62px;background:#f0b187;border:5px solid #111}
-.pixel-hair{position:absolute;left:20px;top:2px;width:82px;height:50px;background:#17191b;border:5px solid #111}
-.pixel-hair:before,.pixel-hair:after{content:"";position:absolute;background:#17191b;border:5px solid #111}
-.pixel-hair:before{width:25px;height:30px;left:-10px;top:25px}.pixel-hair:after{width:28px;height:32px;right:-12px;top:22px}
-.pixel-eye{position:absolute;width:7px;height:14px;background:#111;top:38px}.eye1{left:44px}.eye2{left:71px}
-.pixel-body{position:absolute;left:24px;top:70px;width:72px;height:58px;background:#1c1e20;border:5px solid #111}
-.pixel-leg{position:absolute;top:124px;width:30px;height:39px;background:#191b1e;border:5px solid #111}.leg1{left:28px}.leg2{left:62px}
-.pixel-shoe{position:absolute;top:155px;width:35px;height:12px;background:#111}.shoe1{left:24px}.shoe2{left:62px}
-.hero-tag{
-  position:absolute;background:#fff;border:1px solid #111;border-radius:999px;
-  padding:9px 12px;font:700 12px ui-monospace,monospace
-}
-.ht1{left:18px;top:25px}.ht2{right:14px;top:92px}.ht3{left:52px;bottom:24px}
-h1{font-size:42px;line-height:1.02;letter-spacing:-.045em;margin:24px 0 14px}
-.lead{font-size:15px;line-height:1.65;color:#4c4e50}
-.primary{
-  width:100%;border:0;background:var(--ink);color:#fff;
-  border-radius:14px;padding:17px 18px;font-weight:800;font-size:15px
-}
-.secondary{
-  width:100%;border:1.5px solid var(--ink);background:transparent;color:var(--ink);
-  border-radius:14px;padding:15px 18px;font-weight:800;font-size:14px
-}
-.soft{
-  width:100%;border:1px solid #bbc6d1;background:#fff;border-radius:13px;padding:14px;font-weight:800
-}
-.hint{text-align:center;font-size:11px;color:#888;margin-top:10px}
-.section-title{
-  font-size:28px;line-height:1.15;letter-spacing:-.035em;margin:26px 0 8px
-}
-.form-card{
-  background:#fff;border:1px solid #d5d3cc;border-radius:24px;
-  padding:20px;margin-top:18px
-}
-.field{margin:15px 0}
-label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}
-input,select{
-  width:100%;background:#faf9f6;border:1px solid #d4d3ce;
-  border-radius:12px;padding:14px 13px;outline:none
-}
-input:focus,select:focus{border-color:#111}
-.mbti-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.mbti{
-  border:1px solid #cfcfc9;background:#fff;border-radius:10px;padding:10px 2px;
-  font-size:11px;font-weight:800
-}
-.mbti.on{background:var(--sky);border-color:#111}
-.loading{
-  min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center
-}
-.loader{
-  width:86px;height:86px;border-radius:50%;
-  background:var(--sky);border:1.5px solid #111;display:grid;place-items:center;
-  font-size:34px;margin-bottom:22px;animation:bob 1.1s infinite alternate ease-in-out
-}
-@keyframes bob{to{transform:translateY(-7px)}}
+.type strong{display:block;font-size:22px}.type span{font-size:11px;line-height:1.45;color:#555}
+.type .dot{position:absolute;width:68px;height:68px;border-radius:50%;right:-15px;bottom:-15px;opacity:.7}
+.type[data-m="INFP"] .dot{background:var(--lav)}
+.type[data-m="ENTP"] .dot{background:#ffe56e}
+.type[data-m="INTJ"] .dot{background:var(--gray)}
+.type[data-m="ESFP"] .dot{background:var(--pink)}
+.form{background:#fff;border:1px solid #d7d5cf;border-radius:22px;padding:18px;margin-top:20px}
+.field{margin:14px 0}.field label{display:block;font-size:11px;font-weight:800;margin-bottom:6px}
+.field input{width:100%;padding:13px;border:1px solid #d5d3cd;border-radius:11px;background:#fbfaf7}
+.selected{outline:3px solid #111;outline-offset:2px}
 
-/* ROOM */
-.room-shell{
-  border:1.5px solid #111;border-radius:26px;overflow:hidden;background:#fff;
-  box-shadow:7px 7px 0 rgba(17,19,21,.95);margin-top:18px
-}
-.room-head{
-  height:38px;padding:0 13px;display:flex;align-items:center;justify-content:space-between;
-  background:var(--sky2);border-bottom:1.5px solid #111
-}
-.room-grid{display:grid;grid-template-columns:112px 1fr;min-height:520px}
-.profile{
-  background:#f2efe8;border-right:1.5px solid #111;padding:12px
-}
-.avatar-card{
-  background:var(--sky);height:125px;border:1.5px solid #111;border-radius:16px;
-  display:flex;align-items:center;justify-content:center
-}
-.avatar-small{transform:scale(.72);transform-origin:center;width:118px;height:168px}
-.profile h2{font-size:19px;margin:11px 0 3px}
-.profile p{font-size:10px;line-height:1.45;margin:4px 0;color:#444}
-.profile-meta{margin-top:14px;border-top:1px solid #bbb;padding-top:9px}
-.profile-meta div{font:10px ui-monospace,monospace;margin:6px 0}
-.content{padding:12px;background:#fffdf9}
-.tabs{display:flex;gap:5px;margin-bottom:12px;overflow:auto}
-.tab{
-  white-space:nowrap;border:1px solid #111;border-radius:999px;background:#fff;padding:6px 8px;font-size:9px
-}
-.tab.active{background:#111;color:#fff}
-.note{
-  border:1px solid #111;border-radius:13px;background:#fff;padding:11px;
-  margin-bottom:10px;font-size:11px;line-height:1.45
-}
-.friend-panel{
-  background:var(--sky2);border:1.5px solid #111;border-radius:15px;padding:11px
-}
-.friend-panel h3{font-size:15px;margin:2px 0 10px}
-.rank-row{
-  display:flex;align-items:center;justify-content:space-between;
-  border-top:1px solid rgba(0,0,0,.25);padding:8px 0;font-size:10px
-}
-.rank-name{display:flex;gap:7px;align-items:center}
-.face{
-  width:24px;height:24px;border:1px solid #111;background:#f1b38b;
-  position:relative;display:inline-block
-}
-.face:before{content:"";position:absolute;left:-2px;top:-4px;width:26px;height:10px;background:#1b1b1b}
-.collection{
-  margin-top:10px;border:1px dashed #111;border-radius:12px;padding:10px;background:#fff
-}
-.collection-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
-.mini-face{
-  width:29px;height:29px;border:1px solid #111;background:#f1b38b;position:relative
-}
-.mini-face:before{content:"";position:absolute;left:-1px;top:-3px;width:29px;height:10px;background:#1a1a1a}
-.guestbook{margin-top:10px;border-top:1px solid #111;padding-top:8px}
-.guestbook p{font-size:9px;margin:6px 0}
-.room-actions{display:flex;gap:8px;margin-top:18px}
-.room-actions button{flex:1}
-.unlock{
-  border:1px solid #111;background:var(--pink);padding:12px;border-radius:15px;margin-top:12px;
-  font-size:11px;line-height:1.45
-}
+/* pixel avatar */
+.avatar-wrap{height:215px;display:grid;place-items:center;position:relative}
+.avatar{width:125px;height:185px;position:relative;image-rendering:pixelated}
+.head{position:absolute;left:31px;top:22px;width:63px;height:62px;background:#efb08a;border:5px solid #111}
+.hair{position:absolute;left:21px;top:8px;width:83px;height:50px;background:#18191b;border:5px solid #111}
+.hair:before,.hair:after{content:"";position:absolute;background:#18191b;border:5px solid #111}
+.hair:before{width:22px;height:31px;left:-8px;top:24px}.hair:after{width:24px;height:31px;right:-9px;top:24px}
+.eye{position:absolute;width:7px;height:13px;background:#111;top:48px}.e1{left:47px}.e2{left:75px}
+.body{position:absolute;left:25px;top:82px;width:75px;height:61px;background:#222;border:5px solid #111}
+.leg{position:absolute;top:139px;width:30px;height:38px;background:#1b1b1d;border:5px solid #111}.l1{left:30px}.l2{left:65px}
+.shoe{position:absolute;top:169px;width:37px;height:13px;background:#111}.s1{left:25px}.s2{left:64px}
+.prop{position:absolute;display:none;z-index:8}
 
+/* INFP */
+.mbti-INFP .headset{display:block;left:12px;top:23px;width:101px;height:58px;border:7px solid #4a3e79;border-bottom:0;border-radius:55px 55px 0 0}
+.mbti-INFP .diary{display:block;left:12px;top:120px;width:100px;height:46px;background:#ddd2ff;border:5px solid #111;transform:rotate(-5deg)}
+.mbti-INFP .diary:after{content:"DIARY";position:absolute;left:25px;top:10px;font:900 10px monospace}
+.mbti-INFP .body{background:#7a68aa}
 
-.personality-panel{
-  border:1.5px solid #111;border-radius:15px;padding:12px;margin-bottom:10px;
-  background:#fff;
-}
-.personality-panel h3{font-size:16px;line-height:1.3;margin:6px 0 10px;letter-spacing:-.02em}
-.personality-bit{
-  display:flex;justify-content:space-between;gap:8px;
-  padding:7px 0;border-top:1px solid #deddd7;font-size:10px;line-height:1.35
-}
-.personality-bit span:last-child{text-align:right;font-weight:800}
-.personality-share{
-  width:100%;margin-top:8px;border:0;background:#111;color:#fff;
-  border-radius:9px;padding:9px;font-size:10px;font-weight:800
-}
+/* ENTP */
+.mbti-ENTP .board{display:block;left:-35px;top:87px;width:63px;height:49px;background:#fff276;border:5px solid #111;transform:rotate(-8deg)}
+.mbti-ENTP .board:after{content:"WHY?";position:absolute;left:10px;top:12px;font:950 12px monospace}
+.mbti-ENTP .pointer{display:block;left:105px;top:83px;width:7px;height:91px;background:#111;transform:rotate(-20deg);transform-origin:top}
+.mbti-ENTP .body{background:#f2c927}
 
+/* INTJ */
+.mbti-INTJ .tablet{display:block;left:84px;top:96px;width:48px;height:65px;background:#dce2e8;border:5px solid #111;transform:rotate(5deg)}
+.mbti-INTJ .tablet:after{content:"01\A02\A03";white-space:pre;position:absolute;left:10px;top:8px;font:900 9px/1.6 monospace}
+.mbti-INTJ .body{background:#30353a}
+.mbti-INTJ .hair{background:#0d0f11}.mbti-INTJ .hair:before,.mbti-INTJ .hair:after{background:#0d0f11}
 
-.pixel-person .prop{position:absolute;display:none;z-index:5}
-.pixel-person.mbti-INFP .prop-headset{display:block;left:14px;top:17px;width:92px;height:55px;border:6px solid #222;border-bottom:0;border-radius:48px 48px 0 0}
-.pixel-person.mbti-INFP .prop-book{display:block;left:18px;top:105px;width:82px;height:42px;background:#fff4c9;border:4px solid #111;transform:rotate(-4deg)}
-.pixel-person.mbti-INFP .prop-book:after{content:"DIARY";position:absolute;left:18px;top:10px;font:700 8px monospace}
+/* ESFP */
+.mbti-ESFP .phone{display:block;left:103px;top:86px;width:31px;height:53px;background:#ff7aaa;border:5px solid #111;transform:rotate(-10deg)}
+.mbti-ESFP .glasses{display:block;left:37px;top:43px;width:52px;height:17px}
+.mbti-ESFP .glasses:before,.mbti-ESFP .glasses:after{content:"";position:absolute;top:0;width:20px;height:15px;border:4px solid #ff3d8d;border-radius:50%}
+.mbti-ESFP .glasses:before{left:0}.mbti-ESFP .glasses:after{right:0}
+.mbti-ESFP .body{background:#ff4f98}.mbti-ESFP .leg{background:#ff91bc}
+.mbti-ESFP .hair{background:#3a241c}.mbti-ESFP .hair:before,.mbti-ESFP .hair:after{background:#3a241c}
 
-.pixel-person.mbti-ENTP .prop-pointer{display:block;left:93px;top:68px;width:6px;height:88px;background:#222;transform:rotate(-18deg);transform-origin:top}
-.pixel-person.mbti-ENTP .prop-board{display:block;left:-28px;top:78px;width:55px;height:42px;background:#fff;border:4px solid #111;transform:rotate(-5deg)}
-.pixel-person.mbti-ENTP .prop-board:after{content:"WHY?";position:absolute;left:8px;top:10px;font:900 10px monospace}
-
-.pixel-person.mbti-INTJ .prop-tablet{display:block;left:78px;top:87px;width:45px;height:58px;background:#dfeeff;border:4px solid #111;transform:rotate(5deg)}
-.pixel-person.mbti-INTJ .prop-tablet:after{content:"01\\A02\\A03";white-space:pre;position:absolute;left:9px;top:8px;font:800 8px/1.5 monospace}
-.pixel-person.mbti-INTJ .pixel-body{background:#30343a}
-
-.pixel-person.mbti-ESFP .prop-phone{display:block;left:91px;top:74px;width:27px;height:48px;background:#ffd9e2;border:4px solid #111;transform:rotate(-12deg)}
-.pixel-person.mbti-ESFP .prop-glasses{display:block;left:37px;top:35px;width:48px;height:14px;border-top:5px solid #111}
-.pixel-person.mbti-ESFP .prop-glasses:before,.pixel-person.mbti-ESFP .prop-glasses:after{content:"";position:absolute;top:-4px;width:18px;height:13px;border:3px solid #111;border-radius:50%}
-.pixel-person.mbti-ESFP .prop-glasses:before{left:0}.pixel-person.mbti-ESFP .prop-glasses:after{right:0}
-.pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
-
-/* FRIEND FORM */
-.friend-intro{
-  background:var(--sky);border:1.5px solid #111;border-radius:24px;padding:22px;margin:16px 0
-}
-.friend-intro .pair-icons{font-size:38px;margin:6px 0 8px}
-.friend-intro h2{font-size:28px;line-height:1.15;margin:5px 0}
-
-/* RESULT */
-.result-hero{
-  text-align:center;background:#fff;border:1.5px solid #111;border-radius:24px;
-  padding:23px 17px;margin-top:16px
-}
-.result-pair{
-  display:flex;align-items:flex-end;justify-content:center;gap:18px
-}
-.avatar-result{
-  width:72px;height:104px;position:relative;transform:scale(.72)
-}
-.big-score{
-  font-size:96px;font-weight:900;letter-spacing:-.08em;line-height:.95;margin:8px 0 0
-}
-.relation-line{
-  font-size:25px;line-height:1.28;font-weight:900;letter-spacing:-.04em;
-  margin:21px auto 12px;max-width:330px
-}
-.rank-box{
-  margin-top:16px;border:1.5px solid #111;background:var(--pink);border-radius:18px;
-  padding:16px;text-align:left
-}
-.rank-num{font-size:46px;font-weight:900;line-height:1}
-.meters{margin-top:18px;text-align:left}
-.meter{margin:13px 0}
-.meter-label{display:flex;justify-content:space-between;font:700 11px ui-monospace,monospace}
-.track{height:7px;border-radius:99px;background:#d9d9d5;margin-top:5px;overflow:hidden}
-.fill{height:100%;background:#111}
-.share-card{
-  margin-top:18px;border:1.5px solid #111;background:var(--paper);
-  border-radius:22px;padding:18px
-}
-.share-preview{
-  aspect-ratio:9/12;background:var(--sky);border:1px solid #111;border-radius:18px;
-  padding:22px;display:flex;flex-direction:column;justify-content:space-between
-}
-.share-preview .sp-top{font:700 11px ui-monospace,monospace;display:flex;justify-content:space-between}
-.share-preview .sp-score{font-size:82px;font-weight:900;letter-spacing:-.08em}
-.share-preview .sp-copy{font-size:23px;font-weight:900;line-height:1.28;letter-spacing:-.04em}
-.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.share-actions button{border:1px solid #111;background:#fff;border-radius:12px;padding:13px;font-weight:800;font-size:12px}
-.toast{
-  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
-  background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-size:12px;
-  opacity:0;pointer-events:none;transition:.2s;z-index:100
-}
-.toast.show{opacity:1}
-.small-link{font-size:11px;color:#555;text-align:center;margin-top:12px}
-.footer-space{height:25px}
-@media(max-width:390px){
-  h1{font-size:37px}
-  .room-grid{grid-template-columns:100px 1fr}
-  .profile{padding:9px}.content{padding:9px}
-}
+/* room */
+.room{border:1.5px solid #111;border-radius:25px;overflow:hidden;background:#fff;box-shadow:7px 7px 0 #111;margin-top:16px}
+.roombar{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;border-bottom:1.5px solid #111}
+.roomgrid{display:grid;grid-template-columns:112px 1fr;min-height:545px}
+.profile{padding:11px;background:#f2eee7;border-right:1.5px solid #111}
+.profile-avatar{height:128px;border:1.5px solid #111;border-radius:15px;display:grid;place-items:center;overflow:hidden}
+.profile-avatar .avatar{transform:scale(.67)}
+.profile h2{font-size:20px;margin:10px 0 2px}.profile p{font-size:10px;line-height:1.45;margin:5px 0}
+.main{padding:11px;background:#fffdf9}.tabs{display:flex;gap:5px;margin-bottom:10px}.tab{border:1px solid #111;border-radius:99px;padding:6px 8px;font-size:9px}.tab.on{background:#111;color:#fff}
+.personality{border:1.5px solid #111;border-radius:15px;padding:12px;margin-bottom:10px}
+.personality h3{font-size:17px;line-height:1.25;margin:5px 0 9px}
+.bit{display:flex;justify-content:space-between;gap:7px;border-top:1px solid #ddd;padding:7px 0;font-size:9px;line-height:1.35}
+.bit span:last-child{text-align:right;font-weight:850}
+.friends{border:1.5px solid #111;border-radius:15px;padding:11px}
+.friends h3{font-size:15px;margin:4px 0 9px}.rank{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid rgba(0,0,0,.2);font-size:10px}
+.guest{margin-top:10px;border-top:1px solid #111;padding-top:8px}.guest p{font-size:9px;margin:6px 0}
+.share-note{border:1px solid #111;border-radius:15px;padding:12px;margin-top:13px;font-size:11px}
+.color-INFP{background:#ece7ff}.color-ENTP{background:#fff4a5}.color-INTJ{background:#e7ebef}.color-ESFP{background:#ffd5e6}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}
+.actions button{padding:14px;border-radius:12px;font-weight:800;border:1px solid #111;background:#fff}
+.actions .black{background:#111;color:#fff}
+@media(max-width:390px){.roomgrid{grid-template-columns:100px 1fr}.profile,.main{padding:8px}}
 </style>
 </head>
 <body>
 <div class="app">
-
-<!-- LANDING -->
 <section class="page active" id="landing">
-  <div class="topbar">
-    <div class="brand">MY ROOM</div>
-    <div class="micro">V0.2</div>
+  <div class="top"><div class="brand">MY ROOM</div><div class="micro">MBTI V0.5</div></div>
+  <div class="hero">
+    <div class="micro">YOUR MBTI, YOUR ROOM</div>
+    <h1>내 MBTI로 만든<br>인터넷 방은<br>어떻게 생겼을까?</h1>
+    <p class="lead">성격 설명 말고, 아예 방 자체가 MBTI처럼 나와요.<br>조금 과장돼서 더 웃긴 버전으로.</p>
   </div>
-
-  <div class="hero-blob">
-    <div class="hero-tag ht1">MY MBTI</div>
-    <div class="hero-tag ht2">OUR CHEMISTRY</div>
-    <div class="hero-tag ht3">MY FRIENDS</div>
-
-    <div class="hero-avatar">
-      <div class="pixel-person">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-        <div class="pixel-hair"></div>
-        <div class="pixel-head"></div>
-        <div class="pixel-eye eye1"></div>
-        <div class="pixel-eye eye2"></div>
-        <div class="pixel-body"></div>
-        <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-        <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-      </div>
-    </div>
+  <div class="types">
+    <button class="type" data-m="INFP" onclick="selectType('INFP',this)"><strong>INFP</strong><span>헤드셋 끼고<br>일기 쓰는 중</span><i class="dot"></i></button>
+    <button class="type" data-m="ENTP" onclick="selectType('ENTP',this)"><strong>ENTP</strong><span>WHY? 보드 들고<br>토론 준비 완료</span><i class="dot"></i></button>
+    <button class="type" data-m="INTJ" onclick="selectType('INTJ',this)"><strong>INTJ</strong><span>이미 계획표<br>다 만들어둠</span><i class="dot"></i></button>
+    <button class="type selected" data-m="ESFP" onclick="selectType('ESFP',this)"><strong>ESFP</strong><span>핑크 풀착장<br>오늘도 밖에 있음</span><i class="dot"></i></button>
   </div>
-
-  <div class="micro" style="margin-top:22px">PERSONAL INTERNET ROOM</div>
-  <h1>나랑 제일 잘 맞는<br>친구는 누구일까?</h1>
-  <p class="lead">닉네임, 생년월일, MBTI만 입력하면<br>내 미니홈피와 친구 케미 랭킹이 생겨요.</p>
-  <button class="primary" onclick="go('create')">내 ROOM 만들기 →</button>
-  <p class="hint">사진 없이 · 30초면 완성</p>
+  <div class="form">
+    <div class="field"><label>닉네임</label><input id="name" value="JISU"></div>
+    <div class="field"><label>생년월일</label><input id="birth" type="date" value="1993-08-06"></div>
+  </div>
+  <button class="primary" onclick="makeRoom()">내 ROOM 만들기 →</button>
 </section>
 
-<!-- CREATE -->
-<section class="page" id="create">
-  <div class="topbar">
-    <button class="chip" onclick="go('landing')">←</button>
-    <div class="micro">MAKE MY ROOM</div>
-  </div>
-  <h2 class="section-title">세 가지만 알려줘.</h2>
-  <p class="lead">디자인은 고르지 않아도 돼요.<br>MBTI에 따라 캐릭터의 행동과 ROOM 내용도 달라져요.</p>
-
-  <div class="form-card">
-    <div class="field">
-      <label>닉네임</label>
-      <input id="ownerName" value="JISU" maxlength="12">
-    </div>
-    <div class="field">
-      <label>생년월일</label>
-      <input id="ownerBirth" type="date" value="1993-08-06">
-    </div>
-    <div class="field">
-      <label>MBTI</label>
-      <div class="mbti-grid" id="ownerMbtiGrid"></div>
-      <input type="hidden" id="ownerMbti" value="ENFP">
-    </div>
-  </div>
-  <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
-</section>
-
-<!-- LOADING -->
-<section class="page" id="loading">
-  <div class="loading">
-    <div class="loader">✦</div>
-    <div class="micro">CREATING YOUR ROOM</div>
-    <h2 class="section-title" style="margin-top:12px">ROOM을 만드는 중...</h2>
-    <p class="lead">MBTI 성향 정리 중<br>생일 컬러 조합 중<br>친구가 들어올 자리 만드는 중</p>
-  </div>
-</section>
-
-<!-- ROOM -->
-<section class="page" id="room">
-  <div class="topbar">
-    <div>
-      <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
-      <div class="micro">TODAY 24 · TOTAL 392</div>
-    </div>
-    <button class="chip" onclick="go('landing')">HOME</button>
+<section class="page" id="roomPage">
+  <div class="top">
+    <div><div class="brand"><span id="topName">JISU</span>.zip</div><div class="micro">TODAY 27 · TOTAL 418</div></div>
+    <button class="secondary" style="width:auto;padding:9px 12px" onclick="show('landing')">다시 만들기</button>
   </div>
 
-  <div class="room-shell">
-    <div class="room-head">
-      <span class="micro">MY ROOM</span>
-      <span class="micro">•••</span>
-    </div>
-    <div class="room-grid">
+  <div class="room">
+    <div class="roombar"><span class="micro">MY ROOM</span><span class="micro" id="topMbti">ESFP</span></div>
+    <div class="roomgrid">
       <aside class="profile">
-        <div class="avatar-card">
-          <div class="avatar-small">
-            <div class="pixel-person">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-              <div class="pixel-hair"></div><div class="pixel-head"></div>
-              <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-              <div class="pixel-body"></div><div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-              <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-            </div>
+        <div class="profile-avatar" id="profileColor">
+          <div class="avatar" id="avatar">
+            <i class="prop headset"></i><i class="prop diary"></i><i class="prop board"></i><i class="prop pointer"></i><i class="prop tablet"></i><i class="prop phone"></i><i class="prop glasses"></i>
+            <div class="hair"></div><div class="head"></div><div class="eye e1"></div><div class="eye e2"></div><div class="body"></div><div class="leg l1"></div><div class="leg l2"></div><div class="shoe s1"></div><div class="shoe s2"></div>
           </div>
         </div>
-        <h2 id="roomName">JISU</h2>
-        <p><b id="roomMbti">ENFP</b></p>
-        <p id="roomOneLine">하고 싶은 게 생기면<br>일단 해보는 편.</p>
-        <div class="profile-meta">
-          <div>ROOM 07</div>
-          <div id="roomColor">MOOD · SKY</div>
-          <div id="roomLucky">NO. 06</div>
-        </div>
+        <h2 id="pName">JISU</h2>
+        <p><b id="pMbti">ESFP</b></p>
+        <p id="oneLine"></p>
+        <p class="micro" style="margin-top:14px">ROOM TYPE 07<br>NO. 06</p>
       </aside>
-
-      <main class="content">
-        <div class="tabs">
-          <div class="tab active">HOME</div>
-          <div class="tab">FRIENDS</div>
-          <div class="tab">GUESTBOOK</div>
+      <main class="main">
+        <div class="tabs"><span class="tab on">HOME</span><span class="tab">FRIENDS</span><span class="tab">GUEST</span></div>
+        <div class="personality" id="personality">
+          <div class="micro" id="zipLabel">ESFP.zip</div>
+          <h3 id="headline"></h3>
+          <div id="bits"></div>
         </div>
-
-        <div class="note">
-          <b>오늘의 ROOM</b><br>
-          친구가 들어올수록 이 방이 조금씩 채워져요.
-        </div>
-
-        <div class="personality-panel" id="personalityPanel">
-          <div class="micro" id="personalityLabel">ENFP.zip</div>
-          <h3 id="personalityHeadline">관심사가 자꾸 늘어나는 중.</h3>
-          <div id="personalityBits"></div>
-          <button class="personality-share" onclick="shareMyRoom()">이 ROOM 공유하기 ↗</button>
-        </div>
-
-        <div class="friend-panel">
+        <div class="friends">
           <div class="micro">WHO'S MY BEST MATCH?</div>
           <h3>나랑 제일 잘 맞는 친구는?</h3>
-          <div id="rankList"></div>
+          <div class="rank"><b>1 · MINJI</b><span>96</span></div>
+          <div class="rank"><b>2 · SORA</b><span>92</span></div>
+          <div class="rank"><b>3 · DOHYUN</b><span>88</span></div>
         </div>
-
-        <div class="collection">
-          <div class="micro">FRIEND COLLECTION</div>
-          <div class="collection-list" id="collection"></div>
-        </div>
-
-        <div class="guestbook">
+        <div class="guest">
           <b style="font-size:10px">MINI GUESTBOOK</b>
-          <p>minji · 몇 점 나오는지 해봄 ㅋㅋ</p>
-          <p>sora · 내가 1위할 듯</p>
+          <p id="guest1"></p>
+          <p id="guest2"></p>
         </div>
       </main>
     </div>
   </div>
 
-  <div class="unlock" id="unlockCopy">
-    <b>FRIENDS 2 / 5</b><br>
-    친구 5명이 참여하면 <b>내 친구 관계 타입</b>이 열려요.
+  <div class="share-note" id="shareNote"></div>
+  <div class="actions">
+    <button class="black" onclick="fakeShare()">이 ROOM 공유하기</button>
+    <button onclick="alert('다음 단계에서 친구 궁합 입력 화면을 연결할게요.')">친구 초대하기</button>
   </div>
-
-  <div class="room-actions">
-    <button class="primary" onclick="go('friend')">친구 초대하기</button>
-    <button class="soft" onclick="openShareInvite()">링크 공유</button>
-  </div>
-  <p class="small-link" id="fakeUrl">myroom.kr/jisu</p>
 </section>
-
-<!-- FRIEND -->
-<section class="page" id="friend">
-  <div class="topbar">
-    <button class="chip" onclick="go('room')">← ROOM</button>
-    <div class="micro">FRIEND ENTRY</div>
-  </div>
-
-  <div class="friend-intro">
-    <div class="micro"><span id="friendOwnerName">JISU</span>'S ROOM</div>
-    <div class="pair-icons">◼︎ + ◻︎</div>
-    <h2><span id="friendOwnerName2">지수</span>랑 나는<br>몇 점짜리 친구일까?</h2>
-    <p style="font-size:12px;margin-bottom:0">회원가입 없이 바로 확인할 수 있어요.</p>
-  </div>
-
-  <div class="form-card">
-    <div class="field">
-      <label>닉네임</label>
-      <input id="friendName" value="MINJI" maxlength="12">
-    </div>
-    <div class="field">
-      <label>생년월일</label>
-      <input id="friendBirth" type="date" value="1994-02-17">
-    </div>
-    <div class="field">
-      <label>MBTI</label>
-      <div class="mbti-grid" id="friendMbtiGrid"></div>
-      <input type="hidden" id="friendMbti" value="INFP">
-    </div>
-  </div>
-  <button class="primary" onclick="calcChemistry()">우리 케미 확인하기 →</button>
-  <p class="hint">입력 정보는 이 프로토타입에서 저장되지 않아요.</p>
-</section>
-
-<!-- RESULT -->
-<section class="page" id="result">
-  <div class="topbar">
-    <button class="chip" onclick="go('room')">← ROOM</button>
-    <div class="micro">OUR CHEMISTRY</div>
-  </div>
-
-  <div class="result-hero">
-    <div class="micro"><span id="resultOwner">JISU</span> × <span id="resultFriend">MINJI</span></div>
-
-    <div class="result-pair">
-      <div class="avatar-result">
-        <div class="pixel-person" id="ownerResultAvatar">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-          <div class="pixel-hair"></div><div class="pixel-head"></div>
-          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-          <div class="pixel-body"></div>
-        </div>
-      </div>
-      <div class="avatar-result" style="filter:hue-rotate(300deg) saturate(.8)">
-        <div class="pixel-person" id="friendResultAvatar">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-          <div class="pixel-hair"></div><div class="pixel-head"></div>
-          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-          <div class="pixel-body"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="big-score"><span id="score">94</span><span style="font-size:32px">%</span></div>
-    <div class="relation-line" id="relation">한 명이 사고 치면<br>다른 한 명이 더 크게 키우는 사이.</div>
-    <div class="micro"><span id="resultOwnerMbti">ENFP</span> × <span id="resultFriendMbti">INFP</span></div>
-
-    <div class="meters">
-      <div class="meter"><div class="meter-label"><span>PLAY</span><span id="playVal">98</span></div><div class="track"><div class="fill" id="playBar" style="width:98%"></div></div></div>
-      <div class="meter"><div class="meter-label"><span>TALK</span><span id="talkVal">91</span></div><div class="track"><div class="fill" id="talkBar" style="width:91%"></div></div></div>
-      <div class="meter"><div class="meter-label"><span>TRAVEL</span><span id="travelVal">96</span></div><div class="track"><div class="fill" id="travelBar" style="width:96%"></div></div></div>
-    </div>
-  </div>
-
-  <div class="rank-box">
-    <div class="micro"><span id="rankOwner">JISU</span>'S FRIEND RANK</div>
-    <div class="rank-num"><span id="rankPlace">2</span>위</div>
-    <p style="margin:8px 0 0;font-weight:800" id="rankCopy">“말리지 않는 게 문제인 찐친 조합.”</p>
-  </div>
-
-  <div class="share-card">
-    <div class="micro" style="margin-bottom:10px">STORY CARD PREVIEW</div>
-    <div class="share-preview">
-      <div class="sp-top">
-        <span>MY ROOM</span>
-        <span id="spPair">JISU × MINJI</span>
-      </div>
-      <div>
-        <div class="sp-score" id="spScore">94%</div>
-        <div class="sp-copy" id="spCopy">한 명이 사고 치면<br>다른 한 명이 더 크게 키우는 사이.</div>
-      </div>
-      <div class="micro" style="color:#111"><span id="spRank">02 / 03</span> · 친구 케미 랭킹</div>
-    </div>
-    <div class="share-actions">
-      <button onclick="shareStory()">인스타 스토리용</button>
-      <button onclick="shareKakao()">카톡으로 보내기</button>
-      <button onclick="copyResult()">결과 링크 복사</button>
-      <button onclick="go('create')">나도 ROOM 만들기</button>
-    </div>
-  </div>
-  <div class="footer-space"></div>
-</section>
-
 </div>
 
-<div class="toast" id="toast">복사했어요</div>
-
 <script>
-const MBTIS=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
-
-let state={
-  owner:{name:"JISU",birth:"1993-08-06",mbti:"ENFP"},
-  friends:[
-    {name:"SUJIN",score:97,mbti:"ENTP"},
-    {name:"SORA",score:89,mbti:"ISFP"}
-  ],
-  latest:null
+let selected="ESFP";
+const DATA={
+ INFP:{
+   line:"별일 없었는데\\n혼자 생각은 많았음.",
+   headline:"오늘도 머릿속에서는 많은 일이 있었음.",
+   bits:[
+     ["TODAY'S THOUGHT","아까 그 말 무슨 뜻이었지"],
+     ["상상 속에서 한 일","퇴사 · 이사 · 여행"],
+     ["실제로 한 일","일기 쓰고 누워있기"],
+     ["플레이리스트","감정별로 있음"]
+   ],
+   guest:["MINJI · 또 혼자 생각 많이 했지","SORA · 일기 다 쓰면 연락해"],
+   share:"INFP 방 나왔는데… 실제로 헤드셋 끼고 일기 쓰는 중이라 할 말 없음."
+ },
+ ENTP:{
+   line:"재밌어 보이면\\n일단 반박부터 해보는 편.",
+   headline:"지금도 머릿속에서 토론 3개 동시 진행 중.",
+   bits:[
+     ["CURRENT ARGUMENTS","3개"],
+     ["CURRENT PROJECTS","12개"],
+     ["완료한 프로젝트","비공개"],
+     ["친구가 자주 하는 말","그래서 결론이 뭔데?"]
+   ],
+   guest:["MINJI · 제발 그냥 그렇다고 해","SORA · 너랑 말하면 한 시간이 감"],
+   share:"ENTP 방에 WHY? 보드 들고 있는 거 너무 억울한데 반박은 못 하겠음."
+ },
+ INTJ:{
+   line:"굳이 말 안 했지만\\n이미 다 생각해둔 편.",
+   headline:"말하기 전에 이미 세 가지 경우의 수 계산 완료.",
+   bits:[
+     ["PEOPLE I ACTUALLY LIKE","4명"],
+     ["SOCIAL BATTERY","38%"],
+     ["이번 주 약속","1개"],
+     ["취소됐으면 하는 약속","1개"]
+   ],
+   guest:["MINJI · 읽씹 아니고 생각 중 맞지?","SORA · 토요일 일정 비워둔 거 맞지"],
+   share:"INTJ 방에 취소됐으면 하는 약속 1개라고 뜸. 그 1개가 뭔지 나도 앎."
+ },
+ ESFP:{
+   line:"재밌는 건\\n같이 해야 되는 편.",
+   headline:"오늘도 집에 바로 갈 생각은 없음.",
+   bits:[
+     ["TODAY'S PLAN","사람 만나기"],
+     ["현재 약속","3개"],
+     ["갑자기 생긴 약속","+2"],
+     ["친구가 자주 하는 말","너 또 어디야?"]
+   ],
+   guest:["MINJI · 오늘도 너 덕분에 웃었다ㅋㅋ","SORA · 다음엔 어디 놀러가자"],
+   share:"ESFP 방 핑크 풀착장으로 나옴ㅋㅋ 오늘도 집에 바로 갈 생각 없다는 것까지 들킴."
+ }
 };
-
-function buildMbtiGrid(containerId, hiddenId, selected){
-  const el=document.getElementById(containerId);
-  el.innerHTML="";
-  MBTIS.forEach(m=>{
-    const b=document.createElement("button");
-    b.type="button";b.textContent=m;b.className="mbti"+(m===selected?" on":"");
-    b.onclick=()=>{
-      document.getElementById(hiddenId).value=m;
-      [...el.children].forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");
-    };
-    el.appendChild(b);
-  });
+function selectType(m,el){
+ selected=m;
+ document.querySelectorAll(".type").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
 }
-buildMbtiGrid("ownerMbtiGrid","ownerMbti","ENFP");
-buildMbtiGrid("friendMbtiGrid","friendMbti","INFP");
-
-function go(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0,0);
+function show(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ window.scrollTo(0,0);
 }
-
 function makeRoom(){
-  const name=(document.getElementById("ownerName").value||"JISU").trim().toUpperCase();
-  const birth=document.getElementById("ownerBirth").value||"1993-08-06";
-  const mbti=document.getElementById("ownerMbti").value||"ENFP";
-  state.owner={name,birth,mbti};
-  go("loading");
-  setTimeout(()=>{renderRoom();go("room")},900);
+ const name=(document.getElementById("name").value||"JISU").trim().toUpperCase();
+ const birth=document.getElementById("birth").value||"1993-08-06";
+ const d=DATA[selected];
+ document.getElementById("topName").textContent=name;
+ document.getElementById("pName").textContent=name;
+ document.getElementById("topMbti").textContent=selected;
+ document.getElementById("pMbti").textContent=selected;
+ document.getElementById("oneLine").innerHTML=d.line.replace("\\n","<br>");
+ document.getElementById("zipLabel").textContent=selected+".zip";
+ document.getElementById("headline").textContent=d.headline;
+ document.getElementById("bits").innerHTML=d.bits.map(b=>`<div class="bit"><span>${b[0]}</span><span>${b[1]}</span></div>`).join("");
+ document.getElementById("guest1").textContent=d.guest[0];
+ document.getElementById("guest2").textContent=d.guest[1];
+ document.getElementById("shareNote").innerHTML="<b>공유하면 이런 느낌</b><br>"+d.share;
+ const av=document.getElementById("avatar");
+ av.className="avatar mbti-"+selected;
+ const pc=document.getElementById("profileColor");
+ pc.className="profile-avatar color-"+selected;
+ const pers=document.getElementById("personality");
+ pers.className="personality color-"+selected;
+ show("roomPage");
 }
-
-const ROOM_PERSONALITY={
-  ENTP:{
-    line:"재밌어 보이면\\n일단 벌리고 보는 편.",
-    headline:"현재 진행 중인 관심사 · 너무 많음",
-    bits:[
-      ["CURRENT PROJECTS","12개"],
-      ["완료한 프로젝트","비공개"],
-      ["최근 관심사","AI · 러닝 · 창업 · 갑자기 베이킹"],
-      ["친구가 자주 하는 말","그래서 저번에 한다던 건?"]
-    ]
-  },
-  INTJ:{
-    line:"굳이 말 안 했지만\\n이미 다 생각해둔 편.",
-    headline:"사람은 적게, 생각은 많이.",
-    bits:[
-      ["PEOPLE I ACTUALLY LIKE","4"],
-      ["SOCIAL BATTERY","38%"],
-      ["이번 주 약속","1개"],
-      ["취소됐으면 하는 약속","1개"]
-    ]
-  },
-  INFP:{
-    line:"별일 없었는데\\n혼자 생각은 많았음.",
-    headline:"오늘도 머릿속에서는 많은 일이 있었음.",
-    bits:[
-      ["TODAY'S THOUGHT","아까 그 말 무슨 뜻이었지"],
-      ["상상 속에서 한 일","퇴사 · 이사 · 여행"],
-      ["실제로 한 일","누워있기"],
-      ["저장한 사진","437개"]
-    ]
-  },
-  ESFP:{
-    line:"재밌는 건\\n같이 해야 되는 편.",
-    headline:"오늘도 집에 바로 갈 생각은 없음.",
-    bits:[
-      ["TODAY'S PLAN","사람 만나기"],
-      ["현재 약속","3개"],
-      ["갑자기 생긴 약속","+2"],
-      ["친구가 자주 하는 말","너 또 어디야?"]
-    ]
-  },
-  ENFP:{
-    line:"하고 싶은 게 생기면\\n일단 해보는 편.",
-    headline:"관심사가 자꾸 늘어나는 중.",
-    bits:[
-      ["OPEN TABS","27"],
-      ["이번 달 새 취미","3개"],
-      ["갑자기 꽂힌 것","여행 · 가구 · 러닝"],
-      ["친구가 자주 하는 말","또 시작했어?"]
-    ]
-  }
-};
-function personalityFor(m){
-  return ROOM_PERSONALITY[m]||{
-    line:"내 방식대로\\n천천히 채우는 편.",
-    headline:"별거 아닌 것 같지만 은근 내 얘기.",
-    bits:[
-      ["CURRENT MOOD","나쁘지 않음"],
-      ["PEOPLE","적당히"],
-      ["최근 관심사","계속 바뀌는 중"],
-      ["친구가 자주 하는 말","너답다"]
-    ]
-  };
+function fakeShare(){
+ const text=DATA[selected].share;
+ navigator.clipboard?.writeText(text+"\\nmyroom.kr/"+document.getElementById("pName").textContent.toLowerCase());
+ alert("공유 문구를 복사했어요:\\n\\n"+text);
 }
-function profileLine(m){
-  return personalityFor(m).line.replace("\\n","<br>");
-}
-function renderPersonality(){
-  const p=personalityFor(state.owner.mbti);
-  document.getElementById("personalityLabel").textContent=state.owner.mbti+".zip";
-  document.getElementById("personalityHeadline").textContent=p.headline;
-  document.getElementById("personalityBits").innerHTML=p.bits.map(x=>
-    `<div class="personality-bit"><span>${x[0]}</span><span>${x[1]}</span></div>`
-  ).join("");
-}
-function monthMood(birth){
-  const m=parseInt(birth.split("-")[1]||8);
-  const moods=["ICE","SKY","MINT","LEMON","CORAL","BLUE","NAVY","SKY","OLIVE","CREAM","PINK","SILVER"];
-  return moods[m-1];
-}
-function setAvatarMbti(root, mbti){
-  if(!root) return;
-  root.className=[...root.classList].filter(x=>!x.startsWith("mbti-")).join(" ");
-  root.classList.add("mbti-"+mbti);
-}
-function refreshAvatars(){
-  document.querySelectorAll(".hero-avatar .pixel-person, .avatar-card .pixel-person").forEach(el=>setAvatarMbti(el,state.owner.mbti));
-}
-
-function renderRoom(){
-  const o=state.owner;
-  refreshAvatars();
-  document.getElementById("roomNameTop").textContent=o.name;
-  document.getElementById("roomName").textContent=o.name;
-  document.getElementById("roomMbti").textContent=o.mbti;
-  document.getElementById("roomOneLine").innerHTML=profileLine(o.mbti);
-  renderPersonality();
-  document.getElementById("roomColor").textContent="MOOD · "+monthMood(o.birth);
-  document.getElementById("roomLucky").textContent="NO. "+String(parseInt(o.birth.split("-")[2]||6)).padStart(2,"0");
-  document.getElementById("fakeUrl").textContent="myroom.kr/"+o.name.toLowerCase();
-  document.getElementById("friendOwnerName").textContent=o.name;
-  document.getElementById("friendOwnerName2").textContent=o.name;
-  renderRank();
-}
-function renderRank(){
-  const list=document.getElementById("rankList");
-  const c=document.getElementById("collection");
-  list.innerHTML="";c.innerHTML="";
-  const sorted=[...state.friends].sort((a,b)=>b.score-a.score);
-  sorted.forEach((f,i)=>{
-    const r=document.createElement("div");r.className="rank-row";
-    r.innerHTML=`<div class="rank-name"><b>${i+1}</b><span class="face"></span><b>${f.name}</b></div><span>${f.score}</span>`;
-    list.appendChild(r);
-    const face=document.createElement("div");face.className="mini-face";c.appendChild(face);
-  });
-  for(let i=sorted.length;i<6;i++){
-    const q=document.createElement("div");q.className="mini-face";q.style.opacity=".18";c.appendChild(q);
-  }
-  document.getElementById("unlockCopy").innerHTML=`<b>FRIENDS ${sorted.length} / 5</b><br>친구 5명이 참여하면 <b>내 친구 관계 타입</b>이 열려요.`;
-}
-
-function hashScore(s){
-  let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
-  return h;
-}
-function calcChemistry(){
-  const fname=(document.getElementById("friendName").value||"MINJI").trim().toUpperCase();
-  const fbirth=document.getElementById("friendBirth").value||"1994-02-17";
-  const fmbti=document.getElementById("friendMbti").value||"INFP";
-  const key=state.owner.mbti+fmbti+state.owner.birth+fbirth+fname;
-  const h=hashScore(key);
-  const score=78+(h%21);
-  const play=Math.min(99,score+((h>>2)%8));
-  const talk=Math.min(99,score-4+((h>>4)%10));
-  const travel=Math.min(99,score-1+((h>>6)%7));
-  const relations=[
-    "한 명이 사고 치면\\n다른 한 명이 더 크게 키우는 사이.",
-    "말 안 해도 대충 알아듣는데\\n가끔 너무 잘 알아서 문제인 사이.",
-    "계획은 없는데\\n만나면 이상하게 하루가 꽉 차는 사이.",
-    "취향은 다른데\\n웃기는 포인트는 묘하게 같은 사이.",
-    "자주 안 봐도\\n만나면 바로 어제 본 것 같은 사이."
-  ];
-  const copies=[
-    "“말리지 않는 게 문제인 찐친 조합.”",
-    "“연락 텀과 친밀도는 별개인 조합.”",
-    "“둘이 만나면 계획이 자꾸 늘어나는 조합.”",
-    "“달라도 이상하게 오래 가는 조합.”",
-    "“대화 시작하면 시간이 빨리 가는 조합.”"
-  ];
-  const relation=relations[h%relations.length];
-  const rankCopy=copies[h%copies.length];
-  const all=[...state.friends,{name:fname,score,mbti:fmbti}].sort((a,b)=>b.score-a.score);
-  const place=all.findIndex(x=>x.name===fname&&x.score===score)+1;
-
-  if(!state.friends.some(x=>x.name===fname)){
-    state.friends.push({name:fname,score,mbti:fmbti});
-  }
-  state.latest={name:fname,birth:fbirth,mbti:fmbti,score,play,talk,travel,relation,rankCopy,place,total:all.length};
-  renderResult();
-  renderRank();
-  go("result");
-}
-function renderResult(){
-  const o=state.owner,f=state.latest;
-  setAvatarMbti(document.getElementById("ownerResultAvatar"),o.mbti);
-  setAvatarMbti(document.getElementById("friendResultAvatar"),f.mbti);
-  ["resultOwner","rankOwner"].forEach(id=>document.getElementById(id).textContent=o.name);
-  document.getElementById("resultFriend").textContent=f.name;
-  document.getElementById("resultOwnerMbti").textContent=o.mbti;
-  document.getElementById("resultFriendMbti").textContent=f.mbti;
-  document.getElementById("score").textContent=f.score;
-  document.getElementById("relation").innerHTML=f.relation.replace("\\n","<br>");
-  document.getElementById("rankPlace").textContent=f.place;
-  document.getElementById("rankCopy").textContent=f.rankCopy;
-  [["play",f.play],["talk",f.talk],["travel",f.travel]].forEach(([k,v])=>{
-    document.getElementById(k+"Val").textContent=v;
-    document.getElementById(k+"Bar").style.width=v+"%";
-  });
-  document.getElementById("spPair").textContent=o.name+" × "+f.name;
-  document.getElementById("spScore").textContent=f.score+"%";
-  document.getElementById("spCopy").innerHTML=f.relation.replace("\\n","<br>");
-  document.getElementById("spRank").textContent=String(f.place).padStart(2,"0")+" / "+String(f.total).padStart(2,"0");
-}
-function toast(msg){
-  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1500);
-}
-async function copyText(text){
-  try{await navigator.clipboard.writeText(text);toast("복사했어요")}
-  catch(e){toast("이 환경에서는 복사 버튼만 시연돼요")}
-}
-function shareMyRoom(){
-  const p=personalityFor(state.owner.mbti);
-  const first=p.bits[0] ? `${p.bits[0][0]} ${p.bits[0][1]}` : "";
-  copyText(`${state.owner.mbti} 방 이렇게 나옴 ㅋㅋ\n${p.headline}\n${first}\n너도 해봐 → myroom.kr/${state.owner.name.toLowerCase()}`);
-}
-function openShareInvite(){
-  const url="https://myroom.kr/"+state.owner.name.toLowerCase();
-  copyText(`나랑 제일 잘 맞는 친구 찾는 중 👀\\n너는 몇 점인지 해봐 → ${url}`);
-}
-function shareStory(){
-  toast("인스타 스토리 카드 생성 흐름을 시연했어요");
-}
-function shareKakao(){
-  const f=state.latest;
-  copyText(`${state.owner.name}랑 나 ${f.score}점 나옴 ㅋㅋ\\n${f.relation.replace("\\n"," ")}\\n너도 해봐 → myroom.kr/${state.owner.name.toLowerCase()}`);
-}
-function copyResult(){
-  const f=state.latest;
-  copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
-}
-renderRoom();
+makeRoom();
 </script>
 </body>
 </html>
