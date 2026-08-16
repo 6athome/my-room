@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V1.7</title>
+<title>MY ROOM V1.9</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V1.7: generated-room-only MBTI visual exaggeration */
+/* V1.9: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V1.7 — all 16 MBTI character skins */
+/* V1.9 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V1.7 — retention + participation layers */
+/* V1.9 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V1.7 local account/save prototype */
+/* V1.9 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -544,7 +544,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V1.7 visitor-first flow */
+/* V1.9 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -576,7 +576,7 @@ body.visitor-mode .room-shell{display:none!important}
 body.visitor-mode #visitorFlow{display:block!important}
 
 
-/* V1.7 — actual mini-home room */
+/* V1.9 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -666,6 +666,51 @@ body.visitor-mode #visitorFlow{display:block!important}
 .bottom-share button{padding:13px;border-radius:11px;border:1px solid #111;background:#fff;font-weight:850}
 .bottom-share .dark{background:#111;color:#fff}
 
+
+/* V1.9 — MBTI room showcase + stronger character presence */
+.mbti-showcase{
+  margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
+}
+.mbti-showcase .micro{margin-bottom:8px}
+.mbti-showcase-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+}
+.mbti-showcase-grid button{
+  border:1px solid #111;background:#fff;border-radius:9px;padding:8px 2px;
+  font-size:9px;font-weight:900;
+}
+.mbti-showcase-grid button.on{background:#111;color:#fff}
+
+.room-scene{min-height:360px}
+.owner-avatar-stage{bottom:60px;transform:translateX(-50%);transform-origin:bottom center;}
+.owner-avatar-stage .pixel-person{filter:drop-shadow(2px 3px 0 rgba(0,0,0,.14))}
+.visitor-avatars{bottom:18px}
+.status-bubble{top:14px;font-size:10px;padding:8px 12px}
+
+/* Room color skins */
+.room-scene.room-INFP{background:linear-gradient(to bottom,#ece7ff 0 65%,#e8dfd2 65% 100%)}
+.room-scene.room-ENTP{background:linear-gradient(to bottom,#fff4a5 0 65%,#e8dfd2 65% 100%)}
+.room-scene.room-INTJ{background:linear-gradient(to bottom,#e7ebef 0 65%,#d9d5ce 65% 100%)}
+.room-scene.room-ESFP{background:linear-gradient(to bottom,#ffd5e6 0 65%,#f3dfd1 65% 100%)}
+.room-scene.room-ENFP{background:linear-gradient(to bottom,#ffd9dd 0 65%,#f0e1d2 65% 100%)}
+.room-scene.room-INTP{background:linear-gradient(to bottom,#dcecff 0 65%,#e3ddd4 65% 100%)}
+.room-scene.room-ENTJ{background:linear-gradient(to bottom,#e7d8ef 0 65%,#ddd5cf 65% 100%)}
+.room-scene.room-INFJ{background:linear-gradient(to bottom,#dcecdf 0 65%,#e4dcd1 65% 100%)}
+.room-scene.room-ENFJ{background:linear-gradient(to bottom,#d8f0e5 0 65%,#e6ddd2 65% 100%)}
+.room-scene.room-ISTJ{background:linear-gradient(to bottom,#dfe8f2 0 65%,#ddd8d0 65% 100%)}
+.room-scene.room-ISFJ{background:linear-gradient(to bottom,#ffe0e4 0 65%,#e9dfd3 65% 100%)}
+.room-scene.room-ESTJ{background:linear-gradient(to bottom,#d9e8f7 0 65%,#dbd5cd 65% 100%)}
+.room-scene.room-ESFJ{background:linear-gradient(to bottom,#ffd9e6 0 65%,#eadbd1 65% 100%)}
+.room-scene.room-ISTP{background:linear-gradient(to bottom,#e5e5e1 0 65%,#d6d2ca 65% 100%)}
+.room-scene.room-ISFP{background:linear-gradient(to bottom,#dce9e3 0 65%,#e2dbd0 65% 100%)}
+.room-scene.room-ESTP{background:linear-gradient(to bottom,#ffe0c4 0 65%,#e7d7c7 65% 100%)}
+
+/* Add a distinct MBTI label in room */
+.room-mbti-stamp{
+  position:absolute;right:14px;top:18px;font-size:30px;font-weight:950;
+  letter-spacing:-.08em;opacity:.12;z-index:1;
+}
+
 </style>
 </head>
 <body>
@@ -675,7 +720,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.7</div>
+    <div class="micro">V1.9</div>
   </div>
 
   <div class="hero-blob">
@@ -787,6 +832,9 @@ body.visitor-mode #visitorFlow{display:block!important}
 
 
 <div class="room-shell owner-only">
+  
+
+
   <div class="minihome-hero">
     <div class="minihome-head">
       <div>
@@ -796,7 +844,7 @@ body.visitor-mode #visitorFlow{display:block!important}
       <div class="micro" id="roomVisitMeta">TODAY 2 · TOTAL 28</div>
     </div>
 
-    <div class="room-scene">
+    <div class="room-scene" id="roomScene"><div class="room-mbti-stamp" id="roomMbtiStamp">ISTP</div>
       <div class="room-window"></div>
       <div class="room-bed"></div>
       <div class="room-rug"></div>
@@ -837,18 +885,15 @@ body.visitor-mode #visitorFlow{display:block!important}
 
   <div id="saveStateLoggedOut">
     <h3>이 ROOM을 저장할까요?</h3>
-    <p>카카오 로그인하면 ROOM이 바로 저장되고 공유 링크가 자동으로 만들어져요.</p>
-    <button class="primary" style="margin-top:10px" onclick="startRealSave()">카카오로 저장하기</button>
+    <p>카카오 로그인 후 ROOM이 저장되고, 그때부터 링크 복사와 친구 공유가 가능해요.</p>
+    <button class="primary" style="margin-top:10px" onclick="startRealSave()">카카오로 로그인하고 저장하기</button>
   </div>
 
   <div id="saveStateReady" style="display:none">
     <h3>MY ROOM IS READY ✦</h3>
-    <p id="readyRoomUrl" style="font-size:14px;font-weight:900;color:#111;margin-top:6px"></p>
-    <div class="simple-share-actions">
-      <button class="dark" onclick="copySavedRoomLink()">링크 복사</button>
-      <button onclick="shareSavedRoom()">친구에게 공유</button>
-    </div>
+    <p id="readyRoomUrl" style="font-size:14px;font-weight:900;color:#111;margin-top:6px">공유 링크가 만들어졌어요.</p>
   </div>
+</div>
 </div>
 
 </div>
@@ -1050,15 +1095,14 @@ function syncRealAuthUI(){
   if(auth) auth.style.display=currentAuthUser?"inline-block":"none";
   if(saved) saved.style.display=currentRemoteRoom?"inline-block":"none";
 
-  if(currentRemoteRoom){
+  if(currentAuthUser && currentRemoteRoom){
     showSaveState("ready");
-    syncBottomShare();
     const readyUrl=document.getElementById("readyRoomUrl");
     if(readyUrl) readyUrl.textContent="공유 링크가 만들어졌어요.";
   }else{
     showSaveState("loggedout");
-    syncBottomShare();
   }
+  syncBottomShare();
 }
 
 function startRealSave(){
@@ -1570,6 +1614,10 @@ function applyRoomSkin(){
 }
 
 
+
+const MBTI_PREVIEW_TYPES=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
+
+
 function getRecentFriends(){
   const seed = [
     {name:"MINJI",mbti:"ENFP",score:96},
@@ -1585,6 +1633,10 @@ function renderMiniHome(){
   const owner=state.owner;
   const zip=document.getElementById("zipTitle");
   const label=document.getElementById("roomOwnerLabel");
+  const scene=document.getElementById("roomScene");
+  const stamp=document.getElementById("roomMbtiStamp");
+  if(scene) scene.className="room-scene room-"+owner.mbti;
+  if(stamp) stamp.textContent=owner.mbti;
   if(zip) zip.textContent=(owner.mbti||"ISTP").toLowerCase()+".zip";
   if(label) label.textContent=(owner.name||"JISU").toUpperCase()+"'S ROOM";
 
@@ -1622,7 +1674,8 @@ function renderMiniHome(){
 }
 function syncBottomShare(){
   const el=document.getElementById("bottomShareActions");
-  if(el) el.style.display=currentRemoteRoom?"grid":"none";
+  const canShare=!!(currentAuthUser && currentRemoteRoom);
+  if(el) el.style.display=canShare?"grid":"none";
 }
 
 function renderRoom(){
@@ -1727,17 +1780,27 @@ function renderResult(){
 
 
 function copySavedRoomLink(){
+  if(!(currentAuthUser && currentRemoteRoom)){
+    alert("ROOM을 저장하려면 카카오 로그인이 필요해요.");
+    startRealSave();
+    return;
+  }
   const url=publicRoomUrl();
   navigator.clipboard?.writeText(url);
   toast("링크를 복사했어요");
 }
 async function shareSavedRoom(){
+  if(!(currentAuthUser && currentRemoteRoom)){
+    alert("ROOM을 저장하려면 카카오 로그인이 필요해요.");
+    startRealSave();
+    return;
+  }
   const url=publicRoomUrl();
   const text=`${state.owner.name}의 MY ROOM 구경하고 우리 궁합도 확인해봐 ✦`;
   if(navigator.share){
     try{ await navigator.share({title:"MY ROOM",text,url}); }catch(e){}
   }else{
-    navigator.clipboard?.writeText(text+"\n"+url);
+    navigator.clipboard?.writeText(text+"\\n"+url);
     toast("공유 문구를 복사했어요");
   }
 }
@@ -1841,7 +1904,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V1.7 startup
+// V1.9 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
