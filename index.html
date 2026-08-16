@@ -1338,7 +1338,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
     <button class="primary" id="visitorPrimaryCta" style="margin-top:12px" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
     <button class="visitor-extra-btn" onclick="downloadChemistryStoryCard()">결과 카드 저장</button>
-    <button class="visitor-extra-btn" onclick="showVisitorVote()">하나 더 해볼래? · 친구들이 보는 나</button>
+    
   </div>
 </div>
 
@@ -1370,7 +1370,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <div class="micro" id="roomVisitMeta">TODAY 0 · TOTAL 0 · FRIENDS 0</div>
     </div>
 
-    <div class="room-scene" id="roomScene"><div class="room-mbti-stamp" id="roomMbtiStamp">ISTP</div>
+    <div class="room-scene" id="roomScene">
 
 <div class="mbti-room-details" id="mbtiRoomDetails">
   <div class="mbti-detail-card" id="detailA"></div>
@@ -1435,12 +1435,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     <div class="micro">OUR CHEMISTRY</div>
     <h3>친구들은 나랑 몇 점일까?</h3>
     <div id="chemistryTop3"></div>
-  </div>
-
-  <div class="friends-say-compact">
-    <div class="micro">FRIENDS SAY</div>
-    <h3 style="font-size:15px;margin:5px 0 8px">친구들이 보는 나는?</h3>
-    <div id="reactionBars"></div>
   </div>
 </div>
 
@@ -1975,7 +1969,11 @@ function previewOwnSharedRoom(){
 
 function publicRoomUrl(){
   if(!currentRemoteRoom?.slug) return "";
-  return window.location.origin+window.location.pathname+"?room="+encodeURIComponent(currentRemoteRoom.slug);
+  const url=new URL(window.location.href);
+  url.search="";
+  url.hash="";
+  url.searchParams.set("room",currentRemoteRoom.slug);
+  return url.toString();
 }
 
 async function getAuthUser(){
@@ -2757,10 +2755,22 @@ function renderSocialSnapshot(){
   renderRoomVisitors();
 }
 
+
+function resizeRoomForVisitorCrowd(count){
+  const scene=document.getElementById("roomScene");
+  if(!scene) return;
+  const cols=8;
+  const rows=Math.max(1,Math.ceil(Number(count||0)/cols));
+  const base=360;
+  const extra=Math.max(0,rows-3)*50;
+  scene.style.minHeight=(base+extra)+"px";
+}
+
 function renderRoomVisitors(){
   const avatars=document.getElementById("visitorAvatars");
   if(!avatars) return;
   const friends=(roomSocialSnapshot.recent_friends||[]);
+  resizeRoomForVisitorCrowd(friends.length);
   avatars.innerHTML=friends.map(f=>`
     <div class="visitor-character" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
       <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
@@ -2984,7 +2994,8 @@ function renderRoom(){
   renderPersonality();
   document.getElementById("roomColor").textContent="MOOD · "+monthMood(o.birth);
   document.getElementById("roomLucky").textContent="NO. "+String(parseInt(o.birth.split("-")[2]||6)).padStart(2,"0");
-  document.getElementById("fakeUrl").textContent="myroom.kr/"+o.name.toLowerCase();
+  const fakeUrl=document.getElementById("fakeUrl");
+  if(fakeUrl) fakeUrl.textContent=currentRemoteRoom?.slug ? publicRoomUrl() : "ROOM 저장 후 친구용 주소가 만들어져요.";
   document.getElementById("friendOwnerName").textContent=o.name;
   document.getElementById("friendOwnerName2").textContent=o.name;
   renderRank();
@@ -3378,24 +3389,39 @@ async function copyText(text){
   catch(e){toast("이 환경에서는 복사 버튼만 시연돼요")}
 }
 function shareMyRoom(){
-  const p=personalityFor(state.owner.mbti);
-  const first=p.bits[0] ? `${p.bits[0][0]} ${p.bits[0][1]}` : "";
-  copyText(`${state.owner.mbti} 방 이렇게 나옴 ㅋㅋ\n${p.headline}\n${first}\n너도 해봐 → myroom.kr/${state.owner.name.toLowerCase()}`);
+  const url=publicRoomUrl();
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
+  copyText(`${state.owner.name}의 MY ROOM에 놀러와 ✦
+우리 궁합도 확인해봐 → ${url}`);
 }
 function openShareInvite(){
   const url=publicRoomUrl();
-  copyText(`나랑 제일 잘 맞는 친구 찾는 중 👀\\n너는 몇 점인지 해봐 → ${url}`);
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
+  copyText(`나랑 제일 잘 맞는 친구 찾는 중 👀
+너는 몇 점인지 해봐 → ${url}`);
 }
 function shareStory(){
-  toast("인스타 스토리 카드 생성 흐름을 시연했어요");
+  const url=publicRoomUrl();
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
+  copyText(`${state.owner.name}의 MY ROOM ✦
+${url}`);
 }
 function shareKakao(){
+  const url=publicRoomUrl();
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
   const f=state.latest;
-  copyText(`${state.owner.name}랑 나 ${f.score}점 나옴 ㅋㅋ\\n${f.relation.replace("\\n"," ")}\\n너도 해봐 → myroom.kr/${state.owner.name.toLowerCase()}`);
+  const result=f ? `${state.owner.name}랑 나 ${f.score}점 나옴 ㅋㅋ
+${String(f.relation||"").replace("\n"," ")}
+` : "";
+  copyText(`${result}너도 해봐 → ${url}`);
 }
 function copyResult(){
+  const url=publicRoomUrl();
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
   const f=state.latest;
-  copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
+  const result=f ? `MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%
+` : "";
+  copyText(result+url);
 }
 
 
@@ -3412,70 +3438,63 @@ window.addEventListener("DOMContentLoaded",()=>{
 </html>
 
 
+
+
 <style>
-/* V4.3 — every participant remains visible in the room */
+/* V4.6 — visitor crowd is a main part of the room */
+.room-scene{
+  transition:min-height .2s ease;
+}
 .visitor-avatars{
+  position:absolute!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:8px!important;
   display:grid!important;
-  grid-template-columns:repeat(10,1fr)!important;
-  gap:0!important;
+  grid-template-columns:repeat(8,minmax(0,1fr))!important;
+  gap:3px 1px!important;
   align-items:end!important;
-  left:6px!important;
-  right:6px!important;
-  bottom:7px!important;
-  max-height:none!important;
   overflow:visible!important;
+  z-index:12;
+  pointer-events:none;
 }
 .visitor-character{
-  width:30px!important;
-  height:30px!important;
-  position:relative;
+  width:42px!important;
+  height:48px!important;
+  position:relative!important;
   justify-self:center;
-  overflow:visible;
+  overflow:visible!important;
 }
 .visitor-character .pixel-person{
-  position:absolute;
-  left:50%;
-  bottom:5px;
-  transform:translateX(-50%) scale(.13)!important;
-  transform-origin:bottom center;
+  position:absolute!important;
+  left:50%!important;
+  bottom:8px!important;
+  transform:translateX(-50%) scale(.21)!important;
+  transform-origin:bottom center!important;
 }
 .visitor-character .visitor-name{
-  position:absolute;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  max-width:32px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  font-size:5px!important;
-  white-space:nowrap;
-}
-.visitor-stayed-card{
-  margin-top:12px;
-  border:1.5px solid #111;
-  border-radius:14px;
-  padding:12px;
-  background:#dfeeff;
-  text-align:left;
-}
-.visitor-stayed-row{
-  margin-top:7px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.visitor-stayed-row p{
-  margin:4px 0 0;
-  font-size:10px;
-  line-height:1.45;
+  position:absolute!important;
+  left:50%!important;
+  bottom:0!important;
+  transform:translateX(-50%)!important;
+  width:48px!important;
+  max-width:48px!important;
+  font-size:7px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  background:rgba(255,255,255,.82);
+  border-radius:5px;
+  padding:1px 2px;
 }
 .visitor-stayed-character{
-  flex:0 0 52px;
-  width:52px!important;
-  height:66px!important;
+  width:58px!important;
+  height:72px!important;
 }
 .visitor-stayed-character .pixel-person{
-  transform:translateX(-50%) scale(.28)!important;
-  bottom:6px;
+  transform:translateX(-50%) scale(.32)!important;
 }
 </style>
