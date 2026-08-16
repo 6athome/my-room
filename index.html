@@ -447,6 +447,24 @@ input:focus,select:focus{border-color:#111}
 .status-bad{font-size:10px;color:#b42318;margin-top:7px}
 .saved-badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#111;color:#fff;font-size:10px;font-weight:800}
 
+
+.login-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;
+  display:none;align-items:flex-end;justify-content:center;
+}
+.login-backdrop.show{display:flex}
+.login-sheet{
+  width:min(100%,480px);background:#fffdf9;border-radius:24px 24px 0 0;
+  padding:22px;border:1.5px solid #111;border-bottom:0
+}
+.login-sheet h3{font-size:24px;line-height:1.15;margin:7px 0 10px}
+.login-sheet p{font-size:12px;line-height:1.55;color:#555}
+.login-option{
+  width:100%;border:1px solid #111;background:#fff;border-radius:12px;padding:14px;
+  font-weight:800;margin-top:8px
+}
+.login-option.dark{background:#111;color:#fff}
+
 </style>
 </head>
 <body>
@@ -722,6 +740,17 @@ input:focus,select:focus{border-color:#111}
   <div class="footer-space"></div>
 </section>
 
+</div>
+
+
+<div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeLoginSave()">
+  <div class="login-sheet">
+    <div class="micro">SAVE MY ROOM</div>
+    <h3>내 ROOM으로 저장하려면<br>로그인이 필요해요.</h3>
+    <p>ROOM을 만드는 건 로그인 없이 가능해요. 로그인하면 고유 주소를 만들고, 다른 기기에서도 내 ROOM과 친구 참여 기록을 계속 사용할 수 있어요.</p>
+    <button class="login-option dark" onclick="demoLogin()">간편 로그인하고 계속</button>
+    <button class="login-option" onclick="closeLoginSave()">나중에 할게요</button>
+  </div>
 </div>
 
 <div class="toast" id="toast">복사했어요</div>
