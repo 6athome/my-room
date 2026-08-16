@@ -1905,56 +1905,101 @@ function buildVisitorFlowMarkup(ownerName){
     </div>`;
 }
 
+
+function getSharedRoomSlug(){
+  return (new URLSearchParams(window.location.search).get("room")||"").trim();
+}
+
+async function openSharedRoomFromUrl(){
+  const sharedSlug=getSharedRoomSlug();
+  if(!sharedSlug) return false;
+
+  try{
+    // Auth is optional here. A friend must be able to enter without signing in.
+    try{
+      const {data}=await sb.auth.getSession();
+      currentAuthUser=data?.session?.user||null;
+    }catch(e){
+      currentAuthUser=null;
+    }
+
+    const {data:room,error}=await sb.from("myroom_rooms")
+      .select("*")
+      .eq("slug",sharedSlug)
+      .eq("is_public",true)
+      .maybeSingle();
+
+    if(error || !room){
+      console.error("shared room load failed",error);
+      showMissingRoom();
+      return true;
+    }
+
+    currentRemoteRoom=room;
+    state.owner={
+      name:room.nickname,
+      birth:"2000-01-01",
+      mbti:room.mbti,
+      today_status:room.today_status||""
+    };
+
+    VIEW_MODE="visitor";
+    document.body.classList.add("visitor-mode");
+    document.body.classList.remove("chemistry-done");
+
+    renderRoom();
+    go("room");
+
+    const flow=document.getElementById("visitorFlow");
+
+    // Even the owner opening their own shared URL gets the visitor preview first.
+    // They can still return to their own room using the owner controls.
+    if(flow) flow.innerHTML=buildVisitorFlowMarkup(room.nickname);
+    if(typeof syncVisitorPrimaryCta==="function") syncVisitorPrimaryCta();
+
+    // Do not count the owner; recordPublicRoomVisit already handles that.
+    try{ await recordPublicRoomVisit(room); }catch(e){ console.warn(e); }
+    try{ await loadRoomSocialSnapshot(room.id,false); }catch(e){ console.warn(e); }
+
+    window.scrollTo(0,0);
+    return true;
+  }catch(e){
+    console.error("openSharedRoomFromUrl failed",e);
+    showMissingRoom();
+    return true;
+  }
+}
+
 async function routeApp(){
   if(routeLock) return;
   routeLock=true;
   try{
-    const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
-    const {data}=await sb.auth.getUser();
-    currentAuthUser=data?.user||null;
-    if(currentAuthUser) await fetchOwnRoom();
-
-    if(sharedSlug){
-      const {data:room,error}=await sb.from("myroom_rooms").select("*").eq("slug",sharedSlug).eq("is_public",true).maybeSingle();
-      if(error || !room){ showMissingRoom(); return; }
-
-      currentRemoteRoom=room;
-      state.owner={name:room.nickname,birth:"2000-01-01",mbti:room.mbti,today_status:room.today_status||""};
-      VIEW_MODE="visitor";
-      document.body.classList.add("visitor-mode");
-      document.body.classList.remove("chemistry-done");
-      go("room");
-
-      const flow=document.getElementById("visitorFlow");
-      if(currentAuthUser && room.owner_id===currentAuthUser.id){
-        if(flow){
-          flow.innerHTML=`
-            <div class="visitor-entry-card">
-              <div class="micro">MY SHARED LINK</div>
-              <h3>내가 공유한 ROOM이에요 ✦</h3>
-              <p>친구가 보는 화면을 확인하거나 내 ROOM으로 돌아갈 수 있어요.</p>
-              <button class="primary" onclick="previewOwnSharedRoom()">친구 화면 미리보기</button>
-              <button class="secondary" style="margin-top:7px" onclick="openOwnRoom()">내 ROOM으로 가기</button>
-            </div>`;
-        }
-      }else{
-        if(flow) flow.innerHTML=buildVisitorFlowMarkup(room.nickname);
-        if(typeof syncVisitorPrimaryCta==="function") syncVisitorPrimaryCta();
-        try{recordPublicRoomVisit(room)}catch(e){}
-      }
-      window.scrollTo(0,0);
+    // Rule #1: a URL with ?room=... is ALWAYS a friend-visit route.
+    if(getSharedRoomSlug()){
+      await openSharedRoomFromUrl();
       return;
     }
 
-    if(currentAuthUser && loggedInOwnRoom){
-      await hydrateOwnerRoom(loggedInOwnRoom);
-      return;
+    const {data}=await sb.auth.getUser();
+    currentAuthUser=data?.user||null;
+
+    if(currentAuthUser){
+      const own=await fetchOwnRoom();
+      if(own){
+        await hydrateOwnerRoom(own);
+        return;
+      }
     }
 
     showCreateHome();
   }catch(e){
     console.error("routeApp failed",e);
-    showCreateHome();
+    // Never replace a valid shared URL with the create screen.
+    if(getSharedRoomSlug()){
+      await openSharedRoomFromUrl();
+    }else{
+      showCreateHome();
+    }
   }finally{
     routeLock=false;
   }
@@ -2234,6 +2279,12 @@ async function loadPublicRoomBySlug(slug){
 }
 
 async function bootSupabase(){
+  // Shared URL must win even when this browser already has a Kakao session.
+  if(getSharedRoomSlug()){
+    await openSharedRoomFromUrl();
+    return;
+  }
+
   try{
     const {data}=await sb.auth.getSession();
     if(data?.session?.user){
@@ -2244,14 +2295,22 @@ async function bootSupabase(){
   }catch(e){
     console.warn("initial session lookup failed",e);
   }
+
   await routeApp();
 }
 
 async function handleAuthenticatedSession(){
   try{
+    // If the user is currently on a friend's shared URL, stay there.
+    if(getSharedRoomSlug()){
+      await openSharedRoomFromUrl();
+      return;
+    }
+
     const {data,error}=await sb.auth.getUser();
     if(error) throw error;
     currentAuthUser=data?.user||null;
+
     if(!currentAuthUser){
       showCreateHome();
       return;
@@ -2273,16 +2332,14 @@ async function handleAuthenticatedSession(){
       return;
     }
 
-    const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
-    if(sharedSlug){
-      if(typeof syncVisitorPrimaryCta==="function") syncVisitorPrimaryCta();
-      return;
-    }
-
     showCreateHome();
   }catch(err){
     console.error("handleAuthenticatedSession failed",err);
-    showCreateHome();
+    if(getSharedRoomSlug()){
+      await openSharedRoomFromUrl();
+    }else{
+      showCreateHome();
+    }
   }
 }
 
@@ -2290,11 +2347,15 @@ sb.auth.onAuthStateChange((event,session)=>{
   currentAuthUser=session?.user||null;
 
   if(event==="SIGNED_OUT"){
-    setTimeout(()=>{
+    setTimeout(async()=>{
       currentRemoteRoom=null;
       loggedInOwnRoom=null;
-      history.replaceState({}, "", window.location.pathname);
-      showCreateHome();
+      if(getSharedRoomSlug()){
+        await openSharedRoomFromUrl();
+      }else{
+        history.replaceState({}, "", window.location.pathname);
+        showCreateHome();
+      }
     },0);
     return;
   }
