@@ -751,15 +751,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
   </div>
 
   
-  <div class="save-card" id="saveCard" style="display:none">
-    <div class="micro">KEEP MY ROOM</div>
-    <h3>이 ROOM을 내 것으로 저장할까요?</h3>
-    <p id="saveDescription">ROOM을 만드는 건 로그인 없이 가능해요. 고유 주소와 친구 참여 기록을 계속 사용하려면 로그인 후 저장해 주세요.</p>
-    <button class="primary" id="saveRoomBtn" style="margin-top:10px" onclick="startSaveFlow()">로그인하고 내 ROOM 저장하기</button>
-  </div>
-
-  <div class="handle-card" id="handleCard" style="display:none" style="display:none">
-    <div class="micro">MY ROOM URL</div>
+  
     <h3>내 ROOM 주소 정하기</h3>
     <p>표시 이름은 같아도 괜찮아요. ROOM 주소만 고유하게 사용하면 됩니다.</p>
     <div class="handle-row"><span>myroom.kr/</span><input id="handleInput" maxlength="18" oninput="checkHandle()"></div>
@@ -1172,19 +1164,6 @@ function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){console.warn(e);return false}}
 function safeRemove(k){try{localStorage.removeItem(k)}catch(e){}}
 
-function isLoggedIn(){return safeGet(LOGIN_STORE_KEY)==="1"}
-
-function storeCurrentRoom(){
-  const payload={
-    name:(document.getElementById("ownerName")?.value||state.owner.name||"JISU").trim().toUpperCase(),
-    birth:document.getElementById("ownerBirth")?.value||state.owner.birth||"1993-08-06",
-    mbti:document.getElementById("ownerMbti")?.value||state.owner.mbti||"ENFP",
-    updatedAt:new Date().toISOString()
-  };
-  state.owner={name:payload.name,birth:payload.birth,mbti:payload.mbti};
-  safeSet(ROOM_STORE_KEY,JSON.stringify(payload));
-  return payload;
-}
 function readStoredRoom(){
   try{
     const raw=safeGet(ROOM_STORE_KEY);
@@ -1243,19 +1222,6 @@ function openHandleCard(){
   }
   checkHandle();
   card?.scrollIntoView({behavior:"smooth",block:"center"});
-}
-function checkHandle(){
-  const input=document.getElementById("handleInput");
-  const status=document.getElementById("handleStatus");
-  if(!input||!status)return false;
-  let v=input.value.toLowerCase().replace(/[^a-z0-9._-]/g,"");
-  input.value=v;
-  let ok=true,msg="사용 가능한 주소예요.";
-  if(v.length<3){ok=false;msg="3자 이상 입력해 주세요."}
-  else if(RESERVED_HANDLES.includes(v)){ok=false;msg="이 주소는 사용할 수 없어요."}
-  status.className="handle-status "+(ok?"ok":"bad");
-  status.textContent=msg;
-  return ok;
 }
 function saveMyRoom(){
   if(!isLoggedIn()){startSaveFlow();return}
