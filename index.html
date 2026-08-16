@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V3.2</title>
+<title>MY ROOM V3.3</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V3.2 — retention + participation layers */
+/* V3.3 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V3.2 local account/save prototype */
+/* V3.3 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V3.2 visitor-first flow */
+/* V3.3 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V3.2 — actual mini-home room */
+/* V3.3 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V3.2 — MBTI room showcase + stronger character presence */
+/* V3.3 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V3.2 — restore original V0.7 character language */
+/* V3.3 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V3.2 — MBTI personality room details */
+/* V3.3 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -961,7 +961,7 @@ body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
-/* V3.2 core polish */
+/* V3.3 core polish */
 .owner-avatar-stage{
   left:50%;bottom:48px;width:118px;height:168px;
   transform:translateX(-50%);transform-origin:bottom center;
@@ -1006,7 +1006,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .room-scene{min-height:330px}
 
 
-/* V3.2 — distinct 16 MBTI silhouettes */
+/* V3.3 — distinct 16 MBTI silhouettes */
 .owner-avatar-stage .pixel-person{
   transform:scale(.58)!important; /* approx 0.8x from previous .72 */
   transform-origin:bottom center!important;
@@ -1104,7 +1104,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .character-review-grid button{border:1px solid #111;border-radius:8px;background:#fff;padding:6px 2px;font-size:8px;font-weight:850}
 .character-review-grid button.on{background:#111;color:#fff}
 
-/* V3.2 character differentiation */
+/* V3.3 character differentiation */
 .pixel-person.mbti-INTJ .pixel-body{background:#20242B!important}
 .pixel-person.mbti-INTJ .pixel-leg{background:#B9C7FF!important}
 .pixel-person.mbti-INTP .pixel-body{background:#4B6CB7!important}
@@ -1156,7 +1156,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .pixel-person.hook-heart::after{font-size:29px!important}
 
 
-/* V3.2 — final 16 MBTI code-drawn chibi characters */
+/* V3.3 — final 16 MBTI code-drawn chibi characters */
 .pixel-person{display:none!important}
 .svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
 .svg-avatar svg{width:104px;height:150px;overflow:visible}
@@ -1181,6 +1181,26 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .shared-special-actions button{width:100%;padding:12px;border:1px solid #111;border-radius:10px;background:#fff;font-weight:900}
 .shared-special-actions .primary-action{background:#111;color:#fff}
 
+
+/* V3.3 — test-friendly auth */
+.email-auth-box{margin-top:10px;padding-top:10px;border-top:1px dashed #bbb}
+.email-auth-box input{
+  width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:10px;
+  padding:11px;margin-top:7px;background:#fff;font-size:12px
+}
+.email-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.email-auth-actions button{
+  border:1px solid #111;border-radius:10px;padding:11px;background:#fff;font-weight:850
+}
+.email-auth-msg{font-size:9px;line-height:1.45;margin-top:7px;color:#555}
+.account-tools{
+  display:flex;justify-content:flex-end;gap:6px;margin:7px 0 0
+}
+.account-tools button{
+  border:1px solid #111;border-radius:999px;background:#fff;padding:6px 9px;
+  font-size:8px;font-weight:900
+}
+
 </style>
 </head>
 <body>
@@ -1191,7 +1211,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V3.2</div>
+    <div class="micro">V3.3</div>
   </div>
 
   <div class="hero-blob">
@@ -1267,6 +1287,9 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
       <div class="micro">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
+<div class="account-tools owner-only" id="accountTools" style="display:none">
+  <button onclick="signOutMyRoom()">로그아웃</button>
+</div>
     </div>
     <button class="chip" onclick="go('landing')">HOME</button>
   </div>
@@ -1561,9 +1584,22 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeKakaoModal()">
   <div class="login-sheet">
     <div class="micro">SAVE MY ROOM</div>
-    <h3>내 ROOM을 저장하려면<br>카카오 로그인이 필요해요.</h3>
-    <p>로그인하면 ROOM이 바로 저장되고, 자동으로 고유 주소가 만들어져요. 나중에 같은 카카오 계정으로 다시 들어올 수 있어요.</p>
+    <h3>내 ROOM을 저장하려면<br>로그인이 필요해요.</h3>
+    <p>로그인하면 ROOM이 저장되고 자동으로 친구용 링크가 만들어져요.</p>
+
     <button class="login-option dark" onclick="signInWithKakao()" style="background:#FEE500;color:#111">카카오로 시작하기</button>
+
+    <div class="email-auth-box">
+      <div class="micro">EMAIL · TEST / ALTERNATIVE LOGIN</div>
+      <input id="emailAuthEmail" type="email" placeholder="이메일">
+      <input id="emailAuthPassword" type="password" placeholder="비밀번호 (6자 이상)">
+      <div class="email-auth-actions">
+        <button onclick="signUpWithEmail()">이메일 회원가입</button>
+        <button onclick="signInWithEmail()">이메일 로그인</button>
+      </div>
+      <div id="emailAuthMsg" class="email-auth-msg"></div>
+    </div>
+
     <button class="login-option" onclick="closeKakaoModal()">나중에 할게요</button>
   </div>
 </div>
@@ -1583,6 +1619,73 @@ let currentRemoteRoom=null;
 
 function currentRedirectUrl(){
   return window.location.origin + window.location.pathname;
+}
+
+
+function emailAuthMessage(msg,isError=false){
+  const el=document.getElementById("emailAuthMsg");
+  if(!el) return;
+  el.textContent=msg||"";
+  el.style.color=isError?"#b42318":"#177245";
+}
+function readEmailAuthFields(){
+  const email=(document.getElementById("emailAuthEmail")?.value||"").trim();
+  const password=document.getElementById("emailAuthPassword")?.value||"";
+  return {email,password};
+}
+async function signUpWithEmail(){
+  const {email,password}=readEmailAuthFields();
+  if(!email){emailAuthMessage("이메일을 입력해 주세요.",true);return}
+  if(password.length<6){emailAuthMessage("비밀번호는 6자 이상 입력해 주세요.",true);return}
+  emailAuthMessage("가입 중...");
+  try{
+    const {data,error}=await sb.auth.signUp({
+      email,password,
+      options:{emailRedirectTo:currentRedirectUrl()}
+    });
+    if(error) throw error;
+    if(data?.session){
+      emailAuthMessage("가입 및 로그인 완료!");
+      closeKakaoModal();
+    }else{
+      emailAuthMessage("가입했어요. 이메일 인증 설정이 켜져 있다면 메일을 확인해 주세요.");
+    }
+  }catch(err){
+    console.error(err);
+    emailAuthMessage("회원가입 실패: "+err.message,true);
+  }
+}
+async function signInWithEmail(){
+  const {email,password}=readEmailAuthFields();
+  if(!email||!password){emailAuthMessage("이메일과 비밀번호를 입력해 주세요.",true);return}
+  emailAuthMessage("로그인 중...");
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    emailAuthMessage("로그인 완료!");
+    closeKakaoModal();
+  }catch(err){
+    console.error(err);
+    emailAuthMessage("로그인 실패: "+err.message,true);
+  }
+}
+async function signOutMyRoom(){
+  try{
+    await sb.auth.signOut();
+  }catch(e){
+    console.warn("signout failed",e);
+  }
+  currentAuthUser=null;
+  currentRemoteRoom=null;
+  loggedInOwnRoom=null;
+  try{sessionStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
+  history.replaceState({}, "", window.location.pathname);
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  VIEW_MODE="owner";
+  state.owner={name:"JISU",birth:"1993-08-06",mbti:"ENFP"};
+  syncRealAuthUI();
+  go("landing");
+  window.scrollTo(0,0);
 }
 
 async function signInWithKakao(){
@@ -1636,6 +1739,9 @@ function syncRealAuthUI(){
     showSaveState("loggedout");
   }
   syncBottomShare();
+  const tools=document.getElementById("accountTools");
+  const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
+  if(tools) tools.style.display=(currentAuthUser && !sharedSlug)?"flex":"none";
 }
 
 function startRealSave(){
@@ -1852,6 +1958,7 @@ async function refreshVisitCounts(roomId){
 function showSharedSpecialCard(type,room=null){
   VIEW_MODE="visitor";
   document.body.classList.add("visitor-mode");
+  const accountTools=document.getElementById("accountTools"); if(accountTools) accountTools.style.display="none";
   document.body.classList.remove("chemistry-done");
   go("room");
 
