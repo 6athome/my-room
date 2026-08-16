@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MY ROOM V0 — revised</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#111;color:#171717;font-family:Arial,"Noto Sans KR",sans-serif}
+.shell{max-width:430px;margin:auto;background:#f3efe4;min-height:100vh}
+.screen{padding:22px;min-height:100vh}.top{display:flex;justify-content:space-between;align-items:center;font:11px monospace;letter-spacing:.08em}
+.hero{height:250px;margin:28px 0;background:#d5ff48;border:2px solid #111;border-radius:40% 60% 45% 55%/55% 45% 55% 45%;position:relative}
+.tag{position:absolute;background:#fff;border:1px solid #111;padding:10px 13px;border-radius:999px;font:13px monospace;font-weight:700;letter-spacing:.04em}.t1{top:28px;left:16px}.t2{right:17px;top:90px}.t3{left:70px;bottom:30px}
+.eye,.mono{font:11px monospace;letter-spacing:.1em}.screen h1{font-size:42px;line-height:1.02;margin:14px 0}.lead{line-height:1.65;color:#4f4a41}
+.cta{width:100%;border:0;background:#111;color:#fff;padding:18px;border-radius:14px;font-weight:700;font-size:16px;margin-top:24px}
+.secondary{width:100%;padding:16px;border:1.5px solid #111;background:transparent;border-radius:14px;font-weight:700;margin-top:10px}.tiny{text-align:center;font-size:11px;color:#777;margin-top:12px}
+
+/* mini-home */
+.room-bg{background:#cbc2b2;padding:14px;border-radius:28px;border:1.5px solid #111;box-shadow:7px 7px 0 #111;margin-top:22px}
+.room-window{background:#f8f5ee;border:1.5px solid #111;border-radius:22px;overflow:hidden}
+.window-bar{height:34px;background:#d5ff48;border-bottom:1.5px solid #111;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font:11px monospace}
+.window-dots{letter-spacing:4px}
+.mini-grid{display:grid;grid-template-columns:112px 1fr;min-height:510px}
+.left-panel{border-right:1.5px solid #111;padding:13px;background:#f2eee5}
+.avatar-box{height:125px;background:#ff5d8f;border:1.5px solid #111;border-radius:16px;display:grid;place-items:center;font-size:60px}
+.profile-name{font-size:18px;font-weight:800;margin:10px 0 3px}.status{font-size:11px;line-height:1.45;color:#555}.mini-btn{display:block;width:100%;margin-top:9px;padding:8px;border:1px solid #111;background:#fff;border-radius:9px;font-size:11px;font-weight:700}
+.right-panel{padding:13px;background:#fffdf7}.room-title{font-size:24px;font-weight:900;margin:3px 0}.room-sub{font:10px monospace;color:#666}
+.tabbar{display:flex;gap:5px;margin:12px 0}.tab{padding:6px 8px;border:1px solid #111;border-radius:999px;font-size:9px;background:#fff}.tab.active{background:#111;color:#fff}
+.note{background:#fff7a8;border:1px solid #111;padding:12px;border-radius:13px;transform:rotate(-1.2deg);margin-bottom:10px}.note strong{display:block;margin-bottom:5px}
+.friend-box{border:1.5px solid #111;border-radius:15px;padding:12px;background:#d5ff48}.friend-box h3{font-size:16px;margin:0 0 4px}.rankline{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.35);padding:8px 0;font-size:11px}
+.collection{margin-top:10px;border:1px dashed #111;border-radius:12px;padding:10px;background:#fff}.collection .animals{font-size:24px;line-height:1.6}
+.guest{margin-top:10px;border-top:1px solid #111;padding-top:9px}.guest p{font-size:10px;margin:6px 0}.guest b{font-size:10px}
+
+/* result */
+.result{background:#d5ff48;text-align:center}.pair{font-size:54px;margin-top:45px}.score{font-size:96px;font-weight:900;line-height:.95;margin-top:8px}
+.relation{background:#111;color:#fff;border-radius:18px;padding:18px 16px;margin:18px 0;text-align:left}
+.relation .label{font:10px monospace;letter-spacing:.12em;opacity:.7}.relation .line{font-size:24px;font-weight:900;line-height:1.25;margin-top:7px}
+.rank-card{background:#fff;border:1.5px solid #111;border-radius:20px;padding:18px;margin-top:18px;text-align:left}.rank-card .place{font-size:44px;font-weight:900;line-height:1}
+.metrics{text-align:left;margin-top:20px}.metric{margin-bottom:12px}.metric b{display:flex;justify-content:space-between;font-size:12px}.barwrap{height:8px;background:rgba(0,0,0,.16);border-radius:999px;margin-top:5px}.bar{height:8px;background:#111;border-radius:999px}
+</style></head>
+<body><div class="shell">
+
+<section class="screen">
+<div class="top"><span>MY ROOM / V0</span><span>✦</span></div>
+<div class="hero"><span class="tag t1">MY MBTI</span><span class="tag t2">OUR CHEMISTRY</span><span class="tag t3">MY FRIENDS</span></div>
+<div class="eye">PERSONAL INTERNET ROOM</div>
+<h1>나랑 제일 잘 맞는<br>친구는 누구일까?</h1>
+<p class="lead">닉네임, 생년월일, MBTI만 입력하면<br>내 캐릭터와 친구 랭킹이 담긴 미니홈피가 생겨요.</p>
+<button class="cta" onclick="document.getElementById('room').scrollIntoView()">미니홈피 보기 →</button>
+<p class="tiny">사진 · 회원가입 없이 먼저 체험</p>
+</section>
+
+<section class="screen" id="room">
+<div class="top"><span>MY ROOM</span><span>TODAY 24 · TOTAL 392</span></div>
+
+<div class="room-bg">
+  <div class="room-window">
+    <div class="window-bar"><span>JISU.zip</span><span class="window-dots">● ● ●</span></div>
+    <div class="mini-grid">
+      <aside class="left-panel">
+        <div class="avatar-box">🐓</div>
+        <div class="profile-name">JISU</div>
+        <div class="status">ENFP<br>1993.08.06<br><br>하고 싶은 건 많고<br>일단 해보는 편.</div>
+        <button class="mini-btn">친구 초대하기</button>
+        <button class="mini-btn">내 캐릭터 보기</button>
+      </aside>
+      <main class="right-panel">
+        <div class="room-sub">ROOM TYPE 07</div>
+        <div class="room-title">CURIOUS<br>COLLECTOR</div>
+        <div class="tabbar"><span class="tab active">HOME</span><span class="tab">FRIENDS</span><span class="tab">GUEST</span></div>
+
+        <div class="note">
+          <strong>오늘의 ROOM</strong>
+          Burgundy mood · Lucky no. 06<br>
+          친구가 들어올수록 이 방이 채워져요 ✦
+        </div>
+
+        <div class="friend-box">
+          <div class="mono">WHO'S MY BEST MATCH?</div>
+          <h3>나랑 제일 잘 맞는 친구는?</h3>
+          <div class="rankline"><b>🥇 SUJIN</b><span>97</span></div>
+          <div class="rankline"><b>🥈 MINJI</b><span>94</span></div>
+          <div class="rankline"><b>🥉 YUNA</b><span>91</span></div>
+        </div>
+
+        <div class="collection">
+          <div class="mono">FRIEND COLLECTION · 7</div>
+          <div class="animals">🐇 🐕 🐉 🐎 🐀 🐅 🐑 <span style="opacity:.22">? ?</span></div>
+        </div>
+
+        <div class="guest">
+          <b>MINI GUESTBOOK</b>
+          <p>minji · 94점 인정? ㅋㅋ</p>
+          <p>sujin · 내가 1등이다 🏆</p>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<button class="cta" onclick="document.getElementById('result').scrollIntoView()">궁합 결과 보기</button>
+</section>
+
+<section class="screen result" id="result">
+<div class="top"><span>FRIEND CHEMISTRY</span><span>JISU × MINJI</span></div>
+<div class="pair">🐓 × 🐕</div>
+<div class="mono">ENFP × ENTP</div>
+<div class="score">94</div>
+<h1 style="font-size:32px;margin-top:4px">CHAOS BUDDIES</h1>
+
+<div class="relation">
+  <div class="label">OUR RELATION</div>
+  <div class="line">한 명이 사고 치면<br>다른 한 명이 더 크게 키우는 사이.</div>
+</div>
+
+<div class="rank-card">
+  <div class="mono">JISU'S FRIEND RANK</div>
+  <div class="place">🥈 2위</div>
+  <p style="margin:8px 0 0;font-weight:700">“말리지 않는 게 문제인 찐친 조합.”</p>
+</div>
+
+<div class="metrics">
+  <div class="metric"><b><span>놀기</span><span>98</span></b><div class="barwrap"><div class="bar" style="width:98%"></div></div></div>
+  <div class="metric"><b><span>대화</span><span>91</span></b><div class="barwrap"><div class="bar" style="width:91%"></div></div></div>
+  <div class="metric"><b><span>여행</span><span>96</span></b><div class="barwrap"><div class="bar" style="width:96%"></div></div></div>
+  <div class="metric"><b><span>업무</span><span>68</span></b><div class="barwrap"><div class="bar" style="width:68%"></div></div></div>
+</div>
+
+<button class="cta">결과 공유하기</button>
+<button class="secondary">나도 내 ROOM 만들기 →</button>
+</section>
+</div></body></html>
