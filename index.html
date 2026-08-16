@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.5</title>
+<title>MY ROOM V2.6</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.5 — retention + participation layers */
+/* V2.6 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.5 local account/save prototype */
+/* V2.6 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.5 visitor-first flow */
+/* V2.6 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V2.5 — actual mini-home room */
+/* V2.6 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.5 — MBTI room showcase + stronger character presence */
+/* V2.6 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V2.5 — restore original V0.7 character language */
+/* V2.6 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V2.5 — MBTI personality room details */
+/* V2.6 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -947,16 +947,30 @@ input:focus,select:focus{border-color:#111}
   font-weight:800;
 }
 
+
+html.routing body{visibility:hidden}
+
+
+body.visitor-mode #visitorFlow{display:block!important}
+body.visitor-mode .room-shell,
+body.visitor-mode #realSaveCard,
+body.visitor-mode #bottomShareActions,
+body.visitor-mode .owner-only{display:none!important}
+body.visitor-mode #visitorEntryCard{display:block!important}
+body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
+body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
+
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add("routing");</script>
 <div class="app">
 
 <!-- LANDING -->
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.5</div>
+    <div class="micro">V2.6</div>
   </div>
 
   <div class="hero-blob">
@@ -1521,7 +1535,7 @@ async function refreshVisitCounts(roomId){
 }
 
 async function loadPublicRoomBySlug(slug){
-  const { data, error }=await sb.from("myroom_rooms")
+  const {data,error}=await sb.from("myroom_rooms")
     .select("*")
     .eq("slug",slug)
     .eq("is_public",true)
@@ -1533,55 +1547,86 @@ async function loadPublicRoomBySlug(slug){
   }
   if(!data) return false;
 
-  // Keep separate references:
-  // currentRemoteRoom = the ROOM being visited,
-  // loggedInOwnRoom = the visitor's own room (if they have one).
+  // Visited room is kept separately from visitor's own room.
   currentRemoteRoom=data;
-  state.owner={name:data.nickname,birth:"2000-01-01",mbti:data.mbti};
+  state.owner={
+    name:data.nickname,
+    birth:"2000-01-01",
+    mbti:data.mbti
+  };
 
   VIEW_MODE="visitor";
   document.body.classList.add("visitor-mode");
   document.body.classList.remove("chemistry-done");
 
-  renderRoom();
+  // Switch to room page first, then initialize visitor content.
+  go("room");
   initVisitorFlow();
   syncVisitorPrimaryCta();
-  go("room");
   window.scrollTo(0,0);
 
-  await recordPublicRoomVisit(data);
+  // Count the visit, but do not let a failure affect the UI.
+  recordPublicRoomVisit(data).catch(console.warn);
   return true;
 }
 
 async function bootSupabase(){
-  const params=new URLSearchParams(window.location.search);
-  const roomSlug=params.get("room");
+  try{
+    const params=new URLSearchParams(window.location.search);
+    const sharedSlug=(params.get("room")||"").trim();
 
-  await getAuthUser();
+    // IMPORTANT: shared link routing has absolute priority.
+    if(sharedSlug){
+      // Auth is only informational here. It must never redirect the visitor.
+      try{
+        const {data}=await sb.auth.getUser();
+        currentAuthUser=data?.user||null;
+      }catch(e){
+        currentAuthUser=null;
+      }
 
-  if(roomSlug){
-    // Even a logged-in user is a VISITOR when a shared room URL is opened.
-    if(currentAuthUser) await getLoggedInOwnRoom();
-    const ok=await loadPublicRoomBySlug(roomSlug);
-    if(ok) return;
+      if(currentAuthUser){
+        await getLoggedInOwnRoom();
+      }else{
+        loggedInOwnRoom=null;
+      }
+
+      const ok=await loadPublicRoomBySlug(sharedSlug);
+      if(!ok){
+        console.warn("Shared ROOM not found:",sharedSlug);
+        go("landing");
+      }
+      return;
+    }
+
+    // Normal root URL = owner's flow.
+    await getAuthUser();
+
+    if(currentAuthUser){
+      const existing=await loadMyRemoteRoom();
+      if(existing) return;
+    }
+
+    // No session / no room: show create landing.
+    document.body.classList.remove("visitor-mode","chemistry-done");
+    VIEW_MODE="owner";
+    go("landing");
+    syncRealAuthUI();
+  }finally{
+    document.documentElement.classList.remove("routing");
   }
-
-  // Normal non-shared URL: logged-in users go to their own room.
-  if(currentAuthUser){
-    const existing=await loadMyRemoteRoom();
-    if(existing) return;
-  }
-
-  syncRealAuthUI();
 }
 
 sb.auth.onAuthStateChange(async(event,session)=>{
   currentAuthUser=session?.user||null;
-  const sharedSlug=new URLSearchParams(window.location.search).get("room");
+  const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
 
   if(sharedSlug){
-    if(currentAuthUser) await getLoggedInOwnRoom();
-    else loggedInOwnRoom=null;
+    if(currentAuthUser){
+      await getLoggedInOwnRoom();
+    }else{
+      loggedInOwnRoom=null;
+    }
     syncVisitorPrimaryCta();
     return;
   }
@@ -1721,14 +1766,6 @@ function hydrateStoredOwner(){
   if(n)n.value=state.owner.name;if(b)b.value=state.owner.birth;if(m)m.value=state.owner.mbti;
   const grid=document.getElementById("ownerMbtiGrid");
   if(grid)[...grid.children].forEach(x=>x.classList.toggle("on",x.textContent===state.owner.mbti));
-  return true;
-}
-function autoEnterMyRoom(){
-  if(!hydrateStoredOwner())return false;
-  renderRoom();
-  try{initRetentionLayer()}catch(e){}
-  syncAccountUI();
-  go("room");
   return true;
 }
 
@@ -2365,13 +2402,16 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V2.5 startup
-if(!autoEnterMyRoom()){
-  renderRoom();
-  syncAccountUI();
-}
 
-window.addEventListener("DOMContentLoaded",()=>{ bootSupabase().catch(console.error); });
+
+
+
+window.addEventListener("DOMContentLoaded",()=>{
+  bootSupabase().catch(err=>{
+    console.error("boot failed",err);
+    document.documentElement.classList.remove("routing");
+  });
+});
 </script>
 </body>
 </html>
