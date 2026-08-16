@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V4.0</title>
+<title>MY ROOM V4.9</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1983,6 +1983,17 @@ async function openSharedRoomFromUrl(){
     return true;
   }catch(e){
     console.error("openSharedRoomFromUrl failed",e);
+    const flow=document.getElementById("visitorFlow");
+    if(currentRemoteRoom){
+      // Room was found; don't lie to the user that it doesn't exist.
+      try{
+        VIEW_MODE="visitor";
+        document.body.classList.add("visitor-mode");
+        go("room");
+        if(flow) flow.innerHTML=buildVisitorFlowMarkup(currentRemoteRoom.nickname||state.owner?.name||"친구");
+      }catch(inner){ console.error(inner); }
+      return true;
+    }
     showMissingRoom();
     return true;
   }
@@ -2720,12 +2731,15 @@ function profileLine(m){
   return personalityFor(m).line.replace("\\n","<br>");
 }
 function renderPersonality(){
+  const label=document.getElementById("personalityLabel");
+  const headline=document.getElementById("personalityHeadline");
+  const bits=document.getElementById("personalityBits");
+  if(!label && !headline && !bits) return;
+
   const p=personalityFor(state.owner.mbti);
-  document.getElementById("personalityLabel").textContent=state.owner.mbti+".zip";
-  document.getElementById("personalityHeadline").textContent=p.headline;
-  document.getElementById("personalityBits").innerHTML=p.bits.map(x=>
-    `<div class="personality-bit"><span>${x[0]}</span><span>${x[1]}</span></div>`
-  ).join("");
+  if(label) label.textContent=state.owner.mbti;
+  if(headline) headline.textContent=p.headline;
+  if(bits) bits.innerHTML=p.bits.map(([a,b])=>`<div class="personality-bit"><span>${a}</span><span>${b}</span></div>`).join("");
 }
 function monthMood(birth){
   const m=parseInt(birth.split("-")[1]||8);
@@ -3066,38 +3080,74 @@ function renderRoom(){
   const o=state.owner;
   refreshAvatars();
   applyRoomSkin();
-  document.getElementById("roomNameTop").textContent=o.name;
-  document.getElementById("roomName").textContent=o.name;
-  document.getElementById("roomMbti").textContent=o.mbti;
-  document.getElementById("roomOneLine").innerHTML=profileLine(o.mbti);
-  renderPersonality();
-  document.getElementById("roomColor").textContent="MOOD · "+monthMood(o.birth);
-  document.getElementById("roomLucky").textContent="NO. "+String(parseInt(o.birth.split("-")[2]||6)).padStart(2,"0");
+
+  const setText=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=value;
+  };
+  const setHtml=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=value;
+  };
+
+  setText("roomNameTop",o.name);
+  setText("roomName",o.name);
+  setText("roomMbti",o.mbti);
+  setHtml("roomOneLine",profileLine(o.mbti));
+
+  try{ renderPersonality(); }catch(e){ console.warn("renderPersonality skipped",e); }
+
+  setText("roomColor","MOOD · "+monthMood(o.birth));
+  setText("roomLucky","NO. "+String(parseInt((o.birth||"2000-01-01").split("-")[2]||6)).padStart(2,"0"));
+
   const fakeUrl=document.getElementById("fakeUrl");
   if(fakeUrl) fakeUrl.textContent=currentRemoteRoom?.id ? publicRoomUrl() : "ROOM 저장 후 친구용 주소가 만들어져요.";
-  document.getElementById("friendOwnerName").textContent=o.name;
-  document.getElementById("friendOwnerName2").textContent=o.name;
-  renderRank();
-  renderMiniHome();
-  buildCharacterReview();
-  syncBottomShare();
-  setTimeout(initRetentionLayer,0);
+
+  setText("friendOwnerName",o.name);
+  setText("friendOwnerName2",o.name);
+
+  try{ renderRank(); }catch(e){ console.warn("renderRank skipped",e); }
+  try{ renderMiniHome(); }catch(e){ console.warn("renderMiniHome skipped",e); }
+  try{ buildCharacterReview(); }catch(e){ console.warn("buildCharacterReview skipped",e); }
+  try{ syncBottomShare(); }catch(e){ console.warn("syncBottomShare skipped",e); }
+  setTimeout(()=>{ try{ initRetentionLayer(); }catch(e){ console.warn("retention layer skipped",e); } },0);
 }
 function renderRank(){
   const list=document.getElementById("rankList");
   const c=document.getElementById("collection");
-  list.innerHTML="";c.innerHTML="";
+  const unlock=document.getElementById("unlockCopy");
+
+  // These were part of an older UI and may intentionally not exist anymore.
+  if(!list && !c && !unlock) return;
+
   const sorted=[...state.friends].sort((a,b)=>b.score-a.score);
-  sorted.forEach((f,i)=>{
-    const r=document.createElement("div");r.className="rank-row";
-    r.innerHTML=`<div class="rank-name"><b>${i+1}</b><span class="face"></span><b>${escapeHtml(f.name)}</b></div><span>${f.score}</span>`;
-    list.appendChild(r);
-    const face=document.createElement("div");face.className="mini-face";c.appendChild(face);
-  });
-  for(let i=sorted.length;i<6;i++){
-    const q=document.createElement("div");q.className="mini-face";q.style.opacity=".18";c.appendChild(q);
+
+  if(list){
+    list.innerHTML="";
+    sorted.forEach((f,i)=>{
+      const r=document.createElement("div");
+      r.className="rank-row";
+      r.innerHTML=`<div class="rank-name"><b>${i+1}</b><span class="face"></span><b>${escapeHtml(f.name)}</b></div><span>${f.score}</span>`;
+      list.appendChild(r);
+    });
   }
-  document.getElementById("unlockCopy").innerHTML=`<b>FRIENDS ${sorted.length} / 5</b><br>친구 5명이 참여하면 <b>내 친구 관계 타입</b>이 열려요.`;
+
+  if(c){
+    c.innerHTML="";
+    sorted.forEach(()=>{
+      const face=document.createElement("div");
+      face.className="mini-face";
+      c.appendChild(face);
+    });
+    for(let i=sorted.length;i<6;i++){
+      const q=document.createElement("div");
+      q.className="mini-face";
+      q.style.opacity=".18";
+      c.appendChild(q);
+    }
+  }
+
+  if(unlock) unlock.innerHTML=`<b>FRIENDS ${sorted.length} / 5</b><br>친구 5명이 참여하면 <b>내 친구 관계 타입</b>이 열려요.`;
 }
 
 function hashScore(s){
