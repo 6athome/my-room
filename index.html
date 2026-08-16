@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.1</title>
+<title>MY ROOM V2.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V2.1: generated-room-only MBTI visual exaggeration */
+/* V2.2: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V2.1 — all 16 MBTI character skins */
+/* V2.2 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.1 — retention + participation layers */
+/* V2.2 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.1 local account/save prototype */
+/* V2.2 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -544,7 +544,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.1 visitor-first flow */
+/* V2.2 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -573,10 +573,17 @@ body:not(.visitor-mode) .visitor-only{display:none!important}
 .visitor-extra-btn{width:100%;margin-top:8px;padding:10px;border:0;background:transparent;text-decoration:underline;font-size:10px;color:#555}
 .optional-vote{margin-top:10px}
 body.visitor-mode .room-shell{display:none!important}
-body.visitor-mode #visitorFlow{display:block!important}
+body.visitor-mode #visitorFlow{
+  display:block!important;
+  max-width:420px;
+  margin:18px auto 0;
+}
+body.visitor-mode #visitorEntryCard,
+body.visitor-mode #visitorResultCard{display:block}
+body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V2.1 — actual mini-home room */
+/* V2.2 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -667,7 +674,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.1 — MBTI room showcase + stronger character presence */
+/* V2.2 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -711,6 +718,11 @@ body.visitor-mode #visitorFlow{display:block!important}
   letter-spacing:-.08em;opacity:.12;z-index:1;
 }
 
+
+#visitorResultCard .visitor-score{font-size:58px;line-height:1;margin:10px 0 6px}
+#visitorResultCard .visitor-relation{font-size:19px;line-height:1.35}
+#visitorResultCard .primary{font-size:12px}
+
 </style>
 </head>
 <body>
@@ -720,7 +732,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.1</div>
+    <div class="micro">V2.2</div>
   </div>
 
   <div class="hero-blob">
@@ -1881,9 +1893,10 @@ function chemistryCopy(score, ownerMbti, friendMbti){
   if(score>=80) return ["티격태격해도 또 만남","한 번씩 부딪혀도 결국 다시 연락하는 조합."];
   return ["달라서 더 재밌는 사이","서로 다른 부분이 오히려 관계의 포인트가 되는 조합."];
 }
-function runVisitorChemistry(){
+async function runVisitorChemistry(){
   const name=(document.getElementById("visitorNameInput")?.value||"").trim();
   const mbti=document.getElementById("visitorMbtiInput")?.value||"";
+
   if(!name){ alert("이름이나 닉네임을 입력해 주세요."); return; }
   if(!mbti){ alert("MBTI를 선택해 주세요."); return; }
 
@@ -1891,23 +1904,52 @@ function runVisitorChemistry(){
   const score=chemistryScoreFor(owner.mbti,mbti);
   const [relation,desc]=chemistryCopy(score,owner.mbti,mbti);
 
-  document.getElementById("visitorScore").textContent=score+"%";
-  document.getElementById("visitorRelation").textContent=relation;
-  document.getElementById("visitorResultText").textContent=
-    `${owner.name} (${owner.mbti}) × ${name} (${mbti}) · ${desc}`;
+  const scoreEl=document.getElementById("visitorScore");
+  const relEl=document.getElementById("visitorRelation");
+  const textEl=document.getElementById("visitorResultText");
+  const entry=document.getElementById("visitorEntryCard");
+  const result=document.getElementById("visitorResultCard");
 
-  document.getElementById("visitorEntryCard").style.display="none";
-  document.getElementById("visitorResultCard").style.display="block";
-  document.getElementById("visitorNextCard").style.display="block";
+  if(scoreEl) scoreEl.textContent=score+"%";
+  if(relEl) relEl.textContent=relation;
+  if(textEl) textEl.textContent=`${owner.name} (${owner.mbti}) × ${name} (${mbti}) · ${desc}`;
 
-  // Keep visitor info for later Supabase chemistry save wiring.
+  if(entry) entry.style.display="none";
+  if(result) result.style.display="block";
+  document.body.classList.add("chemistry-done");
+
   window.__visitorChemistry={name,mbti,score,relation};
+
+  // Prototype recent-visitor cache for the room illustration.
   try{
     const arr=JSON.parse(localStorage.getItem("myroom_recent_friends")||"[]");
-    const next=[{name:name.toUpperCase(),mbti,score},...arr.filter(x=>x.name!==name.toUpperCase())].slice(0,5);
+    const upper=name.toUpperCase();
+    const next=[{name:upper,mbti,score},...arr.filter(x=>x.name!==upper)].slice(0,5);
     localStorage.setItem("myroom_recent_friends",JSON.stringify(next));
   }catch(e){}
-  document.body.classList.add("chemistry-done");
+
+  // Persist actual chemistry participation when this is a shared public ROOM.
+  if(currentRemoteRoom?.id){
+    try{
+      const token=getVisitorToken();
+      const {error}=await sb.from("myroom_chemistry_results").upsert({
+        room_id:currentRemoteRoom.id,
+        visitor_token:token,
+        friend_nickname:name,
+        friend_mbti:mbti,
+        score,
+        relation_key:relation,
+        play_score:score,
+        talk_score:Math.max(0,Math.min(100,score+((mbti.charCodeAt(0)%7)-3))),
+        travel_score:Math.max(0,Math.min(100,score+((mbti.charCodeAt(1)%9)-4)))
+      },{onConflict:"room_id,visitor_token"});
+      if(error) console.warn("chemistry save failed",error);
+    }catch(e){
+      console.warn("chemistry save failed",e);
+    }
+  }
+
+  result?.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function showVisitorVote(){
   const v=document.getElementById("visitorFriendsSay");
@@ -1926,12 +1968,17 @@ function startMyRoomFromVisitor(){
 function initVisitorFlow(){
   const n=document.getElementById("visitorOwnerName");
   if(n) n.textContent=state.owner.name||"JISU";
+
   const entry=document.getElementById("visitorEntryCard");
   const result=document.getElementById("visitorResultCard");
-  const next=document.getElementById("visitorNextCard");
-  if(entry)entry.style.display="block";
-  if(result)result.style.display="none";
-  if(next)next.style.display="none";
+
+  if(entry) entry.style.display="block";
+  if(result) result.style.display="none";
+
+  const nameInput=document.getElementById("visitorNameInput");
+  const mbtiInput=document.getElementById("visitorMbtiInput");
+  if(nameInput) nameInput.value="";
+  if(mbtiInput) mbtiInput.value="";
 }
 
 function publicRoomUrl(){
@@ -1967,7 +2014,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V2.1 startup
+// V2.2 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
