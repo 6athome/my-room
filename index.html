@@ -1298,7 +1298,8 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     <div class="micro">OUR CHEMISTRY</div>
     <h3><span id="visitorOwnerName">JISU</span>랑 나는 몇 점?</h3>
     <div class="visitor-fields">
-      <input id="visitorNameInput" placeholder="내 이름">
+      <input id="visitorNameInput" placeholder="내 이름" maxlength="40" autocomplete="name">
+      <input id="visitorBirthInput" type="date" aria-label="내 생년월일">
       <select id="visitorMbtiInput">
         <option value="">내 MBTI</option>
         <option>INTJ</option><option>INTP</option><option>ENTJ</option><option>ENTP</option>
@@ -1813,7 +1814,8 @@ function buildVisitorFlowMarkup(ownerName){
       <div class="micro">OUR CHEMISTRY</div>
       <h3><span id="visitorOwnerName">${ownerName}</span>랑 나는 몇 점?</h3>
       <div class="visitor-fields">
-        <input id="visitorNameInput" placeholder="내 이름">
+        <input id="visitorNameInput" placeholder="내 이름" maxlength="40" autocomplete="name">
+        <input id="visitorBirthInput" type="date" aria-label="내 생년월일">
         <select id="visitorMbtiInput">
           <option value="">내 MBTI</option>
           ${MBTIS.map(m=>`<option>${m}</option>`).join("")}
@@ -3034,15 +3036,18 @@ function chemistryCopy(score, ownerMbti, friendMbti){
 }
 async function runVisitorChemistry(){
   const name=(document.getElementById("visitorNameInput")?.value||"").trim();
+  const birth=document.getElementById("visitorBirthInput")?.value||"";
   const mbti=document.getElementById("visitorMbtiInput")?.value||"";
   if(!name){ alert("이름이나 닉네임을 입력해 주세요."); return; }
+  if(!birth){ alert("생년월일을 입력해 주세요."); return; }
   if(!mbti){ alert("MBTI를 선택해 주세요."); return; }
 
   const owner=state.owner;
-  const score=chemistryScoreFor(owner.mbti,mbti);
-  const [relation,desc]=chemistryCopy(score,owner.mbti,mbti);
-
+  const baseScore=chemistryScoreFor(owner.mbti,mbti);
+  let score=baseScore;
+  let relation=chemistryCopy(score,owner.mbti,mbti)[0];
   let rankData=null;
+
   if(currentRemoteRoom?.id){
     try{
       const {data,error}=await sb.rpc("myroom_submit_chemistry",{
@@ -3050,16 +3055,21 @@ async function runVisitorChemistry(){
         token:getVisitorToken(),
         friend_name:name,
         friend_mbti:mbti,
-        score_value:score,
-        relation_value:relation
+        friend_birth:birth,
+        score_value:baseScore
       });
       if(error) throw error;
       rankData=data;
+      score=Number(data?.score ?? baseScore);
+      relation=data?.relation || chemistryCopy(score,owner.mbti,mbti)[0];
     }catch(e){
       console.warn("chemistry submit failed",e);
+      alert("궁합 결과를 저장하지 못했어요. 잠시 후 다시 시도해 주세요.");
+      return;
     }
   }
 
+  const [,desc]=chemistryCopy(score,owner.mbti,mbti);
   const scoreEl=document.getElementById("visitorScore");
   const relEl=document.getElementById("visitorRelation");
   const textEl=document.getElementById("visitorResultText");
@@ -3109,8 +3119,10 @@ function initVisitorFlow(){
   if(result) result.style.display="none";
 
   const nameInput=document.getElementById("visitorNameInput");
+  const birthInput=document.getElementById("visitorBirthInput");
   const mbtiInput=document.getElementById("visitorMbtiInput");
   if(nameInput) nameInput.value="";
+  if(birthInput) birthInput.value="";
   if(mbtiInput) mbtiInput.value="";
 
   syncVisitorPrimaryCta();
