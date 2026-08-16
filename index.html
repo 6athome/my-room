@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V3.4</title>
+<title>MY ROOM V3.0.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V3.4 — retention + participation layers */
+/* V3.0.1 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V3.4 local account/save prototype */
+/* V3.0.1 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V3.4 visitor-first flow */
+/* V3.0.1 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V3.4 — actual mini-home room */
+/* V3.0.1 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V3.4 — MBTI room showcase + stronger character presence */
+/* V3.0.1 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V3.4 — restore original V0.7 character language */
+/* V3.0.1 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V3.4 — MBTI personality room details */
+/* V3.0.1 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -961,7 +961,7 @@ body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
-/* V3.4 core polish */
+/* V3.0.1 core polish */
 .owner-avatar-stage{
   left:50%;bottom:48px;width:118px;height:168px;
   transform:translateX(-50%);transform-origin:bottom center;
@@ -1006,7 +1006,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .room-scene{min-height:330px}
 
 
-/* V3.4 — distinct 16 MBTI silhouettes */
+/* V3.0.1 — distinct 16 MBTI silhouettes */
 .owner-avatar-stage .pixel-person{
   transform:scale(.58)!important; /* approx 0.8x from previous .72 */
   transform-origin:bottom center!important;
@@ -1104,7 +1104,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .character-review-grid button{border:1px solid #111;border-radius:8px;background:#fff;padding:6px 2px;font-size:8px;font-weight:850}
 .character-review-grid button.on{background:#111;color:#fff}
 
-/* V3.4 character differentiation */
+/* V3.0.1 character differentiation */
 .pixel-person.mbti-INTJ .pixel-body{background:#20242B!important}
 .pixel-person.mbti-INTJ .pixel-leg{background:#B9C7FF!important}
 .pixel-person.mbti-INTP .pixel-body{background:#4B6CB7!important}
@@ -1156,267 +1156,42 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .pixel-person.hook-heart::after{font-size:29px!important}
 
 
-/* V3.4 — final 16 MBTI code-drawn chibi characters */
-.pixel-person{display:none!important}
-.svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
-.svg-avatar svg{width:104px;height:150px;overflow:visible}
+/* V3.0.1 — SVG character pilot: softer modern mini-avatar */
+.svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.svg-avatar svg{width:94px;height:148px;overflow:visible;filter:drop-shadow(0 3px 0 rgba(0,0,0,.10))}
 .owner-avatar-stage .svg-avatar{transform:scale(.80);transform-origin:bottom center}
-.visitor-character .svg-avatar{position:absolute;left:50%;bottom:7px;width:70px;height:86px;transform:translateX(-50%) scale(.54);transform-origin:bottom center}
-.ch-skin{fill:#f3c6a6;stroke:#171717;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.ch-hair{fill:#28231f;stroke:#171717;stroke-width:2.5;stroke-linejoin:round}
-.ch-line{fill:none;stroke:#171717;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.ch-eye{fill:#171717}
-.ch-shoe{fill:#262626;stroke:#171717;stroke-width:2.5}
-.ch-white{fill:#fff;stroke:#171717;stroke-width:2.5;stroke-linejoin:round}
-.ch-text{font:900 8px Arial,sans-serif;fill:#171717}
+.svg-avatar .skin{fill:#f1c4a7;stroke:#181818;stroke-width:2.4;stroke-linejoin:round}
+.svg-avatar .hair{fill:#282522;stroke:#181818;stroke-width:2.4;stroke-linejoin:round}
+.svg-avatar .line{fill:none;stroke:#181818;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.svg-avatar .eye{fill:#181818}
+.svg-avatar .shoe{fill:#292929;stroke:#181818;stroke-width:2.4}
+.svg-avatar .prop-white{fill:#fff;stroke:#181818;stroke-width:2.4;stroke-linejoin:round}
+.svg-avatar text{font-family:Arial,sans-serif;font-weight:900;fill:#181818}
 
 
-.shared-special-card{
-  max-width:420px;margin:18px auto;border:1.5px solid #111;border-radius:18px;
-  padding:18px;background:#fff7d8;box-shadow:4px 4px 0 #111
+/* V3.0.1 auth-only patch — no ROOM/UI redesign */
+.existing-login-link{
+  margin-top:9px;text-align:center;font-size:10px;color:#777
 }
-.shared-special-card h3{font-size:19px;line-height:1.35;margin:5px 0 8px}
-.shared-special-card p{font-size:10px;line-height:1.55;color:#555}
-.shared-special-actions{display:grid;gap:7px;margin-top:12px}
-.shared-special-actions button{width:100%;padding:12px;border:1px solid #111;border-radius:10px;background:#fff;font-weight:900}
-.shared-special-actions .primary-action{background:#111;color:#fff}
-
-
-/* V3.4 — test-friendly auth */
-.email-auth-box{margin-top:10px;padding-top:10px;border-top:1px dashed #bbb}
+.existing-login-link button{
+  border:0;background:transparent;color:#111;text-decoration:underline;
+  font-size:10px;font-weight:850;padding:2px 3px
+}
+.email-auth-box{
+  margin-top:10px;padding-top:10px;border-top:1px dashed #bbb
+}
 .email-auth-box input{
-  width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:10px;
-  padding:11px;margin-top:7px;background:#fff;font-size:12px
+  display:block;width:100%;box-sizing:border-box;margin-top:7px;padding:10px;
+  border:1px solid #bbb;border-radius:9px;background:#fff;font:inherit
 }
-.email-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.email-auth-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px
+}
 .email-auth-actions button{
-  border:1px solid #111;border-radius:10px;padding:11px;background:#fff;font-weight:850
+  border:1px solid #111;border-radius:9px;background:#fff;padding:10px;font-weight:850
 }
-.email-auth-msg{font-size:9px;line-height:1.45;margin-top:7px;color:#555}
-.account-tools{
-  display:flex;justify-content:flex-end;gap:6px;margin:7px 0 0
-}
-.account-tools button{
-  border:1px solid #111;border-radius:999px;background:#fff;padding:6px 9px;
-  font-size:8px;font-weight:900
-}
-
-
-/* V3.4 — character visibility repair */
-#profileAvatarCard{
-  display:block!important;
-  position:relative!important;
-  width:120px!important;
-  height:180px!important;
-  overflow:visible!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-#profileAvatarCard .svg-avatar{
-  display:flex!important;
-  position:relative!important;
-  width:120px!important;
-  height:180px!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  overflow:visible!important;
-  opacity:1!important;
-  visibility:visible!important;
-  transform:none!important;
-}
-#profileAvatarCard .svg-avatar svg{
-  display:block!important;
-  width:92px!important;
-  height:148px!important;
-  overflow:visible!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-.visitor-character{
-  overflow:visible!important;
-}
-.visitor-character .svg-avatar{
-  display:flex!important;
-  position:absolute!important;
-  left:50%!important;
-  bottom:8px!important;
-  width:70px!important;
-  height:90px!important;
-  transform:translateX(-50%) scale(.54)!important;
-  transform-origin:bottom center!important;
-  overflow:visible!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-
-
-/* V3.4 — landing default character + existing account link */
-.landing-avatar{
-  width:100%;height:170px;display:flex;align-items:flex-end;justify-content:center;
-  margin:2px 0 8px;overflow:visible
-}
-.landing-char{position:relative;width:92px;height:152px}
-.landing-char .lc-head{
-  position:absolute;left:25px;top:23px;width:43px;height:43px;border-radius:46% 46% 44% 44%;
-  background:#f1c4a7;border:2.5px solid #171717;z-index:3
-}
-.landing-char .lc-hair{
-  position:absolute;left:22px;top:15px;width:49px;height:31px;border-radius:48% 52% 35% 35%;
-  background:#27231f;border:2.5px solid #171717;z-index:4
-}
-.landing-char .lc-hair:after{
-  content:"";position:absolute;left:4px;right:4px;bottom:-7px;height:15px;
-  background:#27231f;clip-path:polygon(0 0,17% 55%,32% 15%,49% 62%,64% 18%,82% 58%,100% 0,100% 28%,0 28%)
-}
-.landing-char .lc-eye{
-  position:absolute;top:42px;width:3.5px;height:3.5px;background:#171717;border-radius:50%;z-index:5
-}
-.landing-char .lc-eye.e1{left:39px}.landing-char .lc-eye.e2{left:54px}
-.landing-char .lc-body{
-  position:absolute;left:25px;top:67px;width:43px;height:51px;border:2.5px solid #171717;
-  border-radius:12px 12px 7px 7px;background:#1f1f1f;z-index:2
-}
-.landing-char .lc-arm{
-  position:absolute;top:74px;width:12px;height:42px;background:#f1c4a7;border:2.5px solid #171717;border-radius:7px;z-index:1
-}
-.landing-char .lc-arm.a1{left:15px;transform:rotate(8deg)}.landing-char .lc-arm.a2{right:13px;transform:rotate(-8deg)}
-.landing-char .lc-leg{
-  position:absolute;top:115px;width:15px;height:30px;background:#ded7ce;border:2.5px solid #171717;z-index:1
-}
-.landing-char .lc-leg.l1{left:30px}.landing-char .lc-leg.l2{left:51px}
-.landing-char .lc-shoe{
-  position:absolute;top:141px;width:19px;height:9px;background:#222;border:2.5px solid #171717;border-radius:4px
-}
-.landing-char .lc-shoe.s1{left:27px}.landing-char .lc-shoe.s2{left:50px}
-.existing-login-link{
-  margin-top:10px;text-align:center;font-size:10px;color:#666
-}
-.existing-login-link button{
-  border:0;background:transparent;padding:2px 4px;text-decoration:underline;
-  color:#111;font-size:10px;font-weight:850;cursor:pointer
-}
-
-
-/* V3.4 — simple pixel default character on landing */
-.landing-avatar{
-  width:100%;
-  height:250px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:4px 0 10px;
-  overflow:visible;
-}
-.pixel-default-char{
-  position:relative;
-  width:118px;
-  height:210px;
-}
-.pixel-default-char *{box-sizing:border-box}
-.pdc-hair{
-  position:absolute;
-  left:24px;
-  top:14px;
-  width:70px;
-  height:56px;
-  background:#111;
-  box-shadow:
-    -10px 10px 0 #111,
-    10px 10px 0 #111,
-    0 -8px 0 #111;
-  z-index:4;
-}
-.pdc-ear{
-  position:absolute;
-  top:52px;
-  width:14px;
-  height:34px;
-  background:#171717;
-  z-index:3;
-}
-.pdc-ear.left{left:16px}
-.pdc-ear.right{right:16px}
-.pdc-face{
-  position:absolute;
-  left:32px;
-  top:44px;
-  width:54px;
-  height:54px;
-  background:#efb180;
-  border:6px solid #111;
-  z-index:5;
-}
-.pdc-eye{
-  position:absolute;
-  top:18px;
-  width:6px;
-  height:16px;
-  background:#111;
-}
-.pdc-eye.e1{left:13px}
-.pdc-eye.e2{right:13px}
-.pdc-body{
-  position:absolute;
-  left:28px;
-  top:96px;
-  width:62px;
-  height:66px;
-  background:#151515;
-  border:6px solid #111;
-  z-index:3;
-}
-.pdc-leg{
-  position:absolute;
-  top:158px;
-  width:28px;
-  height:42px;
-  background:#171717;
-  border:6px solid #111;
-  z-index:2;
-}
-.pdc-leg.l1{left:29px}
-.pdc-leg.l2{right:29px}
-.pdc-shoe{
-  position:absolute;
-  top:194px;
-  width:39px;
-  height:14px;
-  background:#111;
-  z-index:2;
-}
-.pdc-shoe.s1{left:19px}
-.pdc-shoe.s2{right:19px}
-
-/* existing-account entry */
-.existing-login-link{
-  margin-top:10px;
-  text-align:center;
-  font-size:10px;
-  color:#777;
-}
-.existing-login-link button{
-  border:0;
-  background:transparent;
-  padding:2px 4px;
-  text-decoration:underline;
-  color:#111;
-  font-size:10px;
-  font-weight:850;
-  cursor:pointer;
-}
-
-
-.hero-blob{position:relative}
-.hero-blob:before,.hero-blob:after{
-  content:"✦";
-  position:absolute;
-  font-size:18px;
-  font-weight:900;
-  color:#111;
-  z-index:2;
-}
-.hero-blob:before{left:28%;top:29%}
-.hero-blob:after{right:18%;top:23%}
+.email-auth-msg{min-height:14px;margin-top:6px;font-size:9px;line-height:1.4;color:#666}
+.auth-top-actions{display:flex;gap:6px;align-items:center}
 
 </style>
 </head>
@@ -1428,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V3.4</div>
+    <div class="micro">V3.0.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1469,26 +1244,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <p class="lead">디자인은 고르지 않아도 돼요.<br>MBTI에 따라 캐릭터의 행동과 ROOM 내용도 달라져요.</p>
 
   <div class="form-card">
-    
-<div class="landing-avatar" aria-hidden="true">
-  <div class="pixel-default-char">
-    <div class="pdc-hair"></div>
-    <div class="pdc-ear left"></div>
-    <div class="pdc-ear right"></div>
-    <div class="pdc-face">
-      <span class="pdc-eye e1"></span>
-      <span class="pdc-eye e2"></span>
-    </div>
-    <div class="pdc-body"></div>
-    <div class="pdc-leg l1"></div>
-    <div class="pdc-leg l2"></div>
-    <div class="pdc-shoe s1"></div>
-    <div class="pdc-shoe s2"></div>
-  </div>
-</div>
-</div>
-
-<div class="field">
+    <div class="field">
       <label>닉네임</label>
       <input id="ownerName" value="JISU" maxlength="12">
     </div>
@@ -1503,10 +1259,10 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     </div>
   </div>
   <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
-<div class="existing-login-link">
-  이미 계정이 있나요?
-  <button type="button" onclick="openExistingLogin()">로그인하기</button>
-</div>
+  <div class="existing-login-link">
+    이미 계정이 있나요?
+    <button type="button" onclick="openExistingLogin()">로그인하기</button>
+  </div>
 
   <p class="hint">ROOM을 만들면 이 브라우저에 자동으로 임시 저장돼요.</p>
 </section>
@@ -1528,11 +1284,11 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
       <div class="micro">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
-<div class="account-tools owner-only" id="accountTools" style="display:none">
-  <button onclick="signOutMyRoom()">로그아웃</button>
-</div>
     </div>
-    <button class="chip" onclick="go('landing')">HOME</button>
+    <div class="auth-top-actions">
+      <button class="chip" id="logoutBtn" style="display:none" onclick="signOutMyRoom()">LOGOUT</button>
+      <button class="chip" onclick="go('landing')">HOME</button>
+    </div>
   </div>
 
   
@@ -1824,24 +1580,24 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 <div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeKakaoModal()">
   <div class="login-sheet">
-    <div class="micro">SAVE MY ROOM</div>
-    <h3>내 ROOM을 저장하려면<br>로그인이 필요해요.</h3>
-    <p>로그인하면 ROOM이 저장되고 자동으로 친구용 링크가 만들어져요.</p>
+    <div class="micro">LOGIN / SAVE MY ROOM</div>
+    <h3 id="loginModalTitle">내 ROOM을 저장하려면<br>로그인이 필요해요.</h3>
+    <p id="loginModalDesc">카카오 또는 이메일로 로그인하면 기존 ROOM을 불러오거나 지금 만든 ROOM을 저장할 수 있어요.</p>
 
     <button class="login-option dark" onclick="signInWithKakao()" style="background:#FEE500;color:#111">카카오로 시작하기</button>
 
     <div class="email-auth-box">
-      <div class="micro">EMAIL · TEST / ALTERNATIVE LOGIN</div>
+      <div class="micro">EMAIL</div>
       <input id="emailAuthEmail" type="email" placeholder="이메일">
       <input id="emailAuthPassword" type="password" placeholder="비밀번호 (6자 이상)">
       <div class="email-auth-actions">
-        <button onclick="signUpWithEmail()">이메일 회원가입</button>
-        <button onclick="signInWithEmail()">이메일 로그인</button>
+        <button onclick="signUpWithEmail()">회원가입</button>
+        <button onclick="signInWithEmail()">로그인</button>
       </div>
       <div id="emailAuthMsg" class="email-auth-msg"></div>
     </div>
 
-    <button class="login-option" onclick="closeKakaoModal()">나중에 할게요</button>
+    <button class="login-option" onclick="closeKakaoModal()">닫기</button>
   </div>
 </div>
 
@@ -1863,34 +1619,33 @@ function currentRedirectUrl(){
 }
 
 
-
-function openExistingLogin(){
-  const modal=document.getElementById("loginModal");
-  if(modal){
-    modal.classList.add("show");
-    const title=modal.querySelector("h3");
-    const desc=modal.querySelector("p");
-    if(title) title.innerHTML="이미 계정이 있나요?<br>로그인해 주세요.";
-    if(desc) desc.textContent="기존 ROOM이 있다면 로그인 후 바로 내 ROOM으로 이동해요.";
-  }
-}
-
-function emailAuthMessage(msg,isError=false){
+function setEmailAuthMsg(msg,isError=false){
   const el=document.getElementById("emailAuthMsg");
   if(!el) return;
   el.textContent=msg||"";
   el.style.color=isError?"#b42318":"#177245";
 }
-function readEmailAuthFields(){
-  const email=(document.getElementById("emailAuthEmail")?.value||"").trim();
-  const password=document.getElementById("emailAuthPassword")?.value||"";
-  return {email,password};
+function getEmailAuthFields(){
+  return {
+    email:(document.getElementById("emailAuthEmail")?.value||"").trim(),
+    password:document.getElementById("emailAuthPassword")?.value||""
+  };
+}
+function openExistingLogin(){
+  const modal=document.getElementById("loginModal");
+  if(!modal) return;
+  const title=document.getElementById("loginModalTitle");
+  const desc=document.getElementById("loginModalDesc");
+  if(title) title.innerHTML="이미 계정이 있나요?<br>로그인해 주세요.";
+  if(desc) desc.textContent="기존 ROOM이 있다면 로그인 후 바로 불러올게요.";
+  setEmailAuthMsg("");
+  modal.classList.add("show");
 }
 async function signUpWithEmail(){
-  const {email,password}=readEmailAuthFields();
-  if(!email){emailAuthMessage("이메일을 입력해 주세요.",true);return}
-  if(password.length<6){emailAuthMessage("비밀번호는 6자 이상 입력해 주세요.",true);return}
-  emailAuthMessage("가입 중...");
+  const {email,password}=getEmailAuthFields();
+  if(!email){setEmailAuthMsg("이메일을 입력해 주세요.",true);return}
+  if(password.length<6){setEmailAuthMsg("비밀번호는 6자 이상 입력해 주세요.",true);return}
+  setEmailAuthMsg("가입 중...");
   try{
     const {data,error}=await sb.auth.signUp({
       email,password,
@@ -1898,44 +1653,38 @@ async function signUpWithEmail(){
     });
     if(error) throw error;
     if(data?.session){
-      emailAuthMessage("가입 및 로그인 완료!");
+      setEmailAuthMsg("가입 및 로그인 완료!");
       closeKakaoModal();
     }else{
-      emailAuthMessage("가입했어요. 이메일 인증 설정이 켜져 있다면 메일을 확인해 주세요.");
+      setEmailAuthMsg("가입했어요. 이메일 인증이 켜져 있다면 메일을 확인해 주세요.");
     }
   }catch(err){
     console.error(err);
-    emailAuthMessage("회원가입 실패: "+err.message,true);
+    setEmailAuthMsg("회원가입 실패: "+err.message,true);
   }
 }
 async function signInWithEmail(){
-  const {email,password}=readEmailAuthFields();
-  if(!email||!password){emailAuthMessage("이메일과 비밀번호를 입력해 주세요.",true);return}
-  emailAuthMessage("로그인 중...");
+  const {email,password}=getEmailAuthFields();
+  if(!email||!password){setEmailAuthMsg("이메일과 비밀번호를 입력해 주세요.",true);return}
+  setEmailAuthMsg("로그인 중...");
   try{
-    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    const {error}=await sb.auth.signInWithPassword({email,password});
     if(error) throw error;
-    emailAuthMessage("로그인 완료!");
+    setEmailAuthMsg("로그인 완료!");
     closeKakaoModal();
   }catch(err){
     console.error(err);
-    emailAuthMessage("로그인 실패: "+err.message,true);
+    setEmailAuthMsg("로그인 실패: "+err.message,true);
   }
 }
 async function signOutMyRoom(){
-  try{
-    await sb.auth.signOut();
-  }catch(e){
-    console.warn("signout failed",e);
-  }
+  try{await sb.auth.signOut()}catch(e){console.warn(e)}
   currentAuthUser=null;
   currentRemoteRoom=null;
   loggedInOwnRoom=null;
-  try{sessionStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
   history.replaceState({}, "", window.location.pathname);
   document.body.classList.remove("visitor-mode","chemistry-done");
   VIEW_MODE="owner";
-  state.owner={name:"JISU",birth:"1993-08-06",mbti:"ENFP"};
   syncRealAuthUI();
   go("landing");
   window.scrollTo(0,0);
@@ -1992,22 +1741,21 @@ function syncRealAuthUI(){
     showSaveState("loggedout");
   }
   syncBottomShare();
-  const tools=document.getElementById("accountTools");
+  const logoutBtn=document.getElementById("logoutBtn");
   const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
-  if(tools) tools.style.display=(currentAuthUser && !sharedSlug)?"flex":"none";
+  if(logoutBtn) logoutBtn.style.display=(currentAuthUser && !sharedSlug)?"inline-block":"none";
 }
 
 function startRealSave(){
-  const modal=document.getElementById("loginModal");
-  if(modal){
-    const title=modal.querySelector("h3");
-    const desc=modal.querySelector("p");
-    if(title) title.innerHTML="내 ROOM을 저장하려면<br>로그인이 필요해요.";
-    if(desc) desc.textContent="로그인하면 ROOM이 저장되고 자동으로 친구용 링크가 만들어져요.";
-  }
+  const loginTitle=document.getElementById("loginModalTitle");
+  const loginDesc=document.getElementById("loginModalDesc");
+  if(loginTitle) loginTitle.innerHTML="내 ROOM을 저장하려면<br>로그인이 필요해요.";
+  if(loginDesc) loginDesc.textContent="카카오 또는 이메일로 로그인하면 ROOM을 저장할 수 있어요.";
+
   if(currentAuthUser){
     persistRoomToSupabase();
   }else{
+    const modal=document.getElementById("loginModal");
     if(modal) modal.classList.add("show");
   }
 }
@@ -2019,19 +1767,6 @@ function generateAutoSlug(){
   return `${base}-${rand}`;
 }
 
-
-
-async function generateUniqueAutoSlug(maxAttempts=8){
-  for(let i=0;i<maxAttempts;i++){
-    const candidate=generateAutoSlug();
-    const {data,error}=await sb.from("myroom_rooms").select("id").eq("slug",candidate).limit(1);
-    if(error) throw error;
-    if(!data || data.length===0) return candidate;
-  }
-  // practically unreachable fallback: longer random suffix
-  const base=(state?.owner?.name||"room").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,8)||"room";
-  return `${base}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
-}
 
 function calcMoodFromBirth(birth){
   const m=parseInt((birth||"1993-08-06").split("-")[1]||8,10);
@@ -2057,7 +1792,7 @@ async function persistRoomToSupabase(){
     return;
   }
 
-  const slug=currentRemoteRoom?.slug || await generateUniqueAutoSlug();
+  const slug=currentRemoteRoom?.slug || generateAutoSlug();
   const owner=state.owner;
 
   const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
@@ -2104,39 +1839,13 @@ async function persistRoomToSupabase(){
     res=await sb.from("myroom_rooms").update(roomPayload).eq("id",currentRemoteRoom.id).select().single();
   }else{
     res=await sb.from("myroom_rooms").insert(roomPayload).select().single();
-    // 23505 may be a rare concurrent slug collision. Owner duplication is already
-    // prevented by the DB unique index and the existing-owner check above.
-    if(res.error && res.error.code==="23505" && String(res.error.message||"").toLowerCase().includes("slug")){
-      roomPayload.slug=await generateUniqueAutoSlug();
-      res=await sb.from("myroom_rooms").insert(roomPayload).select().single();
-    }
   }
   if(res.error){
     console.error(res.error);
-    if(res.error.code==="23505"){
-      // If another tab created the user's one ROOM first, load that instead.
-      const existing=await getLoggedInOwnRoom();
-      if(existing){
-        currentRemoteRoom=existing;
-        loggedInOwnRoom=existing;
-        state.owner={
-          name:existing.nickname,
-          birth:state.owner.birth||"2000-01-01",
-          mbti:existing.mbti,
-          today_status:existing.today_status||""
-        };
-        renderRoom();
-        syncRealAuthUI();
-        await refreshVisitCounts(existing.id);
-        return;
-      }
-    }
-    alert("ROOM 저장에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    alert("ROOM 저장 실패: "+res.error.message);
     return;
   }
   currentRemoteRoom=res.data;
-  loggedInOwnRoom=res.data;
-  try{sessionStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
   showSaveState("ready");
   syncRealAuthUI();
   await refreshVisitCounts(currentRemoteRoom.id);
@@ -2213,104 +1922,6 @@ async function refreshVisitCounts(roomId){
   }
 }
 
-
-function showSharedSpecialCard(type,room=null){
-  VIEW_MODE="visitor";
-  document.body.classList.add("visitor-mode");
-  const accountTools=document.getElementById("accountTools"); if(accountTools) accountTools.style.display="none";
-  document.body.classList.remove("chemistry-done");
-  go("room");
-
-  const flow=document.getElementById("visitorFlow");
-  if(!flow) return;
-
-  if(type==="owner"){
-    flow.innerHTML=`
-      <div class="shared-special-card">
-        <div class="micro">MY SHARED LINK</div>
-        <h3>내가 공유한 ROOM이에요 ✦</h3>
-        <p>친구가 보는 궁합 화면을 확인하거나, 바로 내 ROOM으로 돌아갈 수 있어요.</p>
-        <div class="shared-special-actions">
-          <button class="primary-action" onclick="openOwnRoomFromSharedLink()">내 ROOM으로 가기 →</button>
-          <button onclick="previewMyRoomAsFriend()">친구 화면 미리보기</button>
-        </div>
-      </div>`;
-  }else{
-    flow.innerHTML=`
-      <div class="shared-special-card">
-        <div class="micro">ROOM NOT FOUND</div>
-        <h3>존재하지 않는 ROOM이에요.</h3>
-        <p>링크가 오래되었거나 잘못 복사되었을 수 있어요.</p>
-        <div class="shared-special-actions">
-          <button class="primary-action" onclick="goToNormalHome()">내 ROOM 만들기 →</button>
-        </div>
-      </div>`;
-  }
-  window.scrollTo(0,0);
-}
-async function openOwnRoomFromSharedLink(){
-  if(!currentAuthUser) return goToNormalHome();
-  const own=loggedInOwnRoom || await getLoggedInOwnRoom();
-  if(!own) return goToNormalHome();
-  history.replaceState({}, "", window.location.pathname);
-  document.body.classList.remove("visitor-mode","chemistry-done");
-  VIEW_MODE="owner";
-  currentRemoteRoom=own;
-  state.owner={
-    name:own.nickname,
-    birth:"2000-01-01",
-    mbti:own.mbti,
-    today_status:own.today_status||""
-  };
-  try{
-    const p=await sb.from("myroom_profiles").select("birth_date").eq("user_id",currentAuthUser.id).maybeSingle();
-    if(p.data?.birth_date) state.owner.birth=p.data.birth_date;
-  }catch(e){}
-  renderRoom();
-  syncRealAuthUI();
-  await refreshVisitCounts(own.id);
-  if(typeof loadRoomSocialSnapshot==="function") await loadRoomSocialSnapshot(own.id,true);
-  go("room");
-  window.scrollTo(0,0);
-}
-function previewMyRoomAsFriend(){
-  // Same shared ROOM, but explicitly enter the visitor chemistry flow.
-  initVisitorFlow();
-  const flow=document.getElementById("visitorFlow");
-  if(flow){
-    // initVisitorFlow relies on original markup, so recreate the compact visitor flow.
-    flow.innerHTML=`
-      <div class="visitor-entry-card" id="visitorEntryCard">
-        <div class="micro">OUR CHEMISTRY</div>
-        <h3><span id="visitorOwnerName">${state.owner.name}</span>랑 나는 몇 점?</h3>
-        <div class="visitor-fields">
-          <input id="visitorNameInput" placeholder="내 이름">
-          <select id="visitorMbtiInput">
-            <option value="">내 MBTI</option>
-            ${MBTIS.map(m=>`<option>${m}</option>`).join("")}
-          </select>
-        </div>
-        <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
-      </div>
-      <div class="visitor-result-card" id="visitorResultCard" style="display:none">
-        <div class="micro">OUR CHEMISTRY</div>
-        <div class="visitor-score" id="visitorScore">94%</div>
-        <div class="visitor-relation" id="visitorRelation"></div>
-        <p id="visitorResultText"></p>
-        <button class="primary" id="visitorPrimaryCta" style="margin-top:12px" onclick="handleVisitorPrimaryCta()">내 ROOM으로 가기 →</button>
-      </div>`;
-  }
-  window.scrollTo(0,0);
-}
-function goToNormalHome(){
-  history.replaceState({}, "", window.location.pathname);
-  document.body.classList.remove("visitor-mode","chemistry-done");
-  VIEW_MODE="owner";
-  currentRemoteRoom=null;
-  go("landing");
-  window.scrollTo(0,0);
-}
-
 async function loadPublicRoomBySlug(slug){
   const {data,error}=await sb.from("myroom_rooms")
     .select("*")
@@ -2324,27 +1935,12 @@ async function loadPublicRoomBySlug(slug){
   }
   if(!data) return false;
 
-  // If I opened my own shared URL, do not ask "me vs me" chemistry by default.
-  if(currentAuthUser && data.owner_id===currentAuthUser.id){
-    currentRemoteRoom=data;
-    loggedInOwnRoom=data;
-    state.owner={
-      name:data.nickname,
-      birth:"2000-01-01",
-      mbti:data.mbti,
-      today_status:data.today_status||""
-    };
-    showSharedSpecialCard("owner",data);
-    return true;
-  }
-
   // Visited room is kept separately from visitor's own room.
   currentRemoteRoom=data;
   state.owner={
     name:data.nickname,
     birth:"2000-01-01",
-    mbti:data.mbti,
-    today_status:data.today_status||""
+    mbti:data.mbti
   };
 
   VIEW_MODE="visitor";
@@ -2362,15 +1958,7 @@ async function loadPublicRoomBySlug(slug){
   return true;
 }
 
-
-function cleanupLegacyPreviewStorage(){
-  try{localStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
-  try{localStorage.removeItem(LOGIN_STORE_KEY)}catch(e){}
-  try{localStorage.removeItem(HANDLE_STORE_KEY)}catch(e){}
-}
-
 async function bootSupabase(){
-  cleanupLegacyPreviewStorage();
   try{
     const params=new URLSearchParams(window.location.search);
     const sharedSlug=(params.get("room")||"").trim();
@@ -2394,7 +1982,7 @@ async function bootSupabase(){
       const ok=await loadPublicRoomBySlug(sharedSlug);
       if(!ok){
         console.warn("Shared ROOM not found:",sharedSlug);
-        showSharedSpecialCard("notfound");
+        go("landing");
       }
       return;
     }
@@ -2473,14 +2061,12 @@ function storeCurrentRoom(){
     updatedAt:new Date().toISOString()
   };
   state.owner={name:payload.name,birth:payload.birth,mbti:payload.mbti};
-  // Login-before-save ROOM is a preview only. Keep it for this tab/session,
-  // never as a persistent "saved room".
-  try{sessionStorage.setItem(ROOM_STORE_KEY,JSON.stringify(payload))}catch(e){}
+  safeSet(ROOM_STORE_KEY,JSON.stringify(payload));
   return payload;
 }
 function readStoredRoom(){
   try{
-    const raw=sessionStorage.getItem(ROOM_STORE_KEY);
+    const raw=safeGet(ROOM_STORE_KEY);
     return raw?JSON.parse(raw):null;
   }catch(e){return null}
 }
@@ -2876,7 +2462,17 @@ function renderRoomVisitors(){
   const friends=(roomSocialSnapshot.recent_friends||[]).slice(0,8);
   avatars.innerHTML=friends.map(f=>`
     <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
-      ${mbtiCharacterSVG(f.mbti)}<div class="visitor-name">${f.name}</div>
+      <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
+        <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+        <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+        <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
+        <div class="pixel-hair"></div><div class="pixel-head"></div>
+        <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
+        <div class="pixel-body"></div>
+        <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+        <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
+      </div>
+      <div class="visitor-name">${f.name}</div>
     </div>`).join("");
 }
 
@@ -2928,100 +2524,90 @@ async function saveTodayStatus(text){
 
 
 
-
-const CH_PALETTE={
- ISTJ:["#48627b","#dce8f2"],ISFJ:["#d98f99","#ffe1e4"],INFJ:["#7667a5","#e7ddfa"],INTJ:["#252a31","#b9c7df"],
- ISTP:["#4d555a","#d9dddf"],ISFP:["#71845d","#e4ecd7"],INFP:["#8066b3","#e6dcff"],INTP:["#4e73aa","#dbe6fb"],
- ESTP:["#e8792f","#ffe0c5"],ESFP:["#ff4f98","#ffd4e6"],ENFP:["#ff806f","#ffe0d8"],ENTP:["#edc326","#fff0a5"],
- ESTJ:["#b5483d","#f0c9c4"],ESFJ:["#ec7698","#ffdbe5"],ENFJ:["#319879","#d4efe5"],ENTJ:["#6d4586","#e3d3ed"]
-};
-
-function chFace(x=55,y=42,expression="smile",hair="soft"){
- const mouth=expression==="flat"
-  ?`<path class="ch-line" d="M50 ${y+12}h10"/>`
-  :expression==="open"
-   ?`<path d="M50 ${y+10}q6 9 12 0" fill="#fff" stroke="#171717" stroke-width="2.5"/>`
-   :`<path class="ch-line" d="M50 ${y+11}q6 5 12 0"/>`;
- const hairPath=hair==="bun"
-  ?`<circle class="ch-hair" cx="${x+15}" cy="${y-20}" r="10"/><path class="ch-hair" d="M${x-21} ${y-2}q1-25 42-24q7 7 2 26l-10-12-9 8-10-9-8 10z"/>`
-  :hair==="cap"
-   ?`<path class="ch-hair" d="M${x-20} ${y-1}q2-21 40-20q7 8 1 23l-10-11-9 7-9-8-8 9z"/><path d="M${x-22} ${y-19}q20-13 41-2l8 3-9 6-39 1z" fill="#222" stroke="#171717" stroke-width="2.5"/>`
-   :`<path class="ch-hair" d="M${x-21} ${y-1}q1-25 42-24q7 7 2 26l-10-12-9 8-10-9-8 10z"/>`;
- return `<circle class="ch-skin" cx="${x}" cy="${y}" r="21"/>${hairPath}
- <circle class="ch-eye" cx="${x-7}" cy="${y+2}" r="2.2"/><circle class="ch-eye" cx="${x+8}" cy="${y+2}" r="2.2"/>${mouth}`;
-}
-function body(color,pants,kind="stand"){
- if(kind==="sit") return `<path d="M38 67q17-9 34 0l4 40H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-skin" d="M38 77L24 96l8 6 14-15z"/><path class="ch-skin" d="M70 77l14 19-8 6-14-15z"/>
- <path d="M37 105q-17 12-19 31h29l8-20 8 20h29q-4-19-21-31z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-shoe" d="M18 134h29v10H15z"/><path class="ch-shoe" d="M63 134h29l3 10H63z"/>`;
- if(kind==="jump") return `<path d="M38 65q17-8 34 1l4 45H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-skin" d="M38 74L17 55l-6 8 23 25z"/><path class="ch-skin" d="M70 74l22-10 5 9-25 16z"/>
- <path d="M39 109l-8 38h14l10-28 13 25 13-6-14-31z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-shoe" d="M29 144h18v10H26z"/><path class="ch-shoe" d="M69 139l15-5 5 9-18 8z"/>`;
- if(kind==="crouch") return `<path d="M38 70q17-8 34 0l3 36H35z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-skin" d="M38 79L23 99l8 5 15-15z"/><path class="ch-skin" d="M70 79l14 19-8 6-14-15z"/>
- <path d="M38 104l-18 23 12 8 22-17 20 18 13-8-17-24z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-shoe" d="M17 125l18 7-4 11-19-8z"/><path class="ch-shoe" d="M73 132l17-8 5 10-18 9z"/>`;
- return `<path d="M38 65q17-8 34 0l4 48H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-skin" d="M38 74L25 96l8 5 14-17z"/><path class="ch-skin" d="M70 74l14 22-8 5-14-17z"/>
- <path d="M39 111l-4 38h14l6-29 7 29h14l-5-38z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
- <path class="ch-shoe" d="M33 147h18v10H31z"/><path class="ch-shoe" d="M61 147h18l3 10H61z"/>`;
-}
-function propFor(m){
- const p={
- ISTJ:`<rect class="ch-white" x="77" y="66" width="26" height="32" rx="2"/><text class="ch-text" x="81" y="79">08</text><path class="ch-line" d="M81 85h17M81 91h12"/>`,
- ISFJ:`<rect x="77" y="79" width="23" height="18" rx="3" fill="#ffd9df" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M100 83q10 1 4 10h-5"/><path d="M83 84q5-8 10 0" fill="none" stroke="#fff" stroke-width="2"/>`,
- INFJ:`<circle cx="88" cy="79" r="14" fill="#cab9f1" stroke="#171717" stroke-width="2.5"/><circle cx="84" cy="75" r="4" fill="#fff" opacity=".7"/>`,
- INTJ:`<rect x="76" y="72" width="29" height="23" rx="2" fill="#dbe4ff" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="80" y="86">PLAN</text>`,
- ISTP:`<path class="ch-line" d="M79 94l22-24"/><path d="M96 66l10-4-4 10z" fill="#777" stroke="#171717" stroke-width="2.5"/><rect class="ch-white" x="76" y="101" width="29" height="18"/><text class="ch-text" x="82" y="113">FIX</text>`,
- ISFP:`<rect x="77" y="77" width="29" height="22" rx="3" fill="#333" stroke="#171717" stroke-width="2.5"/><circle cx="91" cy="88" r="7" fill="#dcead4" stroke="#171717" stroke-width="2.5"/><rect x="83" y="72" width="10" height="6" fill="#333"/>`,
- INFP:`<rect class="ch-white" x="40" y="96" width="31" height="23"/><path class="ch-line" d="M55 97v21"/><text class="ch-text" x="43" y="109">DIARY</text><path class="ch-line" d="M34 42q3-28 42-3"/><rect x="29" y="40" width="8" height="17" rx="3" fill="#6f5aa3"/><rect x="74" y="39" width="8" height="17" rx="3" fill="#6f5aa3"/>`,
- INTP:`<rect class="ch-white" x="77" y="65" width="29" height="22"/><rect class="ch-white" x="82" y="60" width="29" height="22"/><text class="ch-text" x="87" y="74">47</text>`,
- ESTP:`<path d="M78 73l28 5-2 19-27-5z" fill="#ffb06d" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="84" y="87">GO!</text>`,
- ESFP:`<rect x="87" y="61" width="12" height="21" rx="2" fill="#ffb2cf" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M38 39h31"/><rect x="40" y="35" width="12" height="10" rx="3" fill="#171717"/><rect x="56" y="35" width="12" height="10" rx="3" fill="#171717"/>`,
- ENFP:`<rect x="78" y="70" width="29" height="22" rx="3" fill="#333" stroke="#171717" stroke-width="2.5"/><circle cx="92" cy="81" r="7" fill="#ffd6cd" stroke="#171717" stroke-width="2.5"/><path d="M91 56l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z" fill="#ffd86b" stroke="#171717" stroke-width="2"/>`,
- ENTP:`<path class="ch-line" d="M23 96L103 35"/><path d="M103 35l-15 3 9 10z" fill="#171717"/><rect class="ch-white" x="70" y="10" width="38" height="23"/><text x="75" y="26" font-size="10" font-weight="900">WHY?</text>`,
- ESTJ:`<rect class="ch-white" x="77" y="67" width="29" height="36"/><text class="ch-text" x="81" y="79">TASK</text><path class="ch-line" d="M82 86l4 4 7-8M82 96l4 4 7-8"/>`,
- ESFJ:`<rect x="77" y="76" width="30" height="28" fill="#ffabc2" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M92 76v28M77 88h30"/><path d="M92 76q-12-10-12 0M92 76q12-10 12 0" fill="none" stroke="#171717" stroke-width="2.5"/>`,
- ENFJ:`<path d="M91 74c-10-14-25 2 0 20 25-18 10-34 0-20z" fill="#ff879a" stroke="#171717" stroke-width="2.5"/><rect class="ch-white" x="75" y="99" width="34" height="18"/><text class="ch-text" x="78" y="111">YOU ♥</text>`,
- ENTJ:`<path d="M77 73l28 7-4 20-28-7z" fill="#d8b8e8" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="80" y="87">GOAL</text><path class="ch-line" d="M83 67l18-14"/><path d="M101 53l-10 1 6 8z" fill="#171717"/>`
- };
- return p[m]||"";
-}
-function mbtiCharacterSVG(m){
- const [top,pants]=CH_PALETTE[m]||CH_PALETTE.ISTP;
- const seated=["INFP","INTP","ISFP"].includes(m);
- const jump=["ESFP","ENFP","ESTP"].includes(m);
- const crouch=m==="ISTP";
- const expression=["INTJ","ISTJ"].includes(m)?"flat":(["ESFP","ENFP","ESTP","ENFJ","ESFJ"].includes(m)?"open":"smile");
- const hair=["ISFJ","ESFJ"].includes(m)?"bun":(["ISTP","ESTP"].includes(m)?"cap":"soft");
- let special="";
- if(m==="ENTP") special=`<path class="ch-skin" d="M38 75L18 92l6 8 22-14z"/><path class="ch-skin" d="M70 75l22 14 5-8-24-17z"/>`;
- if(m==="INTJ") special=`<path class="ch-skin" d="M39 77l30 22 6-8-29-25z"/><path class="ch-skin" d="M70 77L42 99l-6-8 28-25z"/>`;
- return `<div class="svg-avatar"><svg viewBox="0 0 112 170" aria-label="${m} character">
- ${chFace(55,42,expression,hair)}
- ${body(top,pants,seated?"sit":jump?"jump":crouch?"crouch":"stand")}
- ${special}${propFor(m)}
- </svg></div>`;
-}
-function renderMbtiCharacter(container,mbti){
-  if(!container) return;
-  container.style.display="block";
-  container.style.visibility="visible";
-  container.style.opacity="1";
-  container.innerHTML=mbtiCharacterSVG(mbti);
-}
-
 function buildCharacterReview(){
   const grid=document.getElementById("characterReviewGrid");
   if(!grid) return;
   grid.innerHTML=Object.keys(MBTI_CHARACTER_STYLE).map(m=>`<button onclick="previewCharacterType('${m}',this)">${m}</button>`).join("");
 }
 function previewCharacterType(m,btn){
-  renderMbtiCharacter(document.getElementById("profileAvatarCard"),m);
+  const card=document.getElementById("profileAvatarCard");
+  if(["ESFP","INFP","ENTP","INTJ"].includes(m)){
+    if(card) card.innerHTML=svgAvatar(m);
+  }else{
+    if(card) card.innerHTML=`<div class="pixel-person"><i class="prop prop-headset"></i><i class="prop prop-book"></i><i class="prop prop-pointer"></i><i class="prop prop-board"></i><i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i><div class="pixel-hair"></div><div class="pixel-head"></div><div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div><div class="pixel-body"></div><div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div><div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div></div>`;
+    const av=card?.querySelector(".pixel-person");
+    applyCharacterIdentity(av,m);
+  }
   document.querySelectorAll("#characterReviewGrid button").forEach(x=>x.classList.remove("on"));
   if(btn)btn.classList.add("on");
+}
+
+
+function svgAvatar(mbti){
+  const commonStart=`<div class="svg-avatar"><svg viewBox="0 0 110 170" aria-label="${mbti} character">`;
+  const end=`</svg></div>`;
+
+  const faces={
+    INFP:`<circle class="skin" cx="54" cy="45" r="22"/><path class="hair" d="M32 44c0-23 43-30 47-2l-9-9-7 7-9-8-8 8-14 4z"/>
+      <circle class="eye" cx="47" cy="47" r="2"/><circle class="eye" cx="62" cy="47" r="2"/>
+      <path class="line" d="M49 56q6 4 11 0"/>`,
+    ESFP:`<circle class="skin" cx="53" cy="40" r="21"/><path class="hair" d="M32 38c3-23 39-28 43-2l-9-8-9 7-8-8-8 8z"/>
+      <circle class="eye" cx="46" cy="42" r="2"/><circle class="eye" cx="61" cy="42" r="2"/><path class="line" d="M47 51q7 7 14 0"/>`,
+    ENTP:`<circle class="skin" cx="48" cy="42" r="21"/><path class="hair" d="M27 41c1-23 41-29 43-2l-8-10-8 8-9-7-8 9z"/>
+      <circle class="eye" cx="41" cy="44" r="2"/><circle class="eye" cx="56" cy="43" r="2"/><path class="line" d="M43 52q7 2 12-2"/>`,
+    INTJ:`<circle class="skin" cx="55" cy="40" r="21"/><path class="hair" d="M34 39c1-24 40-27 42-3l-7-9-9 8-9-8-8 9z"/>
+      <path class="line" d="M45 42h5M61 42h5"/><path class="line" d="M50 52h10"/>`
+  };
+
+  if(mbti==="INFP") return commonStart+faces.INFP+`
+    <!-- seated body -->
+    <path d="M38 68q16-10 32 0l5 42H34z" fill="#8066b3" stroke="#181818" stroke-width="2.4"/>
+    <path class="skin" d="M37 78q-16 12-10 28l10-3q-2-10 8-17z"/>
+    <path class="skin" d="M70 78q16 11 9 27l-10-3q3-10-7-17z"/>
+    <path d="M38 108q-17 10-19 28h28l7-19 7 19h29q-3-18-20-28z" fill="#e5d9ff" stroke="#181818" stroke-width="2.4"/>
+    <path class="shoe" d="M18 134h29v10H15z"/><path class="shoe" d="M61 134h30l3 10H61z"/>
+    <!-- headphones + diary -->
+    <path class="line" d="M34 43q2-27 40-4"/><rect x="28" y="40" width="8" height="17" rx="3" fill="#292929"/><rect x="73" y="39" width="8" height="17" rx="3" fill="#292929"/>
+    <rect class="prop-white" x="39" y="94" width="31" height="23" rx="2"/><path class="line" d="M54 95v21"/><text x="42" y="106" font-size="5">DIARY</text>`+end;
+
+  if(mbti==="ESFP") return commonStart+faces.ESFP+`
+    <!-- energetic asymmetric pose -->
+    <path d="M36 64q17-8 33 1l5 48H34z" fill="#ff3f93" stroke="#181818" stroke-width="2.4"/>
+    <path class="skin" d="M37 72L18 55l-6 8 22 24z"/><path class="skin" d="M68 72l24-9 4 10-25 15z"/>
+    <path d="M38 111l-6 37h13l10-28 11 26 13-5-12-31z" fill="#ffd2e6" stroke="#181818" stroke-width="2.4"/>
+    <path class="shoe" d="M30 145h18v10H27z"/><path class="shoe" d="M67 141l15-5 5 9-18 7z"/>
+    <!-- sunglasses + phone -->
+    <path class="line" d="M37 38h31"/><rect x="39" y="35" width="12" height="9" rx="3" fill="#181818"/><rect x="55" y="35" width="12" height="9" rx="3" fill="#181818"/>
+    <rect x="89" y="52" width="10" height="18" rx="2" fill="#d8d8d8" stroke="#181818" stroke-width="2.4"/>`+end;
+
+  if(mbti==="ENTP") return commonStart+faces.ENTP+`
+    <!-- forward debating stance -->
+    <path d="M30 65q17-9 33 0l10 45-39 6z" fill="#f0c419" stroke="#181818" stroke-width="2.4" transform="rotate(-4 50 90)"/>
+    <path class="skin" d="M34 74L17 88l5 8 19-11z"/><path class="skin" d="M62 73l22 14 5-8-21-18z"/>
+    <path d="M38 111l-8 36h14l9-26 15 25h14l-18-38z" fill="#fff1a8" stroke="#181818" stroke-width="2.4"/>
+    <path class="shoe" d="M28 145h18v10H25z"/><path class="shoe" d="M68 143h18l4 10H69z"/>
+    <!-- spear / argument placard -->
+    <path class="line" d="M20 91L96 34"/><path d="M96 34l-14 3 8 10z" fill="#181818"/>
+    <rect class="prop-white" x="68" y="12" width="38" height="22" rx="3"/><text x="73" y="27" font-size="10">WHY?</text>`+end;
+
+  if(mbti==="INTJ") return commonStart+faces.INTJ+`
+    <!-- calm straight pose with crossed arms -->
+    <path d="M38 63q17-7 34 0l3 51H35z" fill="#20242b" stroke="#181818" stroke-width="2.4"/>
+    <path class="skin" d="M39 76l29 23 6-8-28-25z"/><path class="skin" d="M70 76L42 98l-6-8 28-24z"/>
+    <path d="M39 112l-3 37h14l5-29 6 29h14l-4-37z" fill="#b9c7ff" stroke="#181818" stroke-width="2.4"/>
+    <path class="shoe" d="M34 147h18v10H32z"/><path class="shoe" d="M60 147h18l2 10H60z"/>
+    <rect x="43" y="85" width="27" height="20" rx="2" fill="#dbe4ff" stroke="#181818" stroke-width="2.4"/><text x="47" y="97" font-size="5">PLAN</text>`+end;
+
+  return "";
+}
+
+function useSvgPilotAvatar(){
+  const mbti=state.owner?.mbti;
+  if(!["ESFP","INFP","ENTP","INTJ"].includes(mbti)) return false;
+  const card=document.getElementById("profileAvatarCard");
+  if(!card) return false;
+  card.innerHTML=svgAvatar(mbti);
+  return true;
 }
 
 function applyCharacterIdentity(el, mbti){
@@ -3041,14 +2627,28 @@ function renderMiniHome(){
   if(zip) zip.textContent=(owner.mbti||"ISTP").toLowerCase()+".zip";
   if(label) label.textContent=(owner.name||"JISU").toUpperCase()+"'S ROOM";
 
-renderMbtiCharacter(document.getElementById("profileAvatarCard"),owner.mbti);
+const av=document.querySelector("#profileAvatarCard .pixel-person");
+  if(!useSvgPilotAvatar()){
+    const current=document.querySelector("#profileAvatarCard .pixel-person");
+    if(current) applyCharacterIdentity(current,owner.mbti);
+  }
 
   const friends=getRecentFriends();
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
     avatars.innerHTML=friends.slice(0,8).map(f=>`
       <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
-        ${mbtiCharacterSVG(f.mbti)}<div class="visitor-name">${f.name}</div>
+        <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
+          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
+          <div class="pixel-hair"></div><div class="pixel-head"></div>
+          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
+          <div class="pixel-body"></div>
+          <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+          <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
+        </div>
+        <div class="visitor-name">${f.name}</div>
       </div>`).join("");
   }
 
@@ -3241,8 +2841,7 @@ async function handleVisitorPrimaryCta(){
     state.owner={
       name:loggedInOwnRoom.nickname,
       birth:"2000-01-01",
-      mbti:loggedInOwnRoom.mbti,
-      today_status:loggedInOwnRoom.today_status||""
+      mbti:loggedInOwnRoom.mbti
     };
 
     try{
@@ -3256,7 +2855,6 @@ async function handleVisitorPrimaryCta(){
     renderRoom();
     syncRealAuthUI();
     await refreshVisitCounts(loggedInOwnRoom.id);
-    if(typeof loadRoomSocialSnapshot==="function") await loadRoomSocialSnapshot(loggedInOwnRoom.id,true);
     go("room");
     window.scrollTo(0,0);
     return;
