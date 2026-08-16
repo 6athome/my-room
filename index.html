@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V1.2.3</title>
+<title>MY ROOM V1.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V1.2.3: generated-room-only MBTI visual exaggeration */
+/* V1.4: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V1.2.3 — all 16 MBTI character skins */
+/* V1.4 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V1.2.3 — retention + participation layers */
+/* V1.4 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V1.2.3 local account/save prototype */
+/* V1.4 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -535,6 +535,14 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 .auth-user-badge{display:inline-block;border:1px solid #111;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900;background:#FEE500;margin-top:5px}
 .remote-saved-badge{display:inline-block;border:1px solid #111;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900;background:#111;color:#fff;margin-top:5px}
 
+
+#realSaveCard{background:#fff7d8}
+#realSaveCard h3{font-size:19px;line-height:1.25;margin:6px 0 9px}
+#realSaveCard p{font-size:11px;line-height:1.55;color:#555}
+#saveStateReady .inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#saveStateReady .inline-actions button{padding:13px;border-radius:11px;border:1px solid #111;background:#fff;font-weight:850}
+#saveStateReady .inline-actions .dark{background:#111;color:#fff}
+
 </style>
 </head>
 <body>
@@ -544,7 +552,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.2.3</div>
+    <div class="micro">V1.4</div>
   </div>
 
   <div class="hero-blob">
@@ -751,28 +759,51 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
   </div>
 <h3>내 ROOM 주소 정하기</h3>
     <p>표시 이름은 같아도 괜찮아요. ROOM 주소만 고유하게 사용하면 됩니다.</p>
-    <div class="handle-row"><span>myroom.kr/</span><input id="handleInput" maxlength="18" oninput="checkHandle()"></div>
+    
     <div id="handleStatus" class="handle-status ok">사용 가능한 주소예요.</div>
     <button class="primary" style="margin-top:10px" onclick="saveMyRoom()">이 주소로 저장하기</button>
   </div>
 
+
 <div class="save-card" id="realSaveCard">
-  <div class="micro">SAVE MY ROOM</div>
-  <h3 id="realSaveTitle">이 ROOM을 내 것으로 저장할까요?</h3>
+  <div class="micro" id="saveStepLabel">SAVE MY ROOM</div>
+
+  <div id="saveStateLoggedOut">
+    <h3>이 ROOM을 내 것으로 저장할까요?</h3>
+    <p>ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.</p>
+    <button class="primary" style="margin-top:10px" onclick="startRealSave()">카카오로 로그인하고 저장하기</button>
+  </div>
+
+  <div id="saveStateHandle" style="display:none">
+    <h3>내 ROOM 주소를 정해주세요</h3>
+    <p>표시 이름은 같아도 괜찮아요. ROOM 주소만 고유하면 됩니다.</p>
+    
+    
+    
+  </div>
+
+  <div id="saveStateReady" style="display:none">
+    <h3>MY ROOM IS READY ✦</h3>
+    <p id="readyRoomUrl" style="font-size:16px;font-weight:900;color:#111;margin-top:6px">myroom.kr/</p>
+    <div class="inline-actions" style="margin-top:12px">
+      <button class="dark" onclick="copySavedRoomLink()">링크 복사</button>
+      <button onclick="shareSavedRoom()">친구에게 공유</button>
+    </div>
+  </div>
+</div>
+<h3 id="realSaveTitle">이 ROOM을 내 것으로 저장할까요?</h3>
   <p id="realSaveDesc">ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.</p>
   <button class="primary" id="realSaveBtn" style="margin-top:10px" onclick="startRealSave()">카카오 로그인하고 ROOM 저장하기</button>
 </div>
-<div class="handle-card" id="realHandleCard" style="display:none">
-  <div class="micro">MY ROOM URL</div>
-  <h3>내 ROOM 주소 정하기</h3>
+<h3>내 ROOM 주소 정하기</h3>
   <p>닉네임은 같아도 괜찮아요. 주소만 고유하면 됩니다.</p>
-  <div class="handle-row"><span>myroom.kr/</span><input id="realHandleInput" maxlength="18" oninput="checkRealHandle()"></div>
-  <div id="realHandleStatus" class="handle-status ok">사용 가능한 주소예요.</div>
-  <button class="primary" style="margin-top:10px" onclick="persistRoomToSupabase()">이 주소로 저장하기</button>
+  
+  
+  
 </div>
 <div class="room-actions">
     <button class="primary" onclick="go('friend')">친구 화면 미리보기</button>
-    <button class="soft" onclick="openShareInvite()">링크 공유</button>
+    
   </div>
   <p class="small-link" id="fakeUrl">myroom.kr/jisu</p>
 </section>
@@ -890,7 +921,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
   <div class="login-sheet">
     <div class="micro">SAVE MY ROOM</div>
     <h3>내 ROOM을 저장하려면<br>카카오 로그인이 필요해요.</h3>
-    <p>로그인하면 ROOM이 Supabase 계정에 저장되고, 나중에 다른 기기에서도 같은 카카오 계정으로 다시 들어올 수 있어요.</p>
+    <p>로그인하면 ROOM이 바로 저장되고, 자동으로 고유 주소가 만들어져요. 나중에 같은 카카오 계정으로 다시 들어올 수 있어요.</p>
     <button class="login-option dark" onclick="signInWithKakao()" style="background:#FEE500;color:#111">카카오로 시작하기</button>
     <button class="login-option" onclick="closeKakaoModal()">나중에 할게요</button>
   </div>
@@ -941,79 +972,50 @@ async function getAuthUser(){
   return currentAuthUser;
 }
 
+
+function showSaveState(state){
+  const loggedOut=document.getElementById("saveStateLoggedOut");
+  const ready=document.getElementById("saveStateReady");
+  if(loggedOut) loggedOut.style.display=state==="loggedout"?"block":"none";
+  if(ready) ready.style.display=state==="ready"?"block":"none";
+}
+
 function syncRealAuthUI(){
   const auth=document.getElementById("authUserBadge");
   const saved=document.getElementById("remoteSavedBadge");
   if(auth) auth.style.display=currentAuthUser?"inline-block":"none";
   if(saved) saved.style.display=currentRemoteRoom?"inline-block":"none";
-  const btn=document.getElementById("realSaveBtn");
-  const desc=document.getElementById("realSaveDesc");
-  if(btn){
-    if(currentRemoteRoom){
-      btn.textContent="Supabase에 저장됨";
-      btn.disabled=true;
-    }else if(currentAuthUser){
-      btn.textContent="내 ROOM 주소 정하고 저장하기";
-      btn.disabled=false;
-      btn.onclick=openRealHandle;
-    }else{
-      btn.textContent="카카오 로그인하고 ROOM 저장하기";
-      btn.disabled=false;
-      btn.onclick=startRealSave;
-    }
-  }
-  if(desc){
-    desc.innerHTML=currentRemoteRoom
-      ? `내 ROOM 주소: <b>${currentRemoteRoom.slug}</b>`
-      : currentAuthUser
-        ? "카카오 로그인이 완료됐어요. 이제 고유 주소를 정하면 ROOM을 저장할 수 있어요."
-        : "ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.";
+
+  if(currentRemoteRoom){
+    showSaveState("ready");
+    const url=publicRoomUrl();
+    const readyUrl=document.getElementById("readyRoomUrl");
+    if(readyUrl) readyUrl.textContent=url.replace(/^https?:\/\//,"");
+  }else{
+    showSaveState("loggedout");
   }
 }
 
 function startRealSave(){
-  if(currentAuthUser) openRealHandle();
-  else {
+  if(currentAuthUser){
+    persistRoomToSupabase();
+  }else{
     const modal=document.getElementById("loginModal");
     if(modal) modal.classList.add("show");
   }
 }
 
-function suggestedHandle(){
-  const name=(state?.owner?.name||document.getElementById("roomName")?.textContent||"myroom").toLowerCase();
-  return name.replace(/[^a-z0-9]/g,"").slice(0,12) || "myroom";
+
+function generateAutoSlug(){
+  const base=(state?.owner?.name||"room").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,8) || "room";
+  const rand=Math.random().toString(36).slice(2,7);
+  return `${base}-${rand}`;
 }
 
-async function openRealHandle(){
-  if(!currentAuthUser){
-    startRealSave(); return;
-  }
-  const card=document.getElementById("realHandleCard");
-  const input=document.getElementById("realHandleInput");
-  if(card) card.style.display="block";
-  if(input && !input.value) input.value=suggestedHandle();
-  await checkRealHandle();
-  card?.scrollIntoView({behavior:"smooth",block:"center"});
-}
 
-async function checkRealHandle(){
-  const input=document.getElementById("realHandleInput");
-  const status=document.getElementById("realHandleStatus");
-  if(!input||!status) return false;
-  let slug=input.value.toLowerCase().replace(/[^a-z0-9._-]/g,"");
-  input.value=slug;
-  if(slug.length<3){
-    status.className="handle-status bad"; status.textContent="3자 이상 입력해 주세요."; return false;
-  }
-  const { data, error }=await sb.from("myroom_rooms").select("id").eq("slug",slug).limit(1);
-  if(error){
-    status.className="handle-status bad"; status.textContent="주소 확인 중 오류가 발생했어요."; return false;
-  }
-  const taken=(data||[]).some(x=>!currentRemoteRoom || x.id!==currentRemoteRoom.id);
-  status.className="handle-status "+(taken?"bad":"ok");
-  status.textContent=taken?"이미 사용 중인 주소예요.":"사용 가능한 주소예요.";
-  return !taken;
-}
+async 
+
+async 
 
 function calcMoodFromBirth(birth){
   const m=parseInt((birth||"1993-08-06").split("-")[1]||8,10);
@@ -1023,9 +1025,7 @@ function calcMoodFromBirth(birth){
 
 async function persistRoomToSupabase(){
   if(!currentAuthUser){ startRealSave(); return; }
-  if(!(await checkRealHandle())) return;
-
-  const slug=document.getElementById("realHandleInput").value;
+  const slug=currentRemoteRoom?.slug || generateAutoSlug();
   const owner=state.owner;
   const birth=owner.birth||document.getElementById("ownerBirth")?.value||null;
   const lucky=parseInt((birth||"2000-01-01").split("-")[2]||1,10);
@@ -1062,7 +1062,7 @@ async function persistRoomToSupabase(){
     return;
   }
   currentRemoteRoom=res.data;
-  document.getElementById("realHandleCard").style.display="none";
+  showSaveState("ready");
   syncRealAuthUI();
   const fake=document.getElementById("fakeUrl");
   if(fake) fake.textContent=window.location.origin+window.location.pathname+"?room="+currentRemoteRoom.slug;
@@ -1127,9 +1127,10 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   if(event==="SIGNED_IN" && currentAuthUser){
     closeKakaoModal();
     const existing=await loadMyRemoteRoom();
-    if(!existing) setTimeout(openRealHandle,100);
-  }
-});
+    if(!existing){
+      await persistRoomToSupabase();
+    }
+  });
 
 const MBTIS=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
 
@@ -1603,6 +1604,23 @@ function renderResult(){
   document.getElementById("spRank").textContent=String(f.place).padStart(2,"0")+" / "+String(f.total).padStart(2,"0");
 }
 
+
+function copySavedRoomLink(){
+  const url=publicRoomUrl();
+  navigator.clipboard?.writeText(url);
+  toast("링크를 복사했어요");
+}
+async function shareSavedRoom(){
+  const url=publicRoomUrl();
+  const text=`${state.owner.name}의 MY ROOM 구경하고 우리 궁합도 확인해봐 ✦`;
+  if(navigator.share){
+    try{ await navigator.share({title:"MY ROOM",text,url}); }catch(e){}
+  }else{
+    navigator.clipboard?.writeText(text+"\n"+url);
+    toast("공유 문구를 복사했어요");
+  }
+}
+
 function publicRoomUrl(){
   if(currentRemoteRoom?.slug){
     return window.location.origin+window.location.pathname+"?room="+encodeURIComponent(currentRemoteRoom.slug);
@@ -1637,7 +1655,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V1.2.3 startup
+// V1.4 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
