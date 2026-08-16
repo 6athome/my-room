@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.4</title>
+<title>MY ROOM V2.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.4 — retention + participation layers */
+/* V2.5 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.4 local account/save prototype */
+/* V2.5 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.4 visitor-first flow */
+/* V2.5 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V2.4 — actual mini-home room */
+/* V2.5 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.4 — MBTI room showcase + stronger character presence */
+/* V2.5 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V2.4 — restore original V0.7 character language */
+/* V2.5 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -896,6 +896,57 @@ input:focus,select:focus{border-color:#111}
   font-size:7px;font-weight:850;white-space:nowrap;
 }
 
+
+/* V2.5 — MBTI personality room details */
+.mbti-room-details{
+  position:absolute;
+  left:14px;
+  right:14px;
+  top:88px;
+  z-index:3;
+  pointer-events:none;
+}
+.mbti-detail-card{
+  display:inline-block;
+  max-width:160px;
+  background:rgba(255,255,255,.9);
+  border:1.5px solid #111;
+  border-radius:11px;
+  padding:7px 9px;
+  box-shadow:2px 2px 0 rgba(0,0,0,.12);
+  font-size:8px;
+  line-height:1.35;
+}
+.mbti-detail-card b{
+  display:block;
+  font-size:10px;
+  margin-bottom:2px;
+}
+.mbti-detail-card.right{float:right;text-align:right}
+.mbti-detail-card.bottom{
+  position:absolute;
+  left:0;
+  top:82px;
+}
+.mbti-one-liner{
+  margin-top:10px;
+  border-top:1px dashed rgba(0,0,0,.25);
+  padding-top:9px;
+  font-size:11px;
+  font-weight:850;
+  line-height:1.45;
+}
+.mbti-trait-chip{
+  display:inline-block;
+  border:1px solid #111;
+  border-radius:999px;
+  padding:4px 7px;
+  margin:4px 4px 0 0;
+  background:#fff;
+  font-size:8px;
+  font-weight:800;
+}
+
 </style>
 </head>
 <body>
@@ -905,7 +956,7 @@ input:focus,select:focus{border-color:#111}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.4</div>
+    <div class="micro">V2.5</div>
   </div>
 
   <div class="hero-blob">
@@ -1030,6 +1081,13 @@ input:focus,select:focus{border-color:#111}
     </div>
 
     <div class="room-scene" id="roomScene"><div class="room-mbti-stamp" id="roomMbtiStamp">ISTP</div>
+
+<div class="mbti-room-details" id="mbtiRoomDetails">
+  <div class="mbti-detail-card" id="detailA"></div>
+  <div class="mbti-detail-card right" id="detailB"></div>
+  <div class="mbti-detail-card bottom" id="detailC"></div>
+</div>
+
       <div class="room-window"></div>
       <div class="room-bed"></div>
       <div class="room-rug"></div>
@@ -1050,6 +1108,10 @@ input:focus,select:focus{border-color:#111}
 
       <div class="visitor-avatars" id="visitorAvatars"></div>
     </div>
+    <div style="padding:0 14px 14px">
+<div class="mbti-one-liner" id="mbtiOneLiner"></div>
+<div id="mbtiTraitChips"></div>
+</div>
   </div>
 
   <div class="chemistry-card">
@@ -1332,6 +1394,23 @@ async function persistRoomToSupabase(){
 
   const slug=currentRemoteRoom?.slug || generateAutoSlug();
   const owner=state.owner;
+
+  const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
+  const statusEl=document.getElementById("roomStatusBubble");
+  if(statusEl) statusEl.textContent=copy.status;
+
+  const detailA=document.getElementById("detailA");
+  const detailB=document.getElementById("detailB");
+  const detailC=document.getElementById("detailC");
+  if(detailA) detailA.innerHTML=`<b>${copy.a[0]}</b>${copy.a[1]}`;
+  if(detailB) detailB.innerHTML=`<b>${copy.b[0]}</b>${copy.b[1]}`;
+  if(detailC) detailC.innerHTML=`<b>${copy.c[0]}</b>${copy.c[1]}`;
+
+  const line=document.getElementById("mbtiOneLiner");
+  if(line) line.textContent=copy.line;
+
+  const chips=document.getElementById("mbtiTraitChips");
+  if(chips) chips.innerHTML=copy.chips.map(x=>`<span class="mbti-trait-chip">${x}</span>`).join("");
   const birth=owner.birth||document.getElementById("ownerBirth")?.value||null;
   const lucky=parseInt((birth||"2000-01-01").split("-")[2]||1,10);
 
@@ -1908,6 +1987,8 @@ function getRecentFriends(){
     return Array.isArray(local)&&local.length?local:seed;
   }catch(e){return seed}
 }
+const MBTI_ROOM_COPY={"INTJ": {"status": "TODAY · 말 걸기 전에 용건부터", "line": "계획은 이미 끝났고, 실행만 남았습니다.", "a": ["OPEN TABS", "3개만 켜놨음 (거짓말)"], "b": ["TODAY'S SOCIAL", "필요한 말만 함"], "c": ["BRAIN MODE", "혼자 생각 중"], "chips": ["계획형", "혼자 집중", "비효율 싫음"]}, "INTP": {"status": "TODAY · 생각하다가 하루 끝남", "line": "생각은 47개인데 실행은 내일.", "a": ["OPEN TABS", "47"], "b": ["CURRENT TASK", "왜 이렇게 되는지 궁금함"], "c": ["DEADLINE", "일단 모른 척"], "chips": ["탐구중", "탭 47개", "마감 직전 집중"]}, "ENTJ": {"status": "TODAY · 결론부터 말해줘", "line": "회의가 길어지는 순간 직접 정리하기 시작합니다.", "a": ["TODAY'S PLAN", "다 끝내기"], "b": ["MEETING", "15분이면 충분"], "c": ["NEXT", "이미 다음 단계 생각 중"], "chips": ["결론형", "속도중시", "리드함"]}, "ENTP": {"status": "TODAY · 틀린 말은 못 참음", "line": "싸우는 게 아니라 재미있는 토론 중입니다.", "a": ["TODAY'S DEBATE", "3회"], "b": ["WHY?", "근데 왜?"], "c": ["NEW IDEA", "또 생김 +4"], "chips": ["논쟁환영", "아이디어 폭주", "말빨"]}, "INFJ": {"status": "TODAY · 사람 마음 읽다가 방전", "line": "말 안 해도 알아차리는데, 그래서 더 피곤함.", "a": ["ENERGY", "18%"], "b": ["THOUGHTS", "너무 많이 느낌"], "c": ["RECOVERY", "혼자 있기"], "chips": ["눈치빠름", "혼자충전", "깊게생각"]}, "INFP": {"status": "TODAY · 머릿속에서 이미 영화 한 편", "line": "현실보다 상상 속 일정이 더 바쁩니다.", "a": ["PLAYLIST", "감정 과몰입 중"], "b": ["DIARY", "오늘도 씀"], "c": ["REALITY", "잠깐만"], "chips": ["감성", "상상력", "혼자놀기"]}, "ENFJ": {"status": "TODAY · 다들 괜찮은지 확인 중", "line": "내 일보다 친구 고민 상담이 먼저 끝남.", "a": ["CHECK-IN", "친구 4명"], "b": ["TODAY'S JOB", "분위기 살리기"], "c": ["BATTERY", "사람 만나면 충전"], "chips": ["케어함", "분위기메이커", "사람좋아"]}, "ENFP": {"status": "TODAY · 새 취미 또 생김", "line": "이번 주만 해도 새 인생이 세 번째.", "a": ["NEW HOBBY", "+4"], "b": ["TODAY'S PLAN", "일단 나가기"], "c": ["CURRENT MOOD", "갑자기 신남"], "chips": ["즉흥", "새거좋아", "리액션큼"]}, "ISTJ": {"status": "TODAY · 예정대로 진행 중", "line": "갑작스러운 변경은 미리 알려주세요.", "a": ["SCHEDULE", "계획대로"], "b": ["CHECKLIST", "7/8 완료"], "c": ["SURPRISE", "사절"], "chips": ["정리됨", "약속지킴", "루틴"]}, "ISFJ": {"status": "TODAY · 친구 취향까지 기억함", "line": "내가 챙긴 건 기억 못 해도 네 커피 취향은 기억함.", "a": ["MEMORY", "친구 메뉴 저장됨"], "b": ["TODAY'S MODE", "조용히 챙김"], "c": ["MY NEEDS", "나중에"], "chips": ["세심함", "기억력", "배려"]}, "ESTJ": {"status": "TODAY · 왜 아직 안 했지?", "line": "정리 안 된 걸 보면 손이 먼저 움직입니다.", "a": ["TASKS", "오늘 끝냄"], "b": ["STATUS", "진행률 확인"], "c": ["EXCUSES", "접수 안 함"], "chips": ["추진력", "정리형", "속도"]}, "ESFJ": {"status": "TODAY · 단톡 분위기 체크 중", "line": "모두가 즐거워야 나도 마음이 놓임.", "a": ["GROUP CHAT", "읽음 99+"], "b": ["TODAY'S JOB", "사람 챙기기"], "c": ["EVENT", "다음 약속 잡는 중"], "chips": ["친화력", "리액션", "약속많음"]}, "ISTP": {"status": "TODAY · 연락은 봤는데 답장은 나중에", "line": "필요하면 고쳐주지만 설명은 짧게 합니다.", "a": ["REPLY", "나중에"], "b": ["MANUAL", "UNREAD"], "c": ["SOCIAL", "필요할 때만"], "chips": ["무심함", "손재주", "혼자편함"]}, "ISFP": {"status": "TODAY · 조용히 기분 좋은 거 찾는 중", "line": "말은 적어도 취향은 확실합니다.", "a": ["TODAY'S PICK", "예쁜 거"], "b": ["MOOD", "잔잔함"], "c": ["NOISE", "조금만"], "chips": ["취향확실", "편안함", "감각형"]}, "ESTP": {"status": "TODAY · 일단 해보고 생각함", "line": "문제는 나중에, 재미는 지금.", "a": ["TODAY'S PLAN", "일단 출발"], "b": ["RISK", "괜찮겠지"], "c": ["ENERGY", "밖으로"], "chips": ["행동파", "즉흥", "겁없음"]}, "ESFP": {"status": "TODAY · 오늘 어디 갈지 아직 모름", "line": "약속이 없으면 만드는 편입니다.", "a": ["TODAY'S PLAN", "사람 만나기"], "b": ["NEW PLAN", "+2"], "c": ["CURRENT LOCATION", "또 밖"], "chips": ["화려함", "리액션", "약속폭주"]}};
+
 function renderMiniHome(){
   const owner=state.owner;
   const zip=document.getElementById("zipTitle");
@@ -1919,11 +2000,7 @@ function renderMiniHome(){
   if(zip) zip.textContent=(owner.mbti||"ISTP").toLowerCase()+".zip";
   if(label) label.textContent=(owner.name||"JISU").toUpperCase()+"'S ROOM";
 
-  const status=document.getElementById("roomStatusBubble");
-  const today=loadToday ? loadToday() : "";
-  if(status) status.textContent="TODAY · "+(today||"그냥 살아있음");
-
-  const av=document.querySelector("#profileAvatarCard .pixel-person");
+const av=document.querySelector("#profileAvatarCard .pixel-person");
   if(av) setAvatarMbti(av, owner.mbti);
 
   const friends=getRecentFriends();
@@ -2288,7 +2365,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V2.4 startup
+// V2.5 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
