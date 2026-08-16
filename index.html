@@ -1282,7 +1282,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="topbar">
     <div>
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
-      <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
+      <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0 · FRIENDS 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
     </div>
     <div class="auth-top-actions">
@@ -1308,6 +1308,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
         <option>ISTP</option><option>ISFP</option><option>ESTP</option><option>ESFP</option>
       </select>
     </div>
+    <div class="participation-note">생년월일은 궁합 계산에만 사용되고 저장되지 않아요.</div>
     <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
   </div>
 
@@ -1322,6 +1323,18 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="visitor-rank-list" id="visitorRankList"></div>
 </div>
 
+
+
+    <div class="visitor-stayed-card" id="visitorStayedCard" style="display:none">
+      <div class="micro">I'M IN THE ROOM ✦</div>
+      <div class="visitor-stayed-row">
+        <div class="visitor-character visitor-stayed-character" id="visitorStayedCharacter"></div>
+        <div>
+          <b id="visitorStayedTitle">내 캐릭터가 ROOM에 남았어요.</b>
+          <p id="visitorStayedText">다음에 다시 와도 이 ROOM에서 만날 수 있어요.</p>
+        </div>
+      </div>
+    </div>
 
     <button class="primary" id="visitorPrimaryCta" style="margin-top:12px" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
     <button class="visitor-extra-btn" onclick="downloadChemistryStoryCard()">결과 카드 저장</button>
@@ -1354,7 +1367,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <div>
         <div class="sub" id="roomOwnerLabel">ISTP'S ROOM</div>
       </div>
-      <div class="micro" id="roomVisitMeta">TODAY 0 · TOTAL 0</div>
+      <div class="micro" id="roomVisitMeta">TODAY 0 · TOTAL 0 · FRIENDS 0</div>
     </div>
 
     <div class="room-scene" id="roomScene"><div class="room-mbti-stamp" id="roomMbtiStamp">ISTP</div>
@@ -1811,7 +1824,7 @@ function buildVisitorFlowMarkup(ownerName){
   return `
     <div class="visitor-entry-card" id="visitorEntryCard">
       <div class="micro">OUR CHEMISTRY</div>
-      <h3><span id="visitorOwnerName">${ownerName}</span>랑 나는 몇 점?</h3>
+      <h3><span id="visitorOwnerName">${escapeHtml(ownerName)}</span>랑 나는 몇 점?</h3>
       <div class="visitor-fields">
         <input id="visitorNameInput" placeholder="내 이름" maxlength="40" autocomplete="name">
         <input id="visitorBirthInput" type="date" aria-label="내 생년월일">
@@ -1820,6 +1833,7 @@ function buildVisitorFlowMarkup(ownerName){
           ${MBTIS.map(m=>`<option>${m}</option>`).join("")}
         </select>
       </div>
+      <div class="participation-note">생년월일은 궁합 계산에만 사용되고 저장되지 않아요.</div>
       <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
     </div>
     <div class="visitor-result-card" id="visitorResultCard" style="display:none">
@@ -2104,9 +2118,8 @@ async function refreshVisitCounts(roomId){
     const row=Array.isArray(data)?data[0]:data;
     const today=Number(row?.today_count||0);
     const total=Number(row?.total_count||0);
-    meta.textContent=`TODAY ${today} · TOTAL ${total}`;
-    const topMeta=document.getElementById("roomVisitMetaTop");
-    if(topMeta) topMeta.textContent=`TODAY ${today} · TOTAL ${total}`;
+    roomVisitCounts={today,total};
+    updateRoomCounters();
   }catch(e){
     console.warn("visit count load failed",e);
   }
@@ -2558,6 +2571,27 @@ const MBTI_PREVIEW_TYPES=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP
 
 
 
+let roomVisitCounts={today:0,total:0};
+
+function updateRoomCounters(){
+  const friends=Number(roomSocialSnapshot?.total_participants||0);
+  const label=`TODAY ${roomVisitCounts.today} · TOTAL ${roomVisitCounts.total} · FRIENDS ${friends}`;
+  const meta=document.getElementById("roomVisitMeta");
+  const topMeta=document.getElementById("roomVisitMetaTop");
+  if(meta) meta.textContent=label;
+  if(topMeta) topMeta.textContent=label;
+}
+
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
 let roomSocialSnapshot={top3:[],recent_friends:[],today_names:[],new_count:0,total_participants:0};
 
 function lastSeenKey(roomId){return "myroom_owner_last_seen_"+roomId}
@@ -2580,6 +2614,7 @@ async function loadRoomSocialSnapshot(roomId, markSeen=false){
     console.warn("social snapshot failed",e);
   }
   renderSocialSnapshot();
+  updateRoomCounters();
   return roomSocialSnapshot;
 }
 
@@ -2604,7 +2639,7 @@ function renderSocialSnapshot(){
     top.innerHTML=top3.length ? top3.map((f,i)=>`
       <div class="chem-rank">
         <div class="rankno">${f.rank||i+1}</div>
-        <div class="who">${f.name}<small>${f.mbti}</small></div>
+        <div class="who">${escapeHtml(f.name)}<small>${f.mbti}</small></div>
         <div class="score">${f.score}%</div>
       </div>`).join("") : '<div class="chem-empty">아직 궁합을 본 친구가 없어요.</div>';
   }
@@ -2617,7 +2652,7 @@ function renderRoomVisitors(){
   if(!avatars) return;
   const friends=(roomSocialSnapshot.recent_friends||[]);
   avatars.innerHTML=friends.map(f=>`
-    <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
+    <div class="visitor-character" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
       <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
         <i class="prop prop-headset"></i><i class="prop prop-book"></i>
         <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
@@ -2628,7 +2663,7 @@ function renderRoomVisitors(){
         <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
         <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
       </div>
-      <div class="visitor-name">${f.name}</div>
+      <div class="visitor-name">${escapeHtml(f.name)}</div>
     </div>`).join("");
 }
 
@@ -2793,7 +2828,7 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
     avatars.innerHTML=friends.map(f=>`
-      <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
+      <div class="visitor-character" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
         <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
           <i class="prop prop-headset"></i><i class="prop prop-book"></i>
           <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
@@ -2804,7 +2839,7 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
           <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
           <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
         </div>
-        <div class="visitor-name">${f.name}</div>
+        <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`).join("");
   }
 
@@ -2816,7 +2851,7 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
       top.innerHTML=friends.slice().sort((a,b)=>b.score-a.score).slice(0,3).map((f,i)=>`
         <div class="chem-rank">
           <div class="rankno">${i+1}</div>
-          <div class="who">${f.name}<small>${f.mbti}</small></div>
+          <div class="who">${escapeHtml(f.name)}<small>${f.mbti}</small></div>
           <div class="score">${f.score}%</div>
         </div>`).join("");
     }
@@ -2855,7 +2890,7 @@ function renderRank(){
   const sorted=[...state.friends].sort((a,b)=>b.score-a.score);
   sorted.forEach((f,i)=>{
     const r=document.createElement("div");r.className="rank-row";
-    r.innerHTML=`<div class="rank-name"><b>${i+1}</b><span class="face"></span><b>${f.name}</b></div><span>${f.score}</span>`;
+    r.innerHTML=`<div class="rank-name"><b>${i+1}</b><span class="face"></span><b>${escapeHtml(f.name)}</b></div><span>${f.score}</span>`;
     list.appendChild(r);
     const face=document.createElement("div");face.className="mini-face";c.appendChild(face);
   });
@@ -3080,6 +3115,11 @@ async function runVisitorChemistry(){
 
   window.__visitorChemistry={name,mbti,score,relation,rankData};
 
+  if(currentRemoteRoom?.id){
+    try{ await loadRoomSocialSnapshot(currentRemoteRoom.id,false); }catch(e){}
+  }
+  showVisitorStayedCard(name,mbti);
+
   const entry=document.getElementById("visitorEntryCard");
   const result=document.getElementById("visitorResultCard");
   if(entry) entry.style.display="none";
@@ -3093,12 +3133,37 @@ async function runVisitorChemistry(){
     const r=Number(rankData.rank||1), total=Number(rankData.total||1);
     main.textContent=r===1 ? `🥇 현재 ${owner.name}의 친구 중 1위!` : `현재 ${total}명 중 ${r}위`;
     const top3=rankData.top3||[];
-    list.innerHTML=top3.map(x=>`<div>${x.rank}위 <b>${x.name}</b> · ${x.mbti} · ${x.score}%</div>`).join("");
+    list.innerHTML=top3.map(x=>`<div>${x.rank}위 <b>${escapeHtml(x.name)}</b> · ${x.mbti} · ${x.score}%</div>`).join("");
     box.style.display="block";
   }
 
   result?.scrollIntoView({behavior:"smooth",block:"start"});
 }
+
+function showVisitorStayedCard(name,mbti){
+  const card=document.getElementById("visitorStayedCard");
+  const stage=document.getElementById("visitorStayedCharacter");
+  const title=document.getElementById("visitorStayedTitle");
+  const copy=document.getElementById("visitorStayedText");
+  if(!card || !stage) return;
+
+  const cfg=MBTI_CHARACTER_STYLE[mbti]||MBTI_CHARACTER_STYLE.ISTP;
+  stage.innerHTML=`
+    <div class="pixel-person mbti-${mbti} pose-${cfg.pose} hook-${cfg.hook}">
+      <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+      <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+      <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
+      <div class="pixel-hair"></div><div class="pixel-head"></div>
+      <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
+      <div class="pixel-body"></div>
+      <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+      <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
+    </div>`;
+  if(title) title.textContent=`${name} 캐릭터가 ${state.owner.name}의 ROOM에 남았어요 ✦`;
+  if(copy) copy.textContent="방 주인이 다시 들어오면 내 캐릭터와 궁합 기록을 볼 수 있어요.";
+  card.style.display="block";
+}
+
 function showVisitorVote(){
   const v=document.getElementById("visitorFriendsSay");
   if(v){
@@ -3118,6 +3183,8 @@ function initVisitorFlow(){
 
   if(entry) entry.style.display="block";
   if(result) result.style.display="none";
+  const stayed=document.getElementById("visitorStayedCard");
+  if(stayed) stayed.style.display="none";
 
   const nameInput=document.getElementById("visitorNameInput");
   const birthInput=document.getElementById("visitorBirthInput");
@@ -3233,30 +3300,72 @@ window.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
+
+
 <style>
-/* V4.2 — persistent visitor crowd */
+/* V4.3 — every participant remains visible in the room */
 .visitor-avatars{
   display:grid!important;
-  grid-template-columns:repeat(6, 1fr);
-  gap:2px 0!important;
+  grid-template-columns:repeat(10,1fr)!important;
+  gap:0!important;
   align-items:end!important;
-  left:10px!important;
-  right:10px!important;
-  bottom:8px!important;
-  max-height:150px;
-  overflow:hidden;
+  left:6px!important;
+  right:6px!important;
+  bottom:7px!important;
+  max-height:none!important;
+  overflow:visible!important;
 }
 .visitor-character{
-  width:44px!important;
-  height:62px!important;
+  width:30px!important;
+  height:30px!important;
+  position:relative;
   justify-self:center;
+  overflow:visible;
 }
 .visitor-character .pixel-person{
-  transform:translateX(-50%) scale(.24)!important;
+  position:absolute;
+  left:50%;
+  bottom:5px;
+  transform:translateX(-50%) scale(.13)!important;
+  transform-origin:bottom center;
 }
 .visitor-character .visitor-name{
-  max-width:44px;
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  max-width:32px;
   overflow:hidden;
   text-overflow:ellipsis;
+  font-size:5px!important;
+  white-space:nowrap;
+}
+.visitor-stayed-card{
+  margin-top:12px;
+  border:1.5px solid #111;
+  border-radius:14px;
+  padding:12px;
+  background:#dfeeff;
+  text-align:left;
+}
+.visitor-stayed-row{
+  margin-top:7px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.visitor-stayed-row p{
+  margin:4px 0 0;
+  font-size:10px;
+  line-height:1.45;
+}
+.visitor-stayed-character{
+  flex:0 0 52px;
+  width:52px!important;
+  height:66px!important;
+}
+.visitor-stayed-character .pixel-person{
+  transform:translateX(-50%) scale(.28)!important;
+  bottom:6px;
 }
 </style>
