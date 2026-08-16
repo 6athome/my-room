@@ -465,6 +465,36 @@ input:focus,select:focus{border-color:#111}
 }
 .login-option.dark{background:#111;color:#fff}
 
+
+/* V0.11 — retention + participation layers */
+.today-card,.friends-say,.unlock-card{
+  border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
+}
+.today-card{background:#fff7d8}
+.friends-say{background:#ffdce8}
+.unlock-card{background:#dfeeff}
+.today-options,.reaction-options{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:9px
+}
+.today-options button,.reaction-options button{
+  border:1px solid #111;background:#fff;border-radius:999px;
+  padding:7px 9px;font-size:9px;font-weight:800
+}
+.today-options button.on,.reaction-options button.on{background:#111;color:#fff}
+.today-value{font-size:17px;font-weight:900;margin-top:8px;letter-spacing:-.02em}
+.reaction-bars{margin-top:9px}
+.react-row{display:grid;grid-template-columns:54px 1fr 32px;gap:6px;align-items:center;margin:7px 0;font-size:9px}
+.react-track{height:7px;background:#eee;border-radius:99px;overflow:hidden}
+.react-fill{height:100%;background:#111}
+.unlock-progress{height:9px;background:#fff;border:1px solid #111;border-radius:99px;overflow:hidden;margin:9px 0}
+.unlock-progress>div{height:100%;background:#111}
+.room-item{
+  margin-top:8px;border:1px dashed #111;border-radius:12px;padding:9px;background:#fff;font-size:10px
+}
+.room-item.locked{opacity:.45}
+.room-item.unlocked{background:#fff0f5}
+.participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
+
 </style>
 </head>
 <body>
@@ -560,7 +590,8 @@ input:focus,select:focus{border-color:#111}
     </div>
     <div class="room-grid">
       <aside class="profile">
-        <div class="avatar-card" id="profileAvatarCard">
+        <div class="avatar-card" id="profileAvatarCard" style="position:relative">
+          <div id="friendUnlockedItem" style="display:none;position:absolute;right:6px;top:6px;font-size:24px;z-index:20">🎉</div>
           <div class="avatar-small">
             <div class="pixel-person">
           <i class="prop prop-headset"></i><i class="prop prop-book"></i>
@@ -600,6 +631,45 @@ input:focus,select:focus{border-color:#111}
           <h3 id="personalityHeadline">관심사가 자꾸 늘어나는 중.</h3>
           <div id="personalityBits"></div>
           <button class="personality-share" onclick="shareMyRoom()">이 ROOM 공유하기 ↗</button>
+        </div>
+
+
+        <div class="today-card">
+          <div class="micro">TODAY</div>
+          <div class="today-value" id="todayValue">오늘의 상태를 골라봐.</div>
+          <div class="today-options">
+            <button onclick="setToday('집콕',this)">집콕</button>
+            <button onclick="setToday('밖순이/밖돌이',this)">밖순이/밖돌이</button>
+            <button onclick="setToday('일하는 중',this)">일하는 중</button>
+            <button onclick="setToday('데이트',this)">데이트</button>
+            <button onclick="setToday('여행',this)">여행</button>
+            <button onclick="setToday('그냥 살아있음',this)">그냥 살아있음</button>
+          </div>
+        </div>
+
+        <div class="friends-say">
+          <div class="micro">FRIENDS SAY</div>
+          <h3 style="font-size:15px;margin:5px 0 8px">친구들이 보는 나는?</h3>
+          <div class="reaction-bars" id="reactionBars"></div>
+          <div class="reaction-options">
+            <button onclick="voteReaction('🤡 광대',this)">🤡 광대</button>
+            <button onclick="voteReaction('😇 천사',this)">😇 천사</button>
+            <button onclick="voteReaction('🐶 댕댕이',this)">🐶 댕댕이</button>
+            <button onclick="voteReaction('🧠 브레인',this)">🧠 브레인</button>
+            <button onclick="voteReaction('👑 공주/왕자',this)">👑 공주/왕자</button>
+            <button onclick="voteReaction('😈 악마',this)">😈 악마</button>
+          </div>
+          <div class="participation-note">프로토타입에서는 직접 눌러보면 친구 참여가 쌓이는 모습을 볼 수 있어요.</div>
+        </div>
+
+        <div class="unlock-card">
+          <div class="micro">ROOM GROWTH</div>
+          <h3 style="font-size:15px;margin:5px 0">친구가 올수록 ROOM이 자라요.</h3>
+          <div class="unlock-progress"><div id="unlockBar" style="width:20%"></div></div>
+          <div id="unlockCount" style="font-size:10px;font-weight:800">FRIENDS 2 / 10</div>
+          <div class="room-item unlocked">✓ 3 FRIENDS — FRIEND COLLECTION</div>
+          <div class="room-item locked" id="item5">5 FRIENDS — 친구들이 보는 내 캐릭터</div>
+          <div class="room-item locked" id="item10">10 FRIENDS — ROOM ITEM UNLOCK ✦</div>
         </div>
 
         <div class="friend-panel">
@@ -801,7 +871,7 @@ function makeRoom(persist=true){
   const mbti=document.getElementById("ownerMbti").value||"ENFP";
   state.owner={name,birth,mbti};
   go("loading");
-  setTimeout(()=>{renderRoom();go("room")},900);
+  setTimeout(()=>{renderRoom();initRetentionLayer();go("room")},900);
 }
 
 const ROOM_PERSONALITY={
@@ -885,6 +955,7 @@ function renderRoom(){
   document.getElementById("friendOwnerName").textContent=o.name;
   document.getElementById("friendOwnerName2").textContent=o.name;
   renderRank();
+  setTimeout(initRetentionLayer,0);
 }
 function renderRank(){
   const list=document.getElementById("rankList");
