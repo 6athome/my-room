@@ -1051,7 +1051,106 @@ function makeRoom(persist=true){
   state.owner={name,birth,mbti};
   storeCurrentRoom();
   go("loading");
-  setTimeout(()=>{renderRoom();initRetentionLayer();go("room")},900);
+  setTimeout(()=>{
+    try{
+      renderRoom();
+      initRetentionLayer();
+      syncAccountUI();
+      go("room");
+    }catch(err){
+      console.error("MY ROOM render error:",err);
+      go("room");
+      const note=document.getElementById("shareNote");
+      if(note) note.innerHTML="<b>일부 기능을 불러오지 못했어요.</b><br>새로고침 후 다시 시도해 주세요.";
+    }
+  },900);
+}
+
+
+const TODAY_KEY="myroom_v11_today";
+const REACTION_KEY="myroom_v11_reactions";
+const FRIEND_COUNT_KEY="myroom_v11_friend_count";
+
+function loadToday(){
+  try{return localStorage.getItem(TODAY_KEY)||""}catch(e){return ""}
+}
+function setToday(v,btn){
+  try{localStorage.setItem(TODAY_KEY,v)}catch(e){}
+  const tv=document.getElementById("todayValue");
+  if(tv) tv.textContent="TODAY · "+v;
+  document.querySelectorAll(".today-options button").forEach(x=>x.classList.remove("on"));
+  if(btn) btn.classList.add("on");
+}
+function initToday(){
+  const v=loadToday();
+  if(v){
+    const tv=document.getElementById("todayValue");
+    if(tv) tv.textContent="TODAY · "+v;
+    document.querySelectorAll(".today-options button").forEach(x=>{
+      if(x.textContent===v) x.classList.add("on");
+    });
+  }
+}
+function getReactions(){
+  try{
+    return JSON.parse(localStorage.getItem(REACTION_KEY)||'{"🤡 광대":4,"😇 천사":2,"🐶 댕댕이":3,"🧠 브레인":1,"👑 공주/왕자":1,"😈 악마":0}');
+  }catch(e){
+    return {"🤡 광대":4,"😇 천사":2,"🐶 댕댕이":3,"🧠 브레인":1,"👑 공주/왕자":1,"😈 악마":0};
+  }
+}
+function renderReactions(){
+  const box=document.getElementById("reactionBars");
+  if(!box) return;
+  const data=getReactions();
+  const total=Math.max(1,Object.values(data).reduce((a,b)=>a+b,0));
+  const sorted=Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  box.innerHTML=sorted.slice(0,4).map(([k,v])=>{
+    const pct=Math.round(v/total*100);
+    return `<div class="react-row"><b>${k}</b><div class="react-track"><div class="react-fill" style="width:${pct}%"></div></div><span>${pct}%</span></div>`;
+  }).join("");
+}
+function voteReaction(k,btn){
+  const d=getReactions();
+  d[k]=(d[k]||0)+1;
+  try{localStorage.setItem(REACTION_KEY,JSON.stringify(d))}catch(e){}
+  document.querySelectorAll(".reaction-options button").forEach(x=>x.classList.remove("on"));
+  if(btn) btn.classList.add("on");
+  renderReactions();
+  bumpFriendCount();
+}
+function getFriendCount(){
+  try{return parseInt(localStorage.getItem(FRIEND_COUNT_KEY)||"2",10)}catch(e){return 2}
+}
+function bumpFriendCount(){
+  const n=Math.min(10,getFriendCount()+1);
+  try{localStorage.setItem(FRIEND_COUNT_KEY,String(n))}catch(e){}
+  renderUnlocks();
+}
+function renderUnlocks(){
+  const n=getFriendCount();
+  const count=document.getElementById("unlockCount");
+  const bar=document.getElementById("unlockBar");
+  const item5=document.getElementById("item5");
+  const item10=document.getElementById("item10");
+  const party=document.getElementById("friendUnlockedItem");
+
+  if(count) count.textContent=`FRIENDS ${n} / 10`;
+  if(bar) bar.style.width=(n*10)+"%";
+
+  if(item5){
+    item5.className="room-item "+(n>=5?"unlocked":"locked");
+    item5.textContent=n>=5 ? "✓ 5 FRIENDS — 친구들이 보는 내 캐릭터" : "5 FRIENDS — 친구들이 보는 내 캐릭터";
+  }
+  if(item10){
+    item10.className="room-item "+(n>=10?"unlocked":"locked");
+    item10.textContent=n>=10 ? "✓ 10 FRIENDS — PARTY ITEM UNLOCKED 🎉" : "10 FRIENDS — ROOM ITEM UNLOCK ✦";
+  }
+  if(party) party.style.display=n>=10?"block":"none";
+}
+function initRetentionLayer(){
+  initToday();
+  renderReactions();
+  renderUnlocks();
 }
 
 const ROOM_PERSONALITY={
