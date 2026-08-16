@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.6</title>
+<title>MY ROOM V2.7</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.6 — retention + participation layers */
+/* V2.7 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.6 local account/save prototype */
+/* V2.7 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.6 visitor-first flow */
+/* V2.7 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V2.6 — actual mini-home room */
+/* V2.7 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.6 — MBTI room showcase + stronger character presence */
+/* V2.7 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V2.6 — restore original V0.7 character language */
+/* V2.7 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V2.6 — MBTI personality room details */
+/* V2.7 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -960,6 +960,51 @@ body.visitor-mode #visitorEntryCard{display:block!important}
 body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
+
+/* V2.7 core polish */
+.owner-avatar-stage{
+  left:50%;bottom:48px;width:118px;height:168px;
+  transform:translateX(-50%);transform-origin:bottom center;
+}
+.owner-avatar-stage .avatar-card{width:118px!important;height:168px!important;overflow:visible!important}
+.owner-avatar-stage .pixel-person{transform:scale(.72)!important;transform-origin:bottom center!important;filter:none!important}
+
+.owner-social-summary{
+  margin:12px 0 10px;padding:11px 12px;border:1.5px solid #111;border-radius:14px;background:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:8px
+}
+.owner-social-summary b{font-size:10px;line-height:1.45}
+.new-friend-badge{border:1px solid #111;border-radius:999px;background:#ffdce8;padding:6px 8px;font-size:9px;font-weight:900}
+
+.status-editor{margin-top:12px;border:1.5px solid #111;border-radius:16px;background:#fff;padding:11px 12px}
+.status-editor-head{display:flex;justify-content:space-between;align-items:center}
+.status-editor-head b{font-size:12px}
+.tiny-edit{border:1px solid #111;background:#fff;border-radius:9px;padding:6px 9px;font-weight:900}
+.status-quick{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.status-quick button{border:1px solid #111;background:#fff;border-radius:999px;padding:6px 8px;font-size:8px;font-weight:800}
+.status-custom-row{display:grid;grid-template-columns:1fr 62px;gap:6px;margin-top:8px}
+.status-custom-row input{padding:10px;border:1px solid #bbb;border-radius:10px;background:#fff}
+.status-custom-row button{border:1px solid #111;background:#111;color:#fff;border-radius:10px;font-weight:850}
+
+.bottom-share{grid-template-columns:1fr 1fr}
+.bottom-share .story-btn{grid-column:1 / -1;background:#ffdce8;color:#111}
+
+.visitor-rank-box{margin-top:12px;border:1.5px solid #111;border-radius:14px;padding:11px;background:#fff}
+.visitor-rank-main{font-size:15px;font-weight:950;margin-bottom:8px}
+.visitor-rank-list{font-size:10px;line-height:1.7}
+.visitor-rank-list b{font-size:11px}
+
+.visitor-character{width:54px;height:78px}
+.visitor-character .pixel-person{
+  position:absolute;left:50%;bottom:8px;
+  transform:translateX(-50%) scale(.30)!important;
+  transform-origin:bottom center!important
+}
+.visitor-character .visitor-name{bottom:0}
+
+.mbti-one-liner{font-size:11px}
+.room-scene{min-height:330px}
+
 </style>
 </head>
 <body>
@@ -970,7 +1015,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.6</div>
+    <div class="micro">V2.7</div>
   </div>
 
   <div class="hero-blob">
@@ -1075,7 +1120,14 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     <div class="visitor-relation" id="visitorRelation">대화가 안 끝나는 친구</div>
     <p id="visitorResultText"></p>
 
+<div class="visitor-rank-box" id="visitorRankBox" style="display:none">
+  <div class="visitor-rank-main" id="visitorRankMain">현재 1위!</div>
+  <div class="visitor-rank-list" id="visitorRankList"></div>
+</div>
+
+
     <button class="primary" id="visitorPrimaryCta" style="margin-top:12px" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
+    <button class="visitor-extra-btn" onclick="downloadChemistryStoryCard()">결과 카드 저장</button>
     <button class="visitor-extra-btn" onclick="showVisitorVote()">하나 더 해볼래? · 친구들이 보는 나</button>
   </div>
 </div>
@@ -1085,7 +1137,16 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   
 
 
-  <div class="minihome-hero">
+  
+<div class="owner-social-summary owner-only" id="ownerSocialSummary">
+  <div>
+    <div class="micro">TODAY FRIENDS</div>
+    <b id="todayFriendNames">아직 오늘 놀러온 친구가 없어요.</b>
+  </div>
+  <span id="newFriendBadge" class="new-friend-badge" style="display:none">NEW 0</span>
+</div>
+
+<div class="minihome-hero">
     <div class="minihome-head">
       <div>
         <h2 id="zipTitle">ISTP.zip</h2>
@@ -1113,9 +1174,13 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
             <i class="prop prop-headset"></i><i class="prop prop-book"></i>
             <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
             <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-            <div class="pixel-hair"></div><div class="pixel-face"></div>
-            <div class="pixel-eye left"></div><div class="pixel-eye right"></div>
-            <div class="pixel-body"></div><div class="pixel-leg left"></div><div class="pixel-leg right"></div>
+            <div class="pixel-hair"></div>
+            <div class="pixel-head"></div>
+            <div class="pixel-eye eye1"></div>
+            <div class="pixel-eye eye2"></div>
+            <div class="pixel-body"></div>
+            <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+            <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
           </div>
         </div>
       </div>
@@ -1127,6 +1192,29 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div id="mbtiTraitChips"></div>
 </div>
   </div>
+
+<div class="status-editor owner-only" id="statusEditor">
+  <div class="status-editor-head">
+    <div>
+      <div class="micro">MY STATUS</div>
+      <b>오늘의 상태 바꾸기</b>
+    </div>
+    <button class="tiny-edit" onclick="toggleStatusEditor()">✎</button>
+  </div>
+  <div id="statusEditorBody" style="display:none">
+    <div class="status-quick">
+      <button onclick="chooseTodayStatus('오늘은 사람 만나기 싫음')">사람 만나기 싫음</button>
+      <button onclick="chooseTodayStatus('퇴근만 기다리는 중')">퇴근만 기다리는 중</button>
+      <button onclick="chooseTodayStatus('답장하기 귀찮음')">답장하기 귀찮음</button>
+      <button onclick="chooseTodayStatus('기분 좋음')">기분 좋음</button>
+      <button onclick="chooseTodayStatus('냅두세요')">냅두세요</button>
+    </div>
+    <div class="status-custom-row">
+      <input id="customStatusInput" maxlength="28" placeholder="직접 한 줄 쓰기">
+      <button onclick="saveCustomStatus()">저장</button>
+    </div>
+  </div>
+</div>
 
   <div class="chemistry-card">
     <div class="micro">OUR CHEMISTRY</div>
@@ -1285,6 +1373,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div class="bottom-share owner-only" id="bottomShareActions" style="display:none">
   <button class="dark" onclick="copySavedRoomLink()">링크 복사</button>
   <button onclick="shareSavedRoom()">친구 초대</button>
+  <button class="story-btn" onclick="downloadRoomStoryCard()">스토리 카드 저장</button>
 </div>
 
 <div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeKakaoModal()">
@@ -1301,6 +1390,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div class="toast" id="toast">복사했어요</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 
 const SUPABASE_URL="https://gfpdjxdoxjonramxrlgi.supabase.co";
@@ -1403,6 +1493,7 @@ async function persistRoomToSupabase(){
     loggedInOwnRoom=currentRemoteRoom;
     syncRealAuthUI();
     await refreshVisitCounts(currentRemoteRoom.id);
+  await loadRoomSocialSnapshot(currentRemoteRoom.id,true);
     return;
   }
 
@@ -1411,7 +1502,7 @@ async function persistRoomToSupabase(){
 
   const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
   const statusEl=document.getElementById("roomStatusBubble");
-  if(statusEl) statusEl.textContent=copy.status;
+  if(statusEl) statusEl.textContent=state.owner.today_status ? "TODAY · "+state.owner.today_status : copy.status;
 
   const detailA=document.getElementById("detailA");
   const detailB=document.getElementById("detailB");
@@ -1478,7 +1569,8 @@ async function loadMyRemoteRoom(){
     state.owner={
       name:currentRemoteRoom.nickname,
       birth:document.getElementById("ownerBirth")?.value||"1993-08-06",
-      mbti:currentRemoteRoom.mbti
+      mbti:currentRemoteRoom.mbti,
+      today_status:currentRemoteRoom.today_status||""
     };
     // profile has birthday
     const p=await sb.from("myroom_profiles").select("birth_date").eq("user_id",currentAuthUser.id).maybeSingle();
@@ -1488,6 +1580,7 @@ async function loadMyRemoteRoom(){
     renderRoom();
     go("room");
     await refreshVisitCounts(currentRemoteRoom.id);
+    await loadRoomSocialSnapshot(currentRemoteRoom.id,true);
   }
   syncRealAuthUI();
   return currentRemoteRoom;
@@ -2013,18 +2106,124 @@ function applyRoomSkin(){
 const MBTI_PREVIEW_TYPES=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
 
 
-function getRecentFriends(){
-  const seed = [
-    {name:"MINJI",mbti:"ENFP",score:96},
-    {name:"SORA",mbti:"INFP",score:91},
-    {name:"YUJIN",mbti:"ESTP",score:87}
-  ];
+
+let roomSocialSnapshot={top3:[],recent_friends:[],today_names:[],new_count:0,total_participants:0};
+
+function lastSeenKey(roomId){return "myroom_owner_last_seen_"+roomId}
+
+async function loadRoomSocialSnapshot(roomId, markSeen=false){
+  if(!roomId) return roomSocialSnapshot;
+  let since=null;
+  try{ since=localStorage.getItem(lastSeenKey(roomId)); }catch(e){}
   try{
-    const local=JSON.parse(localStorage.getItem("myroom_recent_friends")||"null");
-    return Array.isArray(local)&&local.length?local:seed;
-  }catch(e){return seed}
+    const {data,error}=await sb.rpc("myroom_room_social_snapshot",{
+      target_room:roomId,
+      since_ts:since||null
+    });
+    if(error) throw error;
+    roomSocialSnapshot=data||roomSocialSnapshot;
+    if(markSeen){
+      try{localStorage.setItem(lastSeenKey(roomId),new Date().toISOString())}catch(e){}
+    }
+  }catch(e){
+    console.warn("social snapshot failed",e);
+  }
+  renderSocialSnapshot();
+  return roomSocialSnapshot;
+}
+
+function renderSocialSnapshot(){
+  const names=document.getElementById("todayFriendNames");
+  const badge=document.getElementById("newFriendBadge");
+  const today=roomSocialSnapshot.today_names||[];
+  if(names){
+    names.textContent=today.length
+      ? today.slice(0,4).join(" · ")+"가 놀러왔어요"
+      : "아직 오늘 놀러온 친구가 없어요.";
+  }
+  if(badge){
+    const n=Number(roomSocialSnapshot.new_count||0);
+    badge.style.display=n>0?"inline-block":"none";
+    badge.textContent="NEW "+n;
+  }
+
+  const top=document.getElementById("chemistryTop3");
+  const top3=roomSocialSnapshot.top3||[];
+  if(top){
+    top.innerHTML=top3.length ? top3.map((f,i)=>`
+      <div class="chem-rank">
+        <div class="rankno">${f.rank||i+1}</div>
+        <div class="who">${f.name}<small>${f.mbti}</small></div>
+        <div class="score">${f.score}%</div>
+      </div>`).join("") : '<div class="chem-empty">아직 궁합을 본 친구가 없어요.</div>';
+  }
+
+  renderRoomVisitors();
+}
+
+function renderRoomVisitors(){
+  const avatars=document.getElementById("visitorAvatars");
+  if(!avatars) return;
+  const friends=(roomSocialSnapshot.recent_friends||[]).slice(0,8);
+  avatars.innerHTML=friends.map(f=>`
+    <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
+      <div class="pixel-person mbti-${f.mbti}">
+        <i class="prop prop-headset"></i><i class="prop prop-book"></i>
+        <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
+        <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
+        <div class="pixel-hair"></div><div class="pixel-head"></div>
+        <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
+        <div class="pixel-body"></div>
+        <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+        <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
+      </div>
+      <div class="visitor-name">${f.name}</div>
+    </div>`).join("");
+}
+
+function getRecentFriends(){
+  const actual=roomSocialSnapshot.recent_friends||[];
+  if(actual.length) return actual;
+  return [];
 }
 const MBTI_ROOM_COPY={"INTJ": {"status": "TODAY · 말 걸기 전에 용건부터", "line": "계획은 이미 끝났고, 실행만 남았습니다.", "a": ["OPEN TABS", "3개만 켜놨음 (거짓말)"], "b": ["TODAY'S SOCIAL", "필요한 말만 함"], "c": ["BRAIN MODE", "혼자 생각 중"], "chips": ["계획형", "혼자 집중", "비효율 싫음"]}, "INTP": {"status": "TODAY · 생각하다가 하루 끝남", "line": "생각은 47개인데 실행은 내일.", "a": ["OPEN TABS", "47"], "b": ["CURRENT TASK", "왜 이렇게 되는지 궁금함"], "c": ["DEADLINE", "일단 모른 척"], "chips": ["탐구중", "탭 47개", "마감 직전 집중"]}, "ENTJ": {"status": "TODAY · 결론부터 말해줘", "line": "회의가 길어지는 순간 직접 정리하기 시작합니다.", "a": ["TODAY'S PLAN", "다 끝내기"], "b": ["MEETING", "15분이면 충분"], "c": ["NEXT", "이미 다음 단계 생각 중"], "chips": ["결론형", "속도중시", "리드함"]}, "ENTP": {"status": "TODAY · 틀린 말은 못 참음", "line": "싸우는 게 아니라 재미있는 토론 중입니다.", "a": ["TODAY'S DEBATE", "3회"], "b": ["WHY?", "근데 왜?"], "c": ["NEW IDEA", "또 생김 +4"], "chips": ["논쟁환영", "아이디어 폭주", "말빨"]}, "INFJ": {"status": "TODAY · 사람 마음 읽다가 방전", "line": "말 안 해도 알아차리는데, 그래서 더 피곤함.", "a": ["ENERGY", "18%"], "b": ["THOUGHTS", "너무 많이 느낌"], "c": ["RECOVERY", "혼자 있기"], "chips": ["눈치빠름", "혼자충전", "깊게생각"]}, "INFP": {"status": "TODAY · 머릿속에서 이미 영화 한 편", "line": "현실보다 상상 속 일정이 더 바쁩니다.", "a": ["PLAYLIST", "감정 과몰입 중"], "b": ["DIARY", "오늘도 씀"], "c": ["REALITY", "잠깐만"], "chips": ["감성", "상상력", "혼자놀기"]}, "ENFJ": {"status": "TODAY · 다들 괜찮은지 확인 중", "line": "내 일보다 친구 고민 상담이 먼저 끝남.", "a": ["CHECK-IN", "친구 4명"], "b": ["TODAY'S JOB", "분위기 살리기"], "c": ["BATTERY", "사람 만나면 충전"], "chips": ["케어함", "분위기메이커", "사람좋아"]}, "ENFP": {"status": "TODAY · 새 취미 또 생김", "line": "이번 주만 해도 새 인생이 세 번째.", "a": ["NEW HOBBY", "+4"], "b": ["TODAY'S PLAN", "일단 나가기"], "c": ["CURRENT MOOD", "갑자기 신남"], "chips": ["즉흥", "새거좋아", "리액션큼"]}, "ISTJ": {"status": "TODAY · 예정대로 진행 중", "line": "갑작스러운 변경은 미리 알려주세요.", "a": ["SCHEDULE", "계획대로"], "b": ["CHECKLIST", "7/8 완료"], "c": ["SURPRISE", "사절"], "chips": ["정리됨", "약속지킴", "루틴"]}, "ISFJ": {"status": "TODAY · 친구 취향까지 기억함", "line": "내가 챙긴 건 기억 못 해도 네 커피 취향은 기억함.", "a": ["MEMORY", "친구 메뉴 저장됨"], "b": ["TODAY'S MODE", "조용히 챙김"], "c": ["MY NEEDS", "나중에"], "chips": ["세심함", "기억력", "배려"]}, "ESTJ": {"status": "TODAY · 왜 아직 안 했지?", "line": "정리 안 된 걸 보면 손이 먼저 움직입니다.", "a": ["TASKS", "오늘 끝냄"], "b": ["STATUS", "진행률 확인"], "c": ["EXCUSES", "접수 안 함"], "chips": ["추진력", "정리형", "속도"]}, "ESFJ": {"status": "TODAY · 단톡 분위기 체크 중", "line": "모두가 즐거워야 나도 마음이 놓임.", "a": ["GROUP CHAT", "읽음 99+"], "b": ["TODAY'S JOB", "사람 챙기기"], "c": ["EVENT", "다음 약속 잡는 중"], "chips": ["친화력", "리액션", "약속많음"]}, "ISTP": {"status": "TODAY · 연락은 봤는데 답장은 나중에", "line": "필요하면 고쳐주지만 설명은 짧게 합니다.", "a": ["REPLY", "나중에"], "b": ["MANUAL", "UNREAD"], "c": ["SOCIAL", "필요할 때만"], "chips": ["무심함", "손재주", "혼자편함"]}, "ISFP": {"status": "TODAY · 조용히 기분 좋은 거 찾는 중", "line": "말은 적어도 취향은 확실합니다.", "a": ["TODAY'S PICK", "예쁜 거"], "b": ["MOOD", "잔잔함"], "c": ["NOISE", "조금만"], "chips": ["취향확실", "편안함", "감각형"]}, "ESTP": {"status": "TODAY · 일단 해보고 생각함", "line": "문제는 나중에, 재미는 지금.", "a": ["TODAY'S PLAN", "일단 출발"], "b": ["RISK", "괜찮겠지"], "c": ["ENERGY", "밖으로"], "chips": ["행동파", "즉흥", "겁없음"]}, "ESFP": {"status": "TODAY · 오늘 어디 갈지 아직 모름", "line": "약속이 없으면 만드는 편입니다.", "a": ["TODAY'S PLAN", "사람 만나기"], "b": ["NEW PLAN", "+2"], "c": ["CURRENT LOCATION", "또 밖"], "chips": ["화려함", "리액션", "약속폭주"]}};
+
+
+function toggleStatusEditor(){
+  const body=document.getElementById("statusEditorBody");
+  if(body) body.style.display=body.style.display==="none"?"block":"none";
+}
+function chooseTodayStatus(text){
+  saveTodayStatus(text);
+}
+function saveCustomStatus(){
+  const input=document.getElementById("customStatusInput");
+  const text=(input?.value||"").trim();
+  if(!text) return;
+  saveTodayStatus(text);
+}
+async function saveTodayStatus(text){
+  if(!currentAuthUser || !currentRemoteRoom || currentRemoteRoom.owner_id!==currentAuthUser.id){
+    alert("내 ROOM에서만 상태를 바꿀 수 있어요.");
+    return;
+  }
+  const {data,error}=await sb.from("myroom_rooms")
+    .update({today_status:text})
+    .eq("id",currentRemoteRoom.id)
+    .select()
+    .single();
+  if(error){
+    console.warn(error);
+    alert("상태를 저장하지 못했어요.");
+    return;
+  }
+  currentRemoteRoom=data;
+  state.owner.today_status=text;
+  const bubble=document.getElementById("roomStatusBubble");
+  if(bubble) bubble.textContent="TODAY · "+text;
+  const body=document.getElementById("statusEditorBody");
+  if(body) body.style.display="none";
+}
 
 function renderMiniHome(){
   const owner=state.owner;
@@ -2043,15 +2242,17 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
   const friends=getRecentFriends();
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
-    avatars.innerHTML=friends.slice(0,5).map(f=>`
-      <div class="visitor-character">
+    avatars.innerHTML=friends.slice(0,8).map(f=>`
+      <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
         <div class="pixel-person mbti-${f.mbti}">
           <i class="prop prop-headset"></i><i class="prop prop-book"></i>
           <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
           <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-          <div class="pixel-hair"></div><div class="pixel-face"></div>
-          <div class="pixel-eye left"></div><div class="pixel-eye right"></div>
-          <div class="pixel-body"></div><div class="pixel-leg left"></div><div class="pixel-leg right"></div>
+          <div class="pixel-hair"></div><div class="pixel-head"></div>
+          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
+          <div class="pixel-body"></div>
+          <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
+          <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
         </div>
         <div class="visitor-name">${f.name}</div>
       </div>`).join("");
@@ -2286,7 +2487,6 @@ function chemistryCopy(score, ownerMbti, friendMbti){
 async function runVisitorChemistry(){
   const name=(document.getElementById("visitorNameInput")?.value||"").trim();
   const mbti=document.getElementById("visitorMbtiInput")?.value||"";
-
   if(!name){ alert("이름이나 닉네임을 입력해 주세요."); return; }
   if(!mbti){ alert("MBTI를 선택해 주세요."); return; }
 
@@ -2294,49 +2494,48 @@ async function runVisitorChemistry(){
   const score=chemistryScoreFor(owner.mbti,mbti);
   const [relation,desc]=chemistryCopy(score,owner.mbti,mbti);
 
+  let rankData=null;
+  if(currentRemoteRoom?.id){
+    try{
+      const {data,error}=await sb.rpc("myroom_submit_chemistry",{
+        target_room:currentRemoteRoom.id,
+        token:getVisitorToken(),
+        friend_name:name,
+        friend_mbti:mbti,
+        score_value:score,
+        relation_value:relation
+      });
+      if(error) throw error;
+      rankData=data;
+    }catch(e){
+      console.warn("chemistry submit failed",e);
+    }
+  }
+
   const scoreEl=document.getElementById("visitorScore");
   const relEl=document.getElementById("visitorRelation");
   const textEl=document.getElementById("visitorResultText");
-  const entry=document.getElementById("visitorEntryCard");
-  const result=document.getElementById("visitorResultCard");
-
   if(scoreEl) scoreEl.textContent=score+"%";
   if(relEl) relEl.textContent=relation;
   if(textEl) textEl.textContent=`${owner.name} (${owner.mbti}) × ${name} (${mbti}) · ${desc}`;
 
+  window.__visitorChemistry={name,mbti,score,relation,rankData};
+
+  const entry=document.getElementById("visitorEntryCard");
+  const result=document.getElementById("visitorResultCard");
   if(entry) entry.style.display="none";
   if(result) result.style.display="block";
   document.body.classList.add("chemistry-done");
 
-  window.__visitorChemistry={name,mbti,score,relation};
-
-  // Prototype recent-visitor cache for the room illustration.
-  try{
-    const arr=JSON.parse(localStorage.getItem("myroom_recent_friends")||"[]");
-    const upper=name.toUpperCase();
-    const next=[{name:upper,mbti,score},...arr.filter(x=>x.name!==upper)].slice(0,5);
-    localStorage.setItem("myroom_recent_friends",JSON.stringify(next));
-  }catch(e){}
-
-  // Persist actual chemistry participation when this is a shared public ROOM.
-  if(currentRemoteRoom?.id){
-    try{
-      const token=getVisitorToken();
-      const {error}=await sb.from("myroom_chemistry_results").upsert({
-        room_id:currentRemoteRoom.id,
-        visitor_token:token,
-        friend_nickname:name,
-        friend_mbti:mbti,
-        score,
-        relation_key:relation,
-        play_score:score,
-        talk_score:Math.max(0,Math.min(100,score+((mbti.charCodeAt(0)%7)-3))),
-        travel_score:Math.max(0,Math.min(100,score+((mbti.charCodeAt(1)%9)-4)))
-      },{onConflict:"room_id,visitor_token"});
-      if(error) console.warn("chemistry save failed",error);
-    }catch(e){
-      console.warn("chemistry save failed",e);
-    }
+  const box=document.getElementById("visitorRankBox");
+  const main=document.getElementById("visitorRankMain");
+  const list=document.getElementById("visitorRankList");
+  if(rankData && box && main && list){
+    const r=Number(rankData.rank||1), total=Number(rankData.total||1);
+    main.textContent=r===1 ? `🥇 현재 ${owner.name}의 친구 중 1위!` : `현재 ${total}명 중 ${r}위`;
+    const top3=rankData.top3||[];
+    list.innerHTML=top3.map(x=>`<div>${x.rank}위 <b>${x.name}</b> · ${x.mbti} · ${x.score}%</div>`).join("");
+    box.style.display="block";
   }
 
   result?.scrollIntoView({behavior:"smooth",block:"start"});
@@ -2367,6 +2566,68 @@ function initVisitorFlow(){
   if(mbtiInput) mbtiInput.value="";
 
   syncVisitorPrimaryCta();
+}
+
+
+async function downloadRoomStoryCard(){
+  if(!(currentAuthUser && currentRemoteRoom)) return;
+  const room=document.querySelector(".minihome-hero");
+  if(!room || typeof html2canvas==="undefined") return;
+  const snap=await html2canvas(room,{backgroundColor:null,scale:2,useCORS:true});
+  const canvas=document.createElement("canvas");
+  canvas.width=1080;canvas.height=1920;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#f8f5ee";ctx.fillRect(0,0,1080,1920);
+  ctx.fillStyle="#111";ctx.font="900 82px Arial";ctx.fillText((state.owner.mbti||"ISTP")+".zip",80,135);
+  ctx.font="600 34px Arial";
+  const status=currentRemoteRoom.today_status || "come to my room";
+  ctx.fillText(status,80,195);
+  const maxW=920,maxH=1180;
+  const scale=Math.min(maxW/snap.width,maxH/snap.height);
+  const w=snap.width*scale,h=snap.height*scale;
+  ctx.drawImage(snap,(1080-w)/2,300,w,h);
+  ctx.font="700 30px Arial";ctx.fillStyle="#555";ctx.fillText("come to my room →",80,1780);
+  ctx.font="500 24px Arial";ctx.fillText("MY ROOM",80,1830);
+  downloadCanvas(canvas,`${state.owner.mbti}-room-story.png`);
+}
+
+function downloadChemistryStoryCard(){
+  const f=window.__visitorChemistry;
+  if(!f) return;
+  const canvas=document.createElement("canvas");
+  canvas.width=1080;canvas.height=1920;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#fff5d9";ctx.fillRect(0,0,1080,1920);
+  ctx.fillStyle="#111";ctx.font="900 48px Arial";ctx.fillText("OUR CHEMISTRY",80,150);
+  ctx.font="900 62px Arial";ctx.fillText(`${state.owner.name} × ${f.name}`,80,270);
+  ctx.font="900 220px Arial";ctx.fillText(`${f.score}%`,80,570);
+  ctx.font="900 56px Arial";
+  wrapCanvasText(ctx,f.relation,80,720,900,72);
+  const rank=f.rankData?.rank;
+  const total=f.rankData?.total;
+  if(rank){
+    ctx.font="900 44px Arial";
+    ctx.fillText(rank===1?`#1 IN ${state.owner.name}'S ROOM`:`#${rank} / ${total}`,80,1000);
+  }
+  ctx.font="600 32px Arial";ctx.fillStyle="#555";ctx.fillText("come to my room →",80,1760);
+  downloadCanvas(canvas,`chemistry-${state.owner.name}-${f.name}.png`);
+}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
+  const chars=String(text||"").split("");
+  let line="";
+  for(const ch of chars){
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxWidth && line){
+      ctx.fillText(line,x,y); line=ch; y+=lineHeight;
+    }else line=test;
+  }
+  if(line) ctx.fillText(line,x,y);
+}
+function downloadCanvas(canvas,filename){
+  const a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download=filename;
+  a.click();
 }
 
 function publicRoomUrl(){
