@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V1.9</title>
+<title>MY ROOM V2.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V1.9: generated-room-only MBTI visual exaggeration */
+/* V2.0: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V1.9 — all 16 MBTI character skins */
+/* V2.0 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V1.9 — retention + participation layers */
+/* V2.0 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V1.9 local account/save prototype */
+/* V2.0 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -544,7 +544,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V1.9 visitor-first flow */
+/* V2.0 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -576,7 +576,7 @@ body.visitor-mode .room-shell{display:none!important}
 body.visitor-mode #visitorFlow{display:block!important}
 
 
-/* V1.9 — actual mini-home room */
+/* V2.0 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -667,7 +667,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V1.9 — MBTI room showcase + stronger character presence */
+/* V2.0 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -720,7 +720,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.9</div>
+    <div class="micro">V2.0</div>
   </div>
 
   <div class="hero-blob">
@@ -794,7 +794,7 @@ body.visitor-mode #visitorFlow{display:block!important}
   <div class="topbar">
     <div>
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
-      <div class="micro">TODAY 24 · TOTAL 392</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
+      <div class="micro">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
     </div>
     <button class="chip" onclick="go('landing')">HOME</button>
@@ -841,7 +841,7 @@ body.visitor-mode #visitorFlow{display:block!important}
         <h2 id="zipTitle">ISTP.zip</h2>
         <div class="sub" id="roomOwnerLabel">JISU'S ROOM</div>
       </div>
-      <div class="micro" id="roomVisitMeta">TODAY 2 · TOTAL 28</div>
+      <div class="micro" id="roomVisitMeta">TODAY 0 · TOTAL 0</div>
     </div>
 
     <div class="room-scene" id="roomScene"><div class="room-mbti-stamp" id="roomMbtiStamp">ISTP</div>
@@ -1169,6 +1169,7 @@ async function persistRoomToSupabase(){
   currentRemoteRoom=res.data;
   showSaveState("ready");
   syncRealAuthUI();
+  await refreshVisitCounts(currentRemoteRoom.id);
   const fake=document.getElementById("fakeUrl");
   if(fake) fake.textContent=window.location.origin+window.location.pathname+"?room="+currentRemoteRoom.slug;
   
@@ -1193,9 +1194,51 @@ async function loadMyRemoteRoom(){
     if(n)n.value=state.owner.name; if(b)b.value=state.owner.birth; if(m)m.value=state.owner.mbti;
     renderRoom();
     go("room");
+    await refreshVisitCounts(currentRemoteRoom.id);
   }
   syncRealAuthUI();
   return currentRemoteRoom;
+}
+
+
+function getVisitorToken(){
+  const key="myroom_visitor_token_v1";
+  let token=null;
+  try{ token=localStorage.getItem(key); }catch(e){}
+  if(!token){
+    token=(crypto.randomUUID ? crypto.randomUUID() : ("v-"+Math.random().toString(36).slice(2)+Date.now().toString(36)));
+    try{ localStorage.setItem(key,token); }catch(e){}
+  }
+  return token;
+}
+
+async function recordPublicRoomVisit(room){
+  if(!room?.id) return;
+  // Do not count the owner viewing their own room.
+  if(currentAuthUser && room.owner_id===currentAuthUser.id) return;
+
+  try{
+    const token=getVisitorToken();
+    await sb.rpc("myroom_record_visit",{target_room:room.id,token});
+  }catch(e){
+    console.warn("visit record failed",e);
+  }
+  await refreshVisitCounts(room.id);
+}
+
+async function refreshVisitCounts(roomId){
+  const meta=document.getElementById("roomVisitMeta");
+  if(!roomId || !meta) return;
+  try{
+    const {data,error}=await sb.rpc("myroom_room_visit_counts",{target_room:roomId});
+    if(error) throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    const today=Number(row?.today_count||0);
+    const total=Number(row?.total_count||0);
+    meta.textContent=`TODAY ${today} · TOTAL ${total}`;
+  }catch(e){
+    console.warn("visit count load failed",e);
+  }
 }
 
 async function loadPublicRoomBySlug(slug){
@@ -1209,6 +1252,7 @@ async function loadPublicRoomBySlug(slug){
   renderRoom();
   initVisitorFlow();
   go("room");
+  await recordPublicRoomVisit(data);
   return true;
 }
 
@@ -1904,7 +1948,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V1.9 startup
+// V2.0 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
