@@ -1923,14 +1923,32 @@ async function openSharedRoomFromUrl(){
       currentAuthUser=null;
     }
 
-    const {data:room,error}=await sb.from("myroom_rooms")
-      .select("*")
-      .eq("slug",sharedSlug)
-      .eq("is_public",true)
-      .maybeSingle();
+    let room=null;
+    let error=null;
+
+    const uuidLike=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(sharedSlug);
+
+    if(uuidLike){
+      const result=await sb.from("myroom_rooms")
+        .select("*")
+        .eq("id",sharedSlug)
+        .eq("is_public",true)
+        .maybeSingle();
+      room=result.data;
+      error=result.error;
+    }else{
+      // Backward compatibility for links already shared with a slug.
+      const result=await sb.from("myroom_rooms")
+        .select("*")
+        .eq("slug",sharedSlug)
+        .eq("is_public",true)
+        .maybeSingle();
+      room=result.data;
+      error=result.error;
+    }
 
     if(error || !room){
-      console.error("shared room load failed",error);
+      console.error("shared room load failed", {sharedRoomKey:sharedSlug,error});
       showMissingRoom();
       return true;
     }
@@ -2013,11 +2031,11 @@ function previewOwnSharedRoom(){
 }
 
 function publicRoomUrl(){
-  if(!currentRemoteRoom?.slug) return "";
+  if(!currentRemoteRoom?.id) return "";
   const url=new URL(window.location.href);
   url.search="";
   url.hash="";
-  url.searchParams.set("room",currentRemoteRoom.slug);
+  url.searchParams.set("room",currentRemoteRoom.id);
   return url.toString();
 }
 
@@ -2046,7 +2064,7 @@ function syncRealAuthUI(){
   if(currentAuthUser && currentRemoteRoom){
     showSaveState("ready");
     const readyUrl=document.getElementById("readyRoomUrl");
-    if(readyUrl) readyUrl.textContent=currentRemoteRoom?.slug ? publicRoomUrl() : "공유 링크를 만드는 중이에요.";
+    if(readyUrl) readyUrl.textContent=currentRemoteRoom?.id ? publicRoomUrl() : "공유 링크를 만드는 중이에요.";
   }else{
     showSaveState("loggedout");
   }
@@ -2106,7 +2124,7 @@ async function persistRoomToSupabase(){
     return;
   }
 
-  const slug=currentRemoteRoom?.slug || generateAutoSlug();
+  const slug=currentRemoteRoom?.id || generateAutoSlug();
   const owner=state.owner;
 
   const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
@@ -3056,7 +3074,7 @@ function renderRoom(){
   document.getElementById("roomColor").textContent="MOOD · "+monthMood(o.birth);
   document.getElementById("roomLucky").textContent="NO. "+String(parseInt(o.birth.split("-")[2]||6)).padStart(2,"0");
   const fakeUrl=document.getElementById("fakeUrl");
-  if(fakeUrl) fakeUrl.textContent=currentRemoteRoom?.slug ? publicRoomUrl() : "ROOM 저장 후 친구용 주소가 만들어져요.";
+  if(fakeUrl) fakeUrl.textContent=currentRemoteRoom?.id ? publicRoomUrl() : "ROOM 저장 후 친구용 주소가 만들어져요.";
   document.getElementById("friendOwnerName").textContent=o.name;
   document.getElementById("friendOwnerName2").textContent=o.name;
   renderRank();
@@ -3148,7 +3166,7 @@ function renderResult(){
 
 
 function copySavedRoomLink(){
-  if(!(currentAuthUser && currentRemoteRoom?.slug)){
+  if(!(currentAuthUser && currentRemoteRoom?.id)){
     alert("ROOM 저장이 완료된 후 링크를 복사할 수 있어요.");
     return;
   }
@@ -3157,7 +3175,7 @@ function copySavedRoomLink(){
   toast("친구용 링크를 복사했어요");
 }
 async function shareSavedRoom(){
-  if(!(currentAuthUser && currentRemoteRoom?.slug)){
+  if(!(currentAuthUser && currentRemoteRoom?.id)){
     alert("ROOM 저장이 완료된 후 친구에게 공유할 수 있어요.");
     return;
   }
