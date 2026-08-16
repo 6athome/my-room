@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.7</title>
+<title>MY ROOM V3.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.7 — retention + participation layers */
+/* V3.1 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.7 local account/save prototype */
+/* V3.1 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.7 visitor-first flow */
+/* V3.1 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V2.7 — actual mini-home room */
+/* V3.1 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.7 — MBTI room showcase + stronger character presence */
+/* V3.1 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V2.7 — restore original V0.7 character language */
+/* V3.1 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V2.7 — MBTI personality room details */
+/* V3.1 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -961,7 +961,7 @@ body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
-/* V2.7 core polish */
+/* V3.1 core polish */
 .owner-avatar-stage{
   left:50%;bottom:48px;width:118px;height:168px;
   transform:translateX(-50%);transform-origin:bottom center;
@@ -1005,6 +1005,171 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .mbti-one-liner{font-size:11px}
 .room-scene{min-height:330px}
 
+
+/* V3.1 — distinct 16 MBTI silhouettes */
+.owner-avatar-stage .pixel-person{
+  transform:scale(.58)!important; /* approx 0.8x from previous .72 */
+  transform-origin:bottom center!important;
+}
+.visitor-character .pixel-person{
+  transform:translateX(-50%) scale(.26)!important;
+}
+
+/* General hooks */
+.pixel-person::before,.pixel-person::after{
+  content:"";position:absolute;display:none;z-index:8;
+}
+.pixel-person.pose-arms .pixel-body:after{
+  content:"";position:absolute;left:-10px;top:16px;width:52px;height:8px;background:#111;border:3px solid #111;transform:rotate(-8deg)
+}
+.pixel-person.pose-lean{transform:scale(.58) rotate(-3deg)!important}
+.pixel-person.pose-point .prop-pointer{display:block!important;transform:rotate(-24deg) scale(1.15)}
+.pixel-person.pose-spear .prop-pointer{display:block!important;transform:rotate(-34deg) scale(1.45)}
+.pixel-person.pose-soft{transform:scale(.58) rotate(1deg)!important}
+.pixel-person.pose-sit{transform:scale(.55)!important;bottom:-6px!important}
+.pixel-person.pose-wave .pixel-body:after{
+  content:"";position:absolute;right:-14px;top:-2px;width:8px;height:30px;background:#efb08a;border:3px solid #111;transform:rotate(-28deg)
+}
+.pixel-person.pose-jump{transform:scale(.56) translateY(-5px) rotate(-2deg)!important}
+.pixel-person.pose-straight{transform:scale(.58)!important}
+.pixel-person.pose-hold .pixel-body:after{
+  content:"";position:absolute;left:9px;top:17px;width:24px;height:8px;background:#efb08a;border:3px solid #111
+}
+.pixel-person.pose-crouch{transform:scale(.54) translateY(6px)!important}
+.pixel-person.pose-forward{transform:scale(.57) rotate(4deg)!important}
+.pixel-person.pose-pose{transform:scale(.56) rotate(-4deg)!important}
+
+/* Big readable hooks */
+.pixel-person.hook-tabs::after{
+  display:block;content:"47";right:-18px;top:20px;width:30px;height:20px;background:#fff;border:3px solid #111;
+  font-size:9px;font-weight:900;text-align:center;line-height:18px
+}
+.pixel-person.hook-why::after{
+  display:block;content:"WHY?";right:-28px;top:10px;width:42px;height:23px;background:#fff7d8;border:3px solid #111;
+  font-size:8px;font-weight:900;text-align:center;line-height:20px
+}
+.pixel-person.hook-heart::after{
+  display:block;content:"♥";right:-18px;top:5px;font-size:22px;color:#ff6f91
+}
+.pixel-person.hook-spark::after{
+  display:block;content:"✦";right:-20px;top:0;font-size:24px
+}
+.pixel-person.hook-check::after{
+  display:block;content:"✓";right:-18px;top:8px;width:24px;height:24px;background:#fff;border:3px solid #111;
+  font-size:16px;font-weight:900;text-align:center;line-height:20px
+}
+.pixel-person.hook-cup::after{
+  display:block;content:"☕";right:-18px;top:18px;font-size:22px
+}
+.pixel-person.hook-clipboard::after{
+  display:block;content:"3/4";right:-25px;top:10px;width:38px;height:28px;background:#fff;border:3px solid #111;
+  font-size:9px;font-weight:900;text-align:center;line-height:24px
+}
+.pixel-person.hook-tool::after{
+  display:block;content:"🔧";right:-24px;top:22px;font-size:20px
+}
+.pixel-person.hook-camera::after{
+  display:block;content:"📷";right:-24px;top:15px;font-size:20px
+}
+.pixel-person.hook-cap::before{
+  display:block;content:"";left:13px;top:-7px;width:36px;height:10px;background:#111;border:3px solid #111;border-radius:50% 50% 0 0
+}
+.pixel-person.hook-glasses .prop-glasses{display:block!important;transform:scale(1.12)}
+.pixel-person.hook-headset .prop-headset{display:block!important;transform:scale(1.08)}
+.pixel-person.hook-tablet .prop-tablet{display:block!important}
+.pixel-person.hook-book .prop-book{display:block!important}
+.pixel-person.hook-phone .prop-phone{display:block!important}
+
+/* Make colors more legible */
+.pixel-person.mbti-INTJ .pixel-body{background:#30353a!important}
+.pixel-person.mbti-INTP .pixel-body{background:#4d75a8!important}
+.pixel-person.mbti-ENTJ .pixel-body{background:#594469!important}
+.pixel-person.mbti-ENTP .pixel-body{background:#f2c927!important}
+.pixel-person.mbti-INFJ .pixel-body{background:#648e77!important}
+.pixel-person.mbti-INFP .pixel-body{background:#7a68aa!important}
+.pixel-person.mbti-ENFJ .pixel-body{background:#62a58a!important}
+.pixel-person.mbti-ENFP .pixel-body{background:#ff7f8f!important}
+.pixel-person.mbti-ISTJ .pixel-body{background:#52657a!important}
+.pixel-person.mbti-ISFJ .pixel-body{background:#e6a0aa!important}
+.pixel-person.mbti-ESTJ .pixel-body{background:#3d5f80!important}
+.pixel-person.mbti-ESFJ .pixel-body{background:#ef759a!important}
+.pixel-person.mbti-ISTP .pixel-body{background:#51565a!important}
+.pixel-person.mbti-ISFP .pixel-body{background:#627f75!important}
+.pixel-person.mbti-ESTP .pixel-body{background:#e58438!important}
+.pixel-person.mbti-ESFP .pixel-body{background:#ff4f98!important}
+
+
+.character-review{margin:10px 0;border:1.5px solid #111;border-radius:14px;background:#fff;padding:10px}
+.character-review-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}
+.character-review-grid button{border:1px solid #111;border-radius:8px;background:#fff;padding:6px 2px;font-size:8px;font-weight:850}
+.character-review-grid button.on{background:#111;color:#fff}
+
+/* V3.1 character differentiation */
+.pixel-person.mbti-INTJ .pixel-body{background:#20242B!important}
+.pixel-person.mbti-INTJ .pixel-leg{background:#B9C7FF!important}
+.pixel-person.mbti-INTP .pixel-body{background:#4B6CB7!important}
+.pixel-person.mbti-INTP .pixel-leg{background:#D8E2FF!important}
+.pixel-person.mbti-ENTJ .pixel-body{background:#7B2E87!important}
+.pixel-person.mbti-ENTJ .pixel-leg{background:#F1C6F4!important}
+.pixel-person.mbti-ENTP .pixel-body{background:#F0C419!important}
+.pixel-person.mbti-ENTP .pixel-leg{background:#FFF1A8!important}
+.pixel-person.mbti-INFJ .pixel-body{background:#557C6B!important}
+.pixel-person.mbti-INFJ .pixel-leg{background:#CDE8D8!important}
+.pixel-person.mbti-INFP .pixel-body{background:#8066B3!important}
+.pixel-person.mbti-INFP .pixel-leg{background:#E5D9FF!important}
+.pixel-person.mbti-ENFJ .pixel-body{background:#27A88A!important}
+.pixel-person.mbti-ENFJ .pixel-leg{background:#C9F5E9!important}
+.pixel-person.mbti-ENFP .pixel-body{background:#FF7A6E!important}
+.pixel-person.mbti-ENFP .pixel-leg{background:#FFE0D9!important}
+.pixel-person.mbti-ISTJ .pixel-body{background:#3E5B79!important}
+.pixel-person.mbti-ISTJ .pixel-leg{background:#D5E4F3!important}
+.pixel-person.mbti-ISFJ .pixel-body{background:#D9909B!important}
+.pixel-person.mbti-ISFJ .pixel-leg{background:#FFE1E5!important}
+.pixel-person.mbti-ESTJ .pixel-body{background:#236A73!important}
+.pixel-person.mbti-ESTJ .pixel-leg{background:#CDEDEF!important}
+.pixel-person.mbti-ESFJ .pixel-body{background:#E85E8B!important}
+.pixel-person.mbti-ESFJ .pixel-leg{background:#FFD6E3!important}
+.pixel-person.mbti-ISTP .pixel-body{background:#5A6066!important}
+.pixel-person.mbti-ISTP .pixel-leg{background:#D9DDE0!important}
+.pixel-person.mbti-ISFP .pixel-body{background:#6E8B62!important}
+.pixel-person.mbti-ISFP .pixel-leg{background:#E0EDD9!important}
+.pixel-person.mbti-ESTP .pixel-body{background:#E4772E!important}
+.pixel-person.mbti-ESTP .pixel-leg{background:#FFE0C7!important}
+.pixel-person.mbti-ESFP .pixel-body{background:#FF3F93!important}
+.pixel-person.mbti-ESFP .pixel-leg{background:#FFD2E6!important}
+
+.pixel-person.hook-blueprint::after{display:block;content:"PLAN";right:-34px;top:12px;width:45px;height:31px;background:#dbe4ff;border:3px solid #111;font-size:8px;font-weight:950;text-align:center;line-height:27px;transform:rotate(-4deg)}
+.pixel-person.hook-megaphone::after{display:block;content:"";right:-34px;top:10px;width:32px;height:22px;background:#d58adf;border:3px solid #111;clip-path:polygon(0 25%,100% 0,100% 100%,0 75%)}
+.pixel-person.hook-letter::after{display:block;content:"...";right:-29px;top:8px;width:35px;height:25px;background:#fff;border:3px solid #111;border-radius:3px;font-size:13px;font-weight:950;text-align:center;line-height:18px}
+.pixel-person.hook-camera::after{display:block;content:"";right:-31px;top:12px;width:34px;height:25px;background:#222;border:3px solid #111;box-shadow:inset 0 0 0 7px #ffb0a8}
+.pixel-person.hook-calendar::after{display:block;content:"08";right:-29px;top:7px;width:34px;height:31px;background:#fff;border:3px solid #111;font-size:11px;font-weight:950;text-align:center;line-height:27px}
+.pixel-person.hook-gift::after{display:block;content:"+";right:-29px;top:13px;width:31px;height:29px;background:#ff9fbd;border:3px solid #111;font-size:17px;font-weight:950;text-align:center;line-height:24px}
+.pixel-person.hook-flower::after{display:block;content:"✿";right:-27px;top:8px;font-size:28px;color:#7fa56e;text-shadow:1px 1px #111}
+.pixel-person.hook-board::after{display:block;content:"GO";right:-32px;top:10px;width:38px;height:27px;background:#ffb477;border:3px solid #111;font-size:10px;font-weight:950;text-align:center;line-height:23px}
+.pixel-person.hook-tool::after{display:block;content:"FIX";right:-31px;top:15px;width:37px;height:25px;background:#d8dde0;border:3px solid #111;font-size:9px;font-weight:950;text-align:center;line-height:21px;transform:rotate(-8deg)}
+.pixel-person.hook-cup::after{display:block;content:"";right:-25px;top:17px;width:23px;height:20px;background:#ffd9df;border:3px solid #111;border-radius:2px 2px 7px 7px}
+.pixel-person.hook-cup::before{display:block;content:"";right:-32px;top:21px;width:10px;height:10px;border:3px solid #111;border-left:0;border-radius:0 7px 7px 0}
+.pixel-person.hook-headset .prop-headset{display:block!important;transform:scale(1.22)}
+.pixel-person.hook-glasses .prop-glasses{display:block!important;transform:scale(1.24)}
+.pixel-person.hook-why::after{transform:rotate(-6deg);width:48px!important;height:27px!important;font-size:9px!important}
+.pixel-person.hook-tabs::after{width:34px!important;height:24px!important;box-shadow:5px -5px 0 #d8e2ff,5px -5px 0 2px #111}
+.pixel-person.hook-heart::after{font-size:29px!important}
+
+
+/* V3.1 — final 16 MBTI code-drawn chibi characters */
+.pixel-person{display:none!important}
+.svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
+.svg-avatar svg{width:104px;height:150px;overflow:visible}
+.owner-avatar-stage .svg-avatar{transform:scale(.80);transform-origin:bottom center}
+.visitor-character .svg-avatar{position:absolute;left:50%;bottom:7px;width:70px;height:86px;transform:translateX(-50%) scale(.54);transform-origin:bottom center}
+.ch-skin{fill:#f3c6a6;stroke:#171717;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.ch-hair{fill:#28231f;stroke:#171717;stroke-width:2.5;stroke-linejoin:round}
+.ch-line{fill:none;stroke:#171717;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ch-eye{fill:#171717}
+.ch-shoe{fill:#262626;stroke:#171717;stroke-width:2.5}
+.ch-white{fill:#fff;stroke:#171717;stroke-width:2.5;stroke-linejoin:round}
+.ch-text{font:900 8px Arial,sans-serif;fill:#171717}
+
 </style>
 </head>
 <body>
@@ -1015,7 +1180,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.7</div>
+    <div class="micro">V3.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1138,6 +1303,12 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
   
+
+<div class="character-review owner-only" id="characterReview">
+  <div class="micro">CHARACTER CHECK · 16 TYPES</div>
+  <div class="character-review-grid" id="characterReviewGrid"></div>
+</div>
+
 <div class="owner-social-summary owner-only" id="ownerSocialSummary">
   <div>
     <div class="micro">TODAY FRIENDS</div>
@@ -2167,17 +2338,7 @@ function renderRoomVisitors(){
   const friends=(roomSocialSnapshot.recent_friends||[]).slice(0,8);
   avatars.innerHTML=friends.map(f=>`
     <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
-      <div class="pixel-person mbti-${f.mbti}">
-        <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-        <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-        <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-        <div class="pixel-hair"></div><div class="pixel-head"></div>
-        <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-        <div class="pixel-body"></div>
-        <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-        <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-      </div>
-      <div class="visitor-name">${f.name}</div>
+      ${mbtiCharacterSVG(f.mbti)}<div class="visitor-name">${f.name}</div>
     </div>`).join("");
 }
 
@@ -2186,6 +2347,8 @@ function getRecentFriends(){
   if(actual.length) return actual;
   return [];
 }
+const MBTI_CHARACTER_STYLE={"INTJ": {"pose": "arms", "hook": "blueprint", "color": "#20242B"}, "INTP": {"pose": "lean", "hook": "tabs", "color": "#4B6CB7"}, "ENTJ": {"pose": "point", "hook": "megaphone", "color": "#7B2E87"}, "ENTP": {"pose": "spear", "hook": "why", "color": "#F0C419"}, "INFJ": {"pose": "soft", "hook": "letter", "color": "#557C6B"}, "INFP": {"pose": "sit", "hook": "headset", "color": "#8066B3"}, "ENFJ": {"pose": "wave", "hook": "heart", "color": "#27A88A"}, "ENFP": {"pose": "jump", "hook": "camera", "color": "#FF7A6E"}, "ISTJ": {"pose": "straight", "hook": "calendar", "color": "#3E5B79"}, "ISFJ": {"pose": "hold", "hook": "cup", "color": "#D9909B"}, "ESTJ": {"pose": "point", "hook": "clipboard", "color": "#236A73"}, "ESFJ": {"pose": "wave", "hook": "gift", "color": "#E85E8B"}, "ISTP": {"pose": "crouch", "hook": "tool", "color": "#5A6066"}, "ISFP": {"pose": "sit", "hook": "flower", "color": "#6E8B62"}, "ESTP": {"pose": "forward", "hook": "board", "color": "#E4772E"}, "ESFP": {"pose": "pose", "hook": "glasses", "color": "#FF3F93"}};
+
 const MBTI_ROOM_COPY={"INTJ": {"status": "TODAY · 말 걸기 전에 용건부터", "line": "계획은 이미 끝났고, 실행만 남았습니다.", "a": ["OPEN TABS", "3개만 켜놨음 (거짓말)"], "b": ["TODAY'S SOCIAL", "필요한 말만 함"], "c": ["BRAIN MODE", "혼자 생각 중"], "chips": ["계획형", "혼자 집중", "비효율 싫음"]}, "INTP": {"status": "TODAY · 생각하다가 하루 끝남", "line": "생각은 47개인데 실행은 내일.", "a": ["OPEN TABS", "47"], "b": ["CURRENT TASK", "왜 이렇게 되는지 궁금함"], "c": ["DEADLINE", "일단 모른 척"], "chips": ["탐구중", "탭 47개", "마감 직전 집중"]}, "ENTJ": {"status": "TODAY · 결론부터 말해줘", "line": "회의가 길어지는 순간 직접 정리하기 시작합니다.", "a": ["TODAY'S PLAN", "다 끝내기"], "b": ["MEETING", "15분이면 충분"], "c": ["NEXT", "이미 다음 단계 생각 중"], "chips": ["결론형", "속도중시", "리드함"]}, "ENTP": {"status": "TODAY · 틀린 말은 못 참음", "line": "싸우는 게 아니라 재미있는 토론 중입니다.", "a": ["TODAY'S DEBATE", "3회"], "b": ["WHY?", "근데 왜?"], "c": ["NEW IDEA", "또 생김 +4"], "chips": ["논쟁환영", "아이디어 폭주", "말빨"]}, "INFJ": {"status": "TODAY · 사람 마음 읽다가 방전", "line": "말 안 해도 알아차리는데, 그래서 더 피곤함.", "a": ["ENERGY", "18%"], "b": ["THOUGHTS", "너무 많이 느낌"], "c": ["RECOVERY", "혼자 있기"], "chips": ["눈치빠름", "혼자충전", "깊게생각"]}, "INFP": {"status": "TODAY · 머릿속에서 이미 영화 한 편", "line": "현실보다 상상 속 일정이 더 바쁩니다.", "a": ["PLAYLIST", "감정 과몰입 중"], "b": ["DIARY", "오늘도 씀"], "c": ["REALITY", "잠깐만"], "chips": ["감성", "상상력", "혼자놀기"]}, "ENFJ": {"status": "TODAY · 다들 괜찮은지 확인 중", "line": "내 일보다 친구 고민 상담이 먼저 끝남.", "a": ["CHECK-IN", "친구 4명"], "b": ["TODAY'S JOB", "분위기 살리기"], "c": ["BATTERY", "사람 만나면 충전"], "chips": ["케어함", "분위기메이커", "사람좋아"]}, "ENFP": {"status": "TODAY · 새 취미 또 생김", "line": "이번 주만 해도 새 인생이 세 번째.", "a": ["NEW HOBBY", "+4"], "b": ["TODAY'S PLAN", "일단 나가기"], "c": ["CURRENT MOOD", "갑자기 신남"], "chips": ["즉흥", "새거좋아", "리액션큼"]}, "ISTJ": {"status": "TODAY · 예정대로 진행 중", "line": "갑작스러운 변경은 미리 알려주세요.", "a": ["SCHEDULE", "계획대로"], "b": ["CHECKLIST", "7/8 완료"], "c": ["SURPRISE", "사절"], "chips": ["정리됨", "약속지킴", "루틴"]}, "ISFJ": {"status": "TODAY · 친구 취향까지 기억함", "line": "내가 챙긴 건 기억 못 해도 네 커피 취향은 기억함.", "a": ["MEMORY", "친구 메뉴 저장됨"], "b": ["TODAY'S MODE", "조용히 챙김"], "c": ["MY NEEDS", "나중에"], "chips": ["세심함", "기억력", "배려"]}, "ESTJ": {"status": "TODAY · 왜 아직 안 했지?", "line": "정리 안 된 걸 보면 손이 먼저 움직입니다.", "a": ["TASKS", "오늘 끝냄"], "b": ["STATUS", "진행률 확인"], "c": ["EXCUSES", "접수 안 함"], "chips": ["추진력", "정리형", "속도"]}, "ESFJ": {"status": "TODAY · 단톡 분위기 체크 중", "line": "모두가 즐거워야 나도 마음이 놓임.", "a": ["GROUP CHAT", "읽음 99+"], "b": ["TODAY'S JOB", "사람 챙기기"], "c": ["EVENT", "다음 약속 잡는 중"], "chips": ["친화력", "리액션", "약속많음"]}, "ISTP": {"status": "TODAY · 연락은 봤는데 답장은 나중에", "line": "필요하면 고쳐주지만 설명은 짧게 합니다.", "a": ["REPLY", "나중에"], "b": ["MANUAL", "UNREAD"], "c": ["SOCIAL", "필요할 때만"], "chips": ["무심함", "손재주", "혼자편함"]}, "ISFP": {"status": "TODAY · 조용히 기분 좋은 거 찾는 중", "line": "말은 적어도 취향은 확실합니다.", "a": ["TODAY'S PICK", "예쁜 거"], "b": ["MOOD", "잔잔함"], "c": ["NOISE", "조금만"], "chips": ["취향확실", "편안함", "감각형"]}, "ESTP": {"status": "TODAY · 일단 해보고 생각함", "line": "문제는 나중에, 재미는 지금.", "a": ["TODAY'S PLAN", "일단 출발"], "b": ["RISK", "괜찮겠지"], "c": ["ENERGY", "밖으로"], "chips": ["행동파", "즉흥", "겁없음"]}, "ESFP": {"status": "TODAY · 오늘 어디 갈지 아직 모름", "line": "약속이 없으면 만드는 편입니다.", "a": ["TODAY'S PLAN", "사람 만나기"], "b": ["NEW PLAN", "+2"], "c": ["CURRENT LOCATION", "또 밖"], "chips": ["화려함", "리액션", "약속폭주"]}};
 
 
@@ -2225,6 +2388,106 @@ async function saveTodayStatus(text){
   if(body) body.style.display="none";
 }
 
+
+
+
+const CH_PALETTE={
+ ISTJ:["#48627b","#dce8f2"],ISFJ:["#d98f99","#ffe1e4"],INFJ:["#7667a5","#e7ddfa"],INTJ:["#252a31","#b9c7df"],
+ ISTP:["#4d555a","#d9dddf"],ISFP:["#71845d","#e4ecd7"],INFP:["#8066b3","#e6dcff"],INTP:["#4e73aa","#dbe6fb"],
+ ESTP:["#e8792f","#ffe0c5"],ESFP:["#ff4f98","#ffd4e6"],ENFP:["#ff806f","#ffe0d8"],ENTP:["#edc326","#fff0a5"],
+ ESTJ:["#b5483d","#f0c9c4"],ESFJ:["#ec7698","#ffdbe5"],ENFJ:["#319879","#d4efe5"],ENTJ:["#6d4586","#e3d3ed"]
+};
+
+function chFace(x=55,y=42,expression="smile",hair="soft"){
+ const mouth=expression==="flat"
+  ?`<path class="ch-line" d="M50 ${y+12}h10"/>`
+  :expression==="open"
+   ?`<path d="M50 ${y+10}q6 9 12 0" fill="#fff" stroke="#171717" stroke-width="2.5"/>`
+   :`<path class="ch-line" d="M50 ${y+11}q6 5 12 0"/>`;
+ const hairPath=hair==="bun"
+  ?`<circle class="ch-hair" cx="${x+15}" cy="${y-20}" r="10"/><path class="ch-hair" d="M${x-21} ${y-2}q1-25 42-24q7 7 2 26l-10-12-9 8-10-9-8 10z"/>`
+  :hair==="cap"
+   ?`<path class="ch-hair" d="M${x-20} ${y-1}q2-21 40-20q7 8 1 23l-10-11-9 7-9-8-8 9z"/><path d="M${x-22} ${y-19}q20-13 41-2l8 3-9 6-39 1z" fill="#222" stroke="#171717" stroke-width="2.5"/>`
+   :`<path class="ch-hair" d="M${x-21} ${y-1}q1-25 42-24q7 7 2 26l-10-12-9 8-10-9-8 10z"/>`;
+ return `<circle class="ch-skin" cx="${x}" cy="${y}" r="21"/>${hairPath}
+ <circle class="ch-eye" cx="${x-7}" cy="${y+2}" r="2.2"/><circle class="ch-eye" cx="${x+8}" cy="${y+2}" r="2.2"/>${mouth}`;
+}
+function body(color,pants,kind="stand"){
+ if(kind==="sit") return `<path d="M38 67q17-9 34 0l4 40H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-skin" d="M38 77L24 96l8 6 14-15z"/><path class="ch-skin" d="M70 77l14 19-8 6-14-15z"/>
+ <path d="M37 105q-17 12-19 31h29l8-20 8 20h29q-4-19-21-31z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-shoe" d="M18 134h29v10H15z"/><path class="ch-shoe" d="M63 134h29l3 10H63z"/>`;
+ if(kind==="jump") return `<path d="M38 65q17-8 34 1l4 45H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-skin" d="M38 74L17 55l-6 8 23 25z"/><path class="ch-skin" d="M70 74l22-10 5 9-25 16z"/>
+ <path d="M39 109l-8 38h14l10-28 13 25 13-6-14-31z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-shoe" d="M29 144h18v10H26z"/><path class="ch-shoe" d="M69 139l15-5 5 9-18 8z"/>`;
+ if(kind==="crouch") return `<path d="M38 70q17-8 34 0l3 36H35z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-skin" d="M38 79L23 99l8 5 15-15z"/><path class="ch-skin" d="M70 79l14 19-8 6-14-15z"/>
+ <path d="M38 104l-18 23 12 8 22-17 20 18 13-8-17-24z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-shoe" d="M17 125l18 7-4 11-19-8z"/><path class="ch-shoe" d="M73 132l17-8 5 10-18 9z"/>`;
+ return `<path d="M38 65q17-8 34 0l4 48H34z" fill="${color}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-skin" d="M38 74L25 96l8 5 14-17z"/><path class="ch-skin" d="M70 74l14 22-8 5-14-17z"/>
+ <path d="M39 111l-4 38h14l6-29 7 29h14l-5-38z" fill="${pants}" stroke="#171717" stroke-width="2.5"/>
+ <path class="ch-shoe" d="M33 147h18v10H31z"/><path class="ch-shoe" d="M61 147h18l3 10H61z"/>`;
+}
+function propFor(m){
+ const p={
+ ISTJ:`<rect class="ch-white" x="77" y="66" width="26" height="32" rx="2"/><text class="ch-text" x="81" y="79">08</text><path class="ch-line" d="M81 85h17M81 91h12"/>`,
+ ISFJ:`<rect x="77" y="79" width="23" height="18" rx="3" fill="#ffd9df" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M100 83q10 1 4 10h-5"/><path d="M83 84q5-8 10 0" fill="none" stroke="#fff" stroke-width="2"/>`,
+ INFJ:`<circle cx="88" cy="79" r="14" fill="#cab9f1" stroke="#171717" stroke-width="2.5"/><circle cx="84" cy="75" r="4" fill="#fff" opacity=".7"/>`,
+ INTJ:`<rect x="76" y="72" width="29" height="23" rx="2" fill="#dbe4ff" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="80" y="86">PLAN</text>`,
+ ISTP:`<path class="ch-line" d="M79 94l22-24"/><path d="M96 66l10-4-4 10z" fill="#777" stroke="#171717" stroke-width="2.5"/><rect class="ch-white" x="76" y="101" width="29" height="18"/><text class="ch-text" x="82" y="113">FIX</text>`,
+ ISFP:`<rect x="77" y="77" width="29" height="22" rx="3" fill="#333" stroke="#171717" stroke-width="2.5"/><circle cx="91" cy="88" r="7" fill="#dcead4" stroke="#171717" stroke-width="2.5"/><rect x="83" y="72" width="10" height="6" fill="#333"/>`,
+ INFP:`<rect class="ch-white" x="40" y="96" width="31" height="23"/><path class="ch-line" d="M55 97v21"/><text class="ch-text" x="43" y="109">DIARY</text><path class="ch-line" d="M34 42q3-28 42-3"/><rect x="29" y="40" width="8" height="17" rx="3" fill="#6f5aa3"/><rect x="74" y="39" width="8" height="17" rx="3" fill="#6f5aa3"/>`,
+ INTP:`<rect class="ch-white" x="77" y="65" width="29" height="22"/><rect class="ch-white" x="82" y="60" width="29" height="22"/><text class="ch-text" x="87" y="74">47</text>`,
+ ESTP:`<path d="M78 73l28 5-2 19-27-5z" fill="#ffb06d" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="84" y="87">GO!</text>`,
+ ESFP:`<rect x="87" y="61" width="12" height="21" rx="2" fill="#ffb2cf" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M38 39h31"/><rect x="40" y="35" width="12" height="10" rx="3" fill="#171717"/><rect x="56" y="35" width="12" height="10" rx="3" fill="#171717"/>`,
+ ENFP:`<rect x="78" y="70" width="29" height="22" rx="3" fill="#333" stroke="#171717" stroke-width="2.5"/><circle cx="92" cy="81" r="7" fill="#ffd6cd" stroke="#171717" stroke-width="2.5"/><path d="M91 56l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z" fill="#ffd86b" stroke="#171717" stroke-width="2"/>`,
+ ENTP:`<path class="ch-line" d="M23 96L103 35"/><path d="M103 35l-15 3 9 10z" fill="#171717"/><rect class="ch-white" x="70" y="10" width="38" height="23"/><text x="75" y="26" font-size="10" font-weight="900">WHY?</text>`,
+ ESTJ:`<rect class="ch-white" x="77" y="67" width="29" height="36"/><text class="ch-text" x="81" y="79">TASK</text><path class="ch-line" d="M82 86l4 4 7-8M82 96l4 4 7-8"/>`,
+ ESFJ:`<rect x="77" y="76" width="30" height="28" fill="#ffabc2" stroke="#171717" stroke-width="2.5"/><path class="ch-line" d="M92 76v28M77 88h30"/><path d="M92 76q-12-10-12 0M92 76q12-10 12 0" fill="none" stroke="#171717" stroke-width="2.5"/>`,
+ ENFJ:`<path d="M91 74c-10-14-25 2 0 20 25-18 10-34 0-20z" fill="#ff879a" stroke="#171717" stroke-width="2.5"/><rect class="ch-white" x="75" y="99" width="34" height="18"/><text class="ch-text" x="78" y="111">YOU ♥</text>`,
+ ENTJ:`<path d="M77 73l28 7-4 20-28-7z" fill="#d8b8e8" stroke="#171717" stroke-width="2.5"/><text class="ch-text" x="80" y="87">GOAL</text><path class="ch-line" d="M83 67l18-14"/><path d="M101 53l-10 1 6 8z" fill="#171717"/>`
+ };
+ return p[m]||"";
+}
+function mbtiCharacterSVG(m){
+ const [top,pants]=CH_PALETTE[m]||CH_PALETTE.ISTP;
+ const seated=["INFP","INTP","ISFP"].includes(m);
+ const jump=["ESFP","ENFP","ESTP"].includes(m);
+ const crouch=m==="ISTP";
+ const expression=["INTJ","ISTJ"].includes(m)?"flat":(["ESFP","ENFP","ESTP","ENFJ","ESFJ"].includes(m)?"open":"smile");
+ const hair=["ISFJ","ESFJ"].includes(m)?"bun":(["ISTP","ESTP"].includes(m)?"cap":"soft");
+ let special="";
+ if(m==="ENTP") special=`<path class="ch-skin" d="M38 75L18 92l6 8 22-14z"/><path class="ch-skin" d="M70 75l22 14 5-8-24-17z"/>`;
+ if(m==="INTJ") special=`<path class="ch-skin" d="M39 77l30 22 6-8-29-25z"/><path class="ch-skin" d="M70 77L42 99l-6-8 28-25z"/>`;
+ return `<div class="svg-avatar"><svg viewBox="0 0 112 170" aria-label="${m} character">
+ ${chFace(55,42,expression,hair)}
+ ${body(top,pants,seated?"sit":jump?"jump":crouch?"crouch":"stand")}
+ ${special}${propFor(m)}
+ </svg></div>`;
+}
+function renderMbtiCharacter(container,mbti){
+ if(container) container.innerHTML=mbtiCharacterSVG(mbti);
+}
+
+function buildCharacterReview(){
+  const grid=document.getElementById("characterReviewGrid");
+  if(!grid) return;
+  grid.innerHTML=Object.keys(MBTI_CHARACTER_STYLE).map(m=>`<button onclick="previewCharacterType('${m}',this)">${m}</button>`).join("");
+}
+function previewCharacterType(m,btn){
+  renderMbtiCharacter(document.getElementById("profileAvatarCard"),m);
+  document.querySelectorAll("#characterReviewGrid button").forEach(x=>x.classList.remove("on"));
+  if(btn)btn.classList.add("on");
+}
+
+function applyCharacterIdentity(el, mbti){
+  if(!el) return;
+  const cfg=MBTI_CHARACTER_STYLE[mbti]||MBTI_CHARACTER_STYLE.ISTP;
+  el.className=`pixel-person mbti-${mbti} pose-${cfg.pose} hook-${cfg.hook}`;
+}
+
 function renderMiniHome(){
   const owner=state.owner;
   const zip=document.getElementById("zipTitle");
@@ -2237,24 +2500,14 @@ function renderMiniHome(){
   if(label) label.textContent=(owner.name||"JISU").toUpperCase()+"'S ROOM";
 
 const av=document.querySelector("#profileAvatarCard .pixel-person");
-  if(av) setAvatarMbti(av, owner.mbti);
+  renderMbtiCharacter(document.getElementById("profileAvatarCard"),owner.mbti);
 
   const friends=getRecentFriends();
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
     avatars.innerHTML=friends.slice(0,8).map(f=>`
       <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
-        <div class="pixel-person mbti-${f.mbti}">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-          <div class="pixel-hair"></div><div class="pixel-head"></div>
-          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-          <div class="pixel-body"></div>
-          <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-          <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-        </div>
-        <div class="visitor-name">${f.name}</div>
+        ${mbtiCharacterSVG(f.mbti)}<div class="visitor-name">${f.name}</div>
       </div>`).join("");
   }
 
@@ -2294,6 +2547,7 @@ function renderRoom(){
   document.getElementById("friendOwnerName2").textContent=o.name;
   renderRank();
   renderMiniHome();
+  buildCharacterReview();
   syncBottomShare();
   setTimeout(initRetentionLayer,0);
 }
