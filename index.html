@@ -1616,6 +1616,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
 <div class="toast" id="toast">복사했어요</div>
+<div class="toast" id="authToast">로그인 후 ROOM을 저장하고 있어요…</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -1626,6 +1627,66 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_NUhd1LmMj09rtA5RMcgAxA_cMKIuZB6";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 let currentAuthUser=null;
 let currentRemoteRoom=null;
+
+const PENDING_ROOM_KEY="myroom_pending_room_v1";
+
+function savePendingRoomDraft(){
+  try{
+    const draft={
+      owner:{
+        name:state?.owner?.name||document.getElementById("ownerName")?.value||"",
+        birth:state?.owner?.birth||document.getElementById("ownerBirth")?.value||"",
+        mbti:state?.owner?.mbti||document.getElementById("ownerMbti")?.value||"",
+        today_status:state?.owner?.today_status||""
+      },
+      saved_at:new Date().toISOString()
+    };
+    if(!draft.owner.name || !draft.owner.mbti) return false;
+    localStorage.setItem(PENDING_ROOM_KEY,JSON.stringify(draft));
+    return true;
+  }catch(e){
+    console.warn("pending room save failed",e);
+    return false;
+  }
+}
+
+function loadPendingRoomDraft(){
+  try{
+    const raw=localStorage.getItem(PENDING_ROOM_KEY);
+    if(!raw) return null;
+    const draft=JSON.parse(raw);
+    if(!draft?.owner?.name || !draft?.owner?.mbti) return null;
+    return draft;
+  }catch(e){
+    console.warn("pending room load failed",e);
+    return null;
+  }
+}
+
+function clearPendingRoomDraft(){
+  try{ localStorage.removeItem(PENDING_ROOM_KEY); }catch(e){}
+}
+
+function restorePendingRoomDraft(){
+  const draft=loadPendingRoomDraft();
+  if(!draft) return false;
+  state.owner={
+    name:draft.owner.name,
+    birth:draft.owner.birth||"",
+    mbti:draft.owner.mbti,
+    today_status:draft.owner.today_status||""
+  };
+  const n=document.getElementById("ownerName");
+  const b=document.getElementById("ownerBirth");
+  const m=document.getElementById("ownerMbti");
+  if(n)n.value=state.owner.name;
+  if(b)b.value=state.owner.birth;
+  if(m)m.value=state.owner.mbti;
+  try{ renderRoom(); }catch(e){ console.warn("pending room render failed",e); }
+  try{ go("room"); }catch(e){}
+  return true;
+}
+
 
 function currentRedirectUrl(){
   return window.location.origin + window.location.pathname;
@@ -1705,6 +1766,7 @@ async function signOutMyRoom(){
 
 async function signInWithKakao(){
   try{
+    savePendingRoomDraft();
     const { error } = await sb.auth.signInWithOAuth({
       provider:"kakao",
       options:{
@@ -1956,6 +2018,7 @@ function startRealSave(){
   if(currentAuthUser){
     persistRoomToSupabase();
   }else{
+    savePendingRoomDraft();
     const modal=document.getElementById("loginModal");
     if(modal) modal.classList.add("show");
   }
@@ -1977,6 +2040,8 @@ function calcMoodFromBirth(birth){
 
 async function persistRoomToSupabase(){
   if(!currentAuthUser){ startRealSave(); return; }
+  const authToast=document.getElementById("authToast");
+  if(authToast) authToast.classList.add("show");
 
   // One ROOM per Kakao account.
   const ownCheck=await sb.from("myroom_rooms")
@@ -1987,6 +2052,7 @@ async function persistRoomToSupabase(){
   if(!ownCheck.error && ownCheck.data && ownCheck.data[0] && !currentRemoteRoom){
     currentRemoteRoom=ownCheck.data[0];
     loggedInOwnRoom=currentRemoteRoom;
+    clearPendingRoomDraft();
     syncRealAuthUI();
     await refreshVisitCounts(currentRemoteRoom.id);
   await loadRoomSocialSnapshot(currentRemoteRoom.id,true);
@@ -2022,7 +2088,9 @@ async function persistRoomToSupabase(){
   };
   let res=await sb.from("myroom_profiles").upsert(profilePayload,{onConflict:"user_id"});
   if(res.error){
-    console.error(res.error); alert("프로필 저장 실패: "+res.error.message); return;
+    console.error(res.error);
+    if(authToast) authToast.classList.remove("show");
+    alert("프로필 저장 실패: "+res.error.message); return;
   }
 
   const roomPayload={
@@ -2043,11 +2111,13 @@ async function persistRoomToSupabase(){
   }
   if(res.error){
     console.error(res.error);
+    if(authToast) authToast.classList.remove("show");
     alert("ROOM 저장 실패: "+res.error.message);
     return;
   }
   currentRemoteRoom=res.data;
   loggedInOwnRoom=res.data;
+  clearPendingRoomDraft();
   showSaveState("ready");
   syncRealAuthUI();
   await refreshVisitCounts(currentRemoteRoom.id);
@@ -2178,20 +2248,26 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 
   if((event==="SIGNED_IN" || event==="INITIAL_SESSION" || event==="TOKEN_REFRESHED") && currentAuthUser){
     closeKakaoModal();
-    const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
 
-    if(sharedSlug){
-      await fetchOwnRoom();
-      if(typeof syncVisitorPrimaryCta==="function") syncVisitorPrimaryCta();
+    const own=await fetchOwnRoom();
+    if(own){
+      clearPendingRoomDraft();
+      history.replaceState({}, "", window.location.pathname);
+      await hydrateOwnerRoom(own);
       return;
     }
 
-    const own=await fetchOwnRoom();
-    if(own){ await hydrateOwnerRoom(own); return; }
-
-    const active=document.querySelector(".page.active")?.id;
-    if(active==="room" && state?.owner?.name && !currentRemoteRoom){
+    const pending=loadPendingRoomDraft();
+    if(pending){
+      history.replaceState({}, "", window.location.pathname);
+      restorePendingRoomDraft();
       await persistRoomToSupabase();
+      return;
+    }
+
+    const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
+    if(sharedSlug){
+      if(typeof syncVisitorPrimaryCta==="function") syncVisitorPrimaryCta();
       return;
     }
 
