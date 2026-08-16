@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V3.1</title>
+<title>MY ROOM V3.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -310,7 +310,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V3.1 — retention + participation layers */
+/* V3.2 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -340,7 +340,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V3.1 local account/save prototype */
+/* V3.2 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -388,7 +388,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V3.1 visitor-first flow */
+/* V3.2 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -427,7 +427,7 @@ body.visitor-mode #visitorResultCard{display:block}
 body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!important}
 
 
-/* V3.1 — actual mini-home room */
+/* V3.2 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -490,7 +490,7 @@ body.visitor-mode #visitorResultCard[style*="display:none"]{display:none!importa
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V3.1 — MBTI room showcase + stronger character presence */
+/* V3.2 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -848,7 +848,7 @@ input:focus,select:focus{border-color:#111}
 
 
 
-/* V3.1 — restore original V0.7 character language */
+/* V3.2 — restore original V0.7 character language */
 .owner-avatar-stage{
   position:absolute;
   left:50%;
@@ -897,7 +897,7 @@ input:focus,select:focus{border-color:#111}
 }
 
 
-/* V3.1 — MBTI personality room details */
+/* V3.2 — MBTI personality room details */
 .mbti-room-details{
   position:absolute;
   left:14px;
@@ -961,7 +961,7 @@ body.visitor-mode.chemistry-done #visitorEntryCard{display:none!important}
 body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 
-/* V3.1 core polish */
+/* V3.2 core polish */
 .owner-avatar-stage{
   left:50%;bottom:48px;width:118px;height:168px;
   transform:translateX(-50%);transform-origin:bottom center;
@@ -1006,7 +1006,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .room-scene{min-height:330px}
 
 
-/* V3.1 — distinct 16 MBTI silhouettes */
+/* V3.2 — distinct 16 MBTI silhouettes */
 .owner-avatar-stage .pixel-person{
   transform:scale(.58)!important; /* approx 0.8x from previous .72 */
   transform-origin:bottom center!important;
@@ -1104,7 +1104,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .character-review-grid button{border:1px solid #111;border-radius:8px;background:#fff;padding:6px 2px;font-size:8px;font-weight:850}
 .character-review-grid button.on{background:#111;color:#fff}
 
-/* V3.1 character differentiation */
+/* V3.2 character differentiation */
 .pixel-person.mbti-INTJ .pixel-body{background:#20242B!important}
 .pixel-person.mbti-INTJ .pixel-leg{background:#B9C7FF!important}
 .pixel-person.mbti-INTP .pixel-body{background:#4B6CB7!important}
@@ -1156,7 +1156,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .pixel-person.hook-heart::after{font-size:29px!important}
 
 
-/* V3.1 — final 16 MBTI code-drawn chibi characters */
+/* V3.2 — final 16 MBTI code-drawn chibi characters */
 .pixel-person{display:none!important}
 .svg-avatar{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}
 .svg-avatar svg{width:104px;height:150px;overflow:visible}
@@ -1170,6 +1170,17 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 .ch-white{fill:#fff;stroke:#171717;stroke-width:2.5;stroke-linejoin:round}
 .ch-text{font:900 8px Arial,sans-serif;fill:#171717}
 
+
+.shared-special-card{
+  max-width:420px;margin:18px auto;border:1.5px solid #111;border-radius:18px;
+  padding:18px;background:#fff7d8;box-shadow:4px 4px 0 #111
+}
+.shared-special-card h3{font-size:19px;line-height:1.35;margin:5px 0 8px}
+.shared-special-card p{font-size:10px;line-height:1.55;color:#555}
+.shared-special-actions{display:grid;gap:7px;margin-top:12px}
+.shared-special-actions button{width:100%;padding:12px;border:1px solid #111;border-radius:10px;background:#fff;font-weight:900}
+.shared-special-actions .primary-action{background:#111;color:#fff}
+
 </style>
 </head>
 <body>
@@ -1180,7 +1191,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V3.1</div>
+    <div class="micro">V3.2</div>
   </div>
 
   <div class="hero-blob">
@@ -1644,6 +1655,19 @@ function generateAutoSlug(){
 }
 
 
+
+async function generateUniqueAutoSlug(maxAttempts=8){
+  for(let i=0;i<maxAttempts;i++){
+    const candidate=generateAutoSlug();
+    const {data,error}=await sb.from("myroom_rooms").select("id").eq("slug",candidate).limit(1);
+    if(error) throw error;
+    if(!data || data.length===0) return candidate;
+  }
+  // practically unreachable fallback: longer random suffix
+  const base=(state?.owner?.name||"room").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,8)||"room";
+  return `${base}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
+}
+
 function calcMoodFromBirth(birth){
   const m=parseInt((birth||"1993-08-06").split("-")[1]||8,10);
   const moods=["ice","sky","mint","lemon","coral","blue","navy","sky","olive","cream","pink","silver"];
@@ -1668,7 +1692,7 @@ async function persistRoomToSupabase(){
     return;
   }
 
-  const slug=currentRemoteRoom?.slug || generateAutoSlug();
+  const slug=currentRemoteRoom?.slug || await generateUniqueAutoSlug();
   const owner=state.owner;
 
   const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
@@ -1715,13 +1739,39 @@ async function persistRoomToSupabase(){
     res=await sb.from("myroom_rooms").update(roomPayload).eq("id",currentRemoteRoom.id).select().single();
   }else{
     res=await sb.from("myroom_rooms").insert(roomPayload).select().single();
+    // 23505 may be a rare concurrent slug collision. Owner duplication is already
+    // prevented by the DB unique index and the existing-owner check above.
+    if(res.error && res.error.code==="23505" && String(res.error.message||"").toLowerCase().includes("slug")){
+      roomPayload.slug=await generateUniqueAutoSlug();
+      res=await sb.from("myroom_rooms").insert(roomPayload).select().single();
+    }
   }
   if(res.error){
     console.error(res.error);
-    alert("ROOM 저장 실패: "+res.error.message);
+    if(res.error.code==="23505"){
+      // If another tab created the user's one ROOM first, load that instead.
+      const existing=await getLoggedInOwnRoom();
+      if(existing){
+        currentRemoteRoom=existing;
+        loggedInOwnRoom=existing;
+        state.owner={
+          name:existing.nickname,
+          birth:state.owner.birth||"2000-01-01",
+          mbti:existing.mbti,
+          today_status:existing.today_status||""
+        };
+        renderRoom();
+        syncRealAuthUI();
+        await refreshVisitCounts(existing.id);
+        return;
+      }
+    }
+    alert("ROOM 저장에 실패했어요. 잠시 후 다시 시도해 주세요.");
     return;
   }
   currentRemoteRoom=res.data;
+  loggedInOwnRoom=res.data;
+  try{sessionStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
   showSaveState("ready");
   syncRealAuthUI();
   await refreshVisitCounts(currentRemoteRoom.id);
@@ -1798,6 +1848,103 @@ async function refreshVisitCounts(roomId){
   }
 }
 
+
+function showSharedSpecialCard(type,room=null){
+  VIEW_MODE="visitor";
+  document.body.classList.add("visitor-mode");
+  document.body.classList.remove("chemistry-done");
+  go("room");
+
+  const flow=document.getElementById("visitorFlow");
+  if(!flow) return;
+
+  if(type==="owner"){
+    flow.innerHTML=`
+      <div class="shared-special-card">
+        <div class="micro">MY SHARED LINK</div>
+        <h3>내가 공유한 ROOM이에요 ✦</h3>
+        <p>친구가 보는 궁합 화면을 확인하거나, 바로 내 ROOM으로 돌아갈 수 있어요.</p>
+        <div class="shared-special-actions">
+          <button class="primary-action" onclick="openOwnRoomFromSharedLink()">내 ROOM으로 가기 →</button>
+          <button onclick="previewMyRoomAsFriend()">친구 화면 미리보기</button>
+        </div>
+      </div>`;
+  }else{
+    flow.innerHTML=`
+      <div class="shared-special-card">
+        <div class="micro">ROOM NOT FOUND</div>
+        <h3>존재하지 않는 ROOM이에요.</h3>
+        <p>링크가 오래되었거나 잘못 복사되었을 수 있어요.</p>
+        <div class="shared-special-actions">
+          <button class="primary-action" onclick="goToNormalHome()">내 ROOM 만들기 →</button>
+        </div>
+      </div>`;
+  }
+  window.scrollTo(0,0);
+}
+async function openOwnRoomFromSharedLink(){
+  if(!currentAuthUser) return goToNormalHome();
+  const own=loggedInOwnRoom || await getLoggedInOwnRoom();
+  if(!own) return goToNormalHome();
+  history.replaceState({}, "", window.location.pathname);
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  VIEW_MODE="owner";
+  currentRemoteRoom=own;
+  state.owner={
+    name:own.nickname,
+    birth:"2000-01-01",
+    mbti:own.mbti,
+    today_status:own.today_status||""
+  };
+  try{
+    const p=await sb.from("myroom_profiles").select("birth_date").eq("user_id",currentAuthUser.id).maybeSingle();
+    if(p.data?.birth_date) state.owner.birth=p.data.birth_date;
+  }catch(e){}
+  renderRoom();
+  syncRealAuthUI();
+  await refreshVisitCounts(own.id);
+  if(typeof loadRoomSocialSnapshot==="function") await loadRoomSocialSnapshot(own.id,true);
+  go("room");
+  window.scrollTo(0,0);
+}
+function previewMyRoomAsFriend(){
+  // Same shared ROOM, but explicitly enter the visitor chemistry flow.
+  initVisitorFlow();
+  const flow=document.getElementById("visitorFlow");
+  if(flow){
+    // initVisitorFlow relies on original markup, so recreate the compact visitor flow.
+    flow.innerHTML=`
+      <div class="visitor-entry-card" id="visitorEntryCard">
+        <div class="micro">OUR CHEMISTRY</div>
+        <h3><span id="visitorOwnerName">${state.owner.name}</span>랑 나는 몇 점?</h3>
+        <div class="visitor-fields">
+          <input id="visitorNameInput" placeholder="내 이름">
+          <select id="visitorMbtiInput">
+            <option value="">내 MBTI</option>
+            ${MBTIS.map(m=>`<option>${m}</option>`).join("")}
+          </select>
+        </div>
+        <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
+      </div>
+      <div class="visitor-result-card" id="visitorResultCard" style="display:none">
+        <div class="micro">OUR CHEMISTRY</div>
+        <div class="visitor-score" id="visitorScore">94%</div>
+        <div class="visitor-relation" id="visitorRelation"></div>
+        <p id="visitorResultText"></p>
+        <button class="primary" id="visitorPrimaryCta" style="margin-top:12px" onclick="handleVisitorPrimaryCta()">내 ROOM으로 가기 →</button>
+      </div>`;
+  }
+  window.scrollTo(0,0);
+}
+function goToNormalHome(){
+  history.replaceState({}, "", window.location.pathname);
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  VIEW_MODE="owner";
+  currentRemoteRoom=null;
+  go("landing");
+  window.scrollTo(0,0);
+}
+
 async function loadPublicRoomBySlug(slug){
   const {data,error}=await sb.from("myroom_rooms")
     .select("*")
@@ -1811,12 +1958,27 @@ async function loadPublicRoomBySlug(slug){
   }
   if(!data) return false;
 
+  // If I opened my own shared URL, do not ask "me vs me" chemistry by default.
+  if(currentAuthUser && data.owner_id===currentAuthUser.id){
+    currentRemoteRoom=data;
+    loggedInOwnRoom=data;
+    state.owner={
+      name:data.nickname,
+      birth:"2000-01-01",
+      mbti:data.mbti,
+      today_status:data.today_status||""
+    };
+    showSharedSpecialCard("owner",data);
+    return true;
+  }
+
   // Visited room is kept separately from visitor's own room.
   currentRemoteRoom=data;
   state.owner={
     name:data.nickname,
     birth:"2000-01-01",
-    mbti:data.mbti
+    mbti:data.mbti,
+    today_status:data.today_status||""
   };
 
   VIEW_MODE="visitor";
@@ -1834,7 +1996,15 @@ async function loadPublicRoomBySlug(slug){
   return true;
 }
 
+
+function cleanupLegacyPreviewStorage(){
+  try{localStorage.removeItem(ROOM_STORE_KEY)}catch(e){}
+  try{localStorage.removeItem(LOGIN_STORE_KEY)}catch(e){}
+  try{localStorage.removeItem(HANDLE_STORE_KEY)}catch(e){}
+}
+
 async function bootSupabase(){
+  cleanupLegacyPreviewStorage();
   try{
     const params=new URLSearchParams(window.location.search);
     const sharedSlug=(params.get("room")||"").trim();
@@ -1858,7 +2028,7 @@ async function bootSupabase(){
       const ok=await loadPublicRoomBySlug(sharedSlug);
       if(!ok){
         console.warn("Shared ROOM not found:",sharedSlug);
-        go("landing");
+        showSharedSpecialCard("notfound");
       }
       return;
     }
@@ -1937,12 +2107,14 @@ function storeCurrentRoom(){
     updatedAt:new Date().toISOString()
   };
   state.owner={name:payload.name,birth:payload.birth,mbti:payload.mbti};
-  safeSet(ROOM_STORE_KEY,JSON.stringify(payload));
+  // Login-before-save ROOM is a preview only. Keep it for this tab/session,
+  // never as a persistent "saved room".
+  try{sessionStorage.setItem(ROOM_STORE_KEY,JSON.stringify(payload))}catch(e){}
   return payload;
 }
 function readStoredRoom(){
   try{
-    const raw=safeGet(ROOM_STORE_KEY);
+    const raw=sessionStorage.getItem(ROOM_STORE_KEY);
     return raw?JSON.parse(raw):null;
   }catch(e){return null}
 }
@@ -2700,7 +2872,8 @@ async function handleVisitorPrimaryCta(){
     state.owner={
       name:loggedInOwnRoom.nickname,
       birth:"2000-01-01",
-      mbti:loggedInOwnRoom.mbti
+      mbti:loggedInOwnRoom.mbti,
+      today_status:loggedInOwnRoom.today_status||""
     };
 
     try{
@@ -2714,6 +2887,7 @@ async function handleVisitorPrimaryCta(){
     renderRoom();
     syncRealAuthUI();
     await refreshVisitCounts(loggedInOwnRoom.id);
+    if(typeof loadRoomSocialSnapshot==="function") await loadRoomSocialSnapshot(loggedInOwnRoom.id,true);
     go("room");
     window.scrollTo(0,0);
     return;
