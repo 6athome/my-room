@@ -1764,7 +1764,10 @@ async function signOutMyRoom(){
   window.scrollTo(0,0);
 }
 
+let kakaoLoginStarting=false;
 async function signInWithKakao(){
+  if(kakaoLoginStarting) return;
+  kakaoLoginStarting=true;
   try{
     savePendingRoomDraft();
     const { error } = await sb.auth.signInWithOAuth({
@@ -1776,6 +1779,7 @@ async function signInWithKakao(){
     });
     if(error) throw error;
   }catch(err){
+    kakaoLoginStarting=false;
     console.error(err);
     alert("카카오 로그인을 시작하지 못했어요: "+err.message);
   }
@@ -2232,22 +2236,28 @@ async function loadPublicRoomBySlug(slug){
 }
 
 async function bootSupabase(){
+  try{
+    const {data}=await sb.auth.getSession();
+    if(data?.session?.user){
+      currentAuthUser=data.session.user;
+      await handleAuthenticatedSession();
+      return;
+    }
+  }catch(e){
+    console.warn("initial session lookup failed",e);
+  }
   await routeApp();
 }
 
-sb.auth.onAuthStateChange(async(event,session)=>{
-  currentAuthUser=session?.user||null;
-
-  if(event==="SIGNED_OUT"){
-    currentRemoteRoom=null;
-    loggedInOwnRoom=null;
-    history.replaceState({}, "", window.location.pathname);
-    showCreateHome();
-    return;
-  }
-
-  if((event==="SIGNED_IN" || event==="INITIAL_SESSION" || event==="TOKEN_REFRESHED") && currentAuthUser){
-    closeKakaoModal();
+async function handleAuthenticatedSession(){
+  try{
+    const {data,error}=await sb.auth.getUser();
+    if(error) throw error;
+    currentAuthUser=data?.user||null;
+    if(!currentAuthUser){
+      showCreateHome();
+      return;
+    }
 
     const own=await fetchOwnRoom();
     if(own){
@@ -2272,6 +2282,30 @@ sb.auth.onAuthStateChange(async(event,session)=>{
     }
 
     showCreateHome();
+  }catch(err){
+    console.error("handleAuthenticatedSession failed",err);
+    showCreateHome();
+  }
+}
+
+sb.auth.onAuthStateChange((event,session)=>{
+  currentAuthUser=session?.user||null;
+
+  if(event==="SIGNED_OUT"){
+    setTimeout(()=>{
+      currentRemoteRoom=null;
+      loggedInOwnRoom=null;
+      history.replaceState({}, "", window.location.pathname);
+      showCreateHome();
+    },0);
+    return;
+  }
+
+  if((event==="SIGNED_IN" || event==="INITIAL_SESSION" || event==="TOKEN_REFRESHED") && session?.user){
+    closeKakaoModal();
+    setTimeout(()=>{
+      handleAuthenticatedSession();
+    },0);
   }
 });
 
