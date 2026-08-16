@@ -184,6 +184,22 @@ input:focus,select:focus{border-color:#111}
   font-size:11px;line-height:1.45
 }
 
+
+.personality-panel{
+  border:1.5px solid #111;border-radius:15px;padding:12px;margin-bottom:10px;
+  background:#fff;
+}
+.personality-panel h3{font-size:16px;line-height:1.3;margin:6px 0 10px;letter-spacing:-.02em}
+.personality-bit{
+  display:flex;justify-content:space-between;gap:8px;
+  padding:7px 0;border-top:1px solid #deddd7;font-size:10px;line-height:1.35
+}
+.personality-bit span:last-child{text-align:right;font-weight:800}
+.personality-share{
+  width:100%;margin-top:8px;border:0;background:#111;color:#fff;
+  border-radius:9px;padding:9px;font-size:10px;font-weight:800
+}
+
 /* FRIEND FORM */
 .friend-intro{
   background:var(--sky);border:1.5px solid #111;border-radius:24px;padding:22px;margin:16px 0
@@ -368,6 +384,13 @@ input:focus,select:focus{border-color:#111}
           친구가 들어올수록 이 방이 조금씩 채워져요.
         </div>
 
+        <div class="personality-panel" id="personalityPanel">
+          <div class="micro" id="personalityLabel">ENFP.zip</div>
+          <h3 id="personalityHeadline">관심사가 자꾸 늘어나는 중.</h3>
+          <div id="personalityBits"></div>
+          <button class="personality-share" onclick="shareMyRoom()">이 ROOM 공유하기 ↗</button>
+        </div>
+
         <div class="friend-panel">
           <div class="micro">WHO'S MY BEST MATCH?</div>
           <h3>나랑 제일 잘 맞는 친구는?</h3>
@@ -548,16 +571,80 @@ function makeRoom(){
   setTimeout(()=>{renderRoom();go("room")},900);
 }
 
-function profileLine(m){
-  const map={
-    ENFP:"하고 싶은 게 생기면\\n일단 해보는 편.",
-    ENTP:"재밌어 보이면\\n한 번 건드려보는 편.",
-    INFP:"좋아하는 건\\n오래 좋아하는 편.",
-    INTJ:"필요한 건 조용히\\n다 계산해두는 편.",
-    ESFP:"재밌는 건\\n같이 해야 되는 편.",
-    ISFP:"편한 사람과\\n편한 시간을 좋아하는 편."
+const ROOM_PERSONALITY={
+  ENTP:{
+    line:"재밌어 보이면\\n일단 벌리고 보는 편.",
+    headline:"현재 진행 중인 관심사 · 너무 많음",
+    bits:[
+      ["CURRENT PROJECTS","12개"],
+      ["완료한 프로젝트","비공개"],
+      ["최근 관심사","AI · 러닝 · 창업 · 갑자기 베이킹"],
+      ["친구가 자주 하는 말","그래서 저번에 한다던 건?"]
+    ]
+  },
+  INTJ:{
+    line:"굳이 말 안 했지만\\n이미 다 생각해둔 편.",
+    headline:"사람은 적게, 생각은 많이.",
+    bits:[
+      ["PEOPLE I ACTUALLY LIKE","4"],
+      ["SOCIAL BATTERY","38%"],
+      ["이번 주 약속","1개"],
+      ["취소됐으면 하는 약속","1개"]
+    ]
+  },
+  INFP:{
+    line:"별일 없었는데\\n혼자 생각은 많았음.",
+    headline:"오늘도 머릿속에서는 많은 일이 있었음.",
+    bits:[
+      ["TODAY'S THOUGHT","아까 그 말 무슨 뜻이었지"],
+      ["상상 속에서 한 일","퇴사 · 이사 · 여행"],
+      ["실제로 한 일","누워있기"],
+      ["저장한 사진","437개"]
+    ]
+  },
+  ESFP:{
+    line:"재밌는 건\\n같이 해야 되는 편.",
+    headline:"오늘도 집에 바로 갈 생각은 없음.",
+    bits:[
+      ["TODAY'S PLAN","사람 만나기"],
+      ["현재 약속","3개"],
+      ["갑자기 생긴 약속","+2"],
+      ["친구가 자주 하는 말","너 또 어디야?"]
+    ]
+  },
+  ENFP:{
+    line:"하고 싶은 게 생기면\\n일단 해보는 편.",
+    headline:"관심사가 자꾸 늘어나는 중.",
+    bits:[
+      ["OPEN TABS","27"],
+      ["이번 달 새 취미","3개"],
+      ["갑자기 꽂힌 것","여행 · 가구 · 러닝"],
+      ["친구가 자주 하는 말","또 시작했어?"]
+    ]
+  }
+};
+function personalityFor(m){
+  return ROOM_PERSONALITY[m]||{
+    line:"내 방식대로\\n천천히 채우는 편.",
+    headline:"별거 아닌 것 같지만 은근 내 얘기.",
+    bits:[
+      ["CURRENT MOOD","나쁘지 않음"],
+      ["PEOPLE","적당히"],
+      ["최근 관심사","계속 바뀌는 중"],
+      ["친구가 자주 하는 말","너답다"]
+    ]
   };
-  return (map[m]||"내 방식대로\\n천천히 채우는 편.").replace("\\n","<br>");
+}
+function profileLine(m){
+  return personalityFor(m).line.replace("\\n","<br>");
+}
+function renderPersonality(){
+  const p=personalityFor(state.owner.mbti);
+  document.getElementById("personalityLabel").textContent=state.owner.mbti+".zip";
+  document.getElementById("personalityHeadline").textContent=p.headline;
+  document.getElementById("personalityBits").innerHTML=p.bits.map(x=>
+    `<div class="personality-bit"><span>${x[0]}</span><span>${x[1]}</span></div>`
+  ).join("");
 }
 function monthMood(birth){
   const m=parseInt(birth.split("-")[1]||8);
@@ -570,6 +657,7 @@ function renderRoom(){
   document.getElementById("roomName").textContent=o.name;
   document.getElementById("roomMbti").textContent=o.mbti;
   document.getElementById("roomOneLine").innerHTML=profileLine(o.mbti);
+  renderPersonality();
   document.getElementById("roomColor").textContent="MOOD · "+monthMood(o.birth);
   document.getElementById("roomLucky").textContent="NO. "+String(parseInt(o.birth.split("-")[2]||6)).padStart(2,"0");
   document.getElementById("fakeUrl").textContent="myroom.kr/"+o.name.toLowerCase();
@@ -661,6 +749,11 @@ function toast(msg){
 async function copyText(text){
   try{await navigator.clipboard.writeText(text);toast("복사했어요")}
   catch(e){toast("이 환경에서는 복사 버튼만 시연돼요")}
+}
+function shareMyRoom(){
+  const p=personalityFor(state.owner.mbti);
+  const first=p.bits[0] ? `${p.bits[0][0]} ${p.bits[0][1]}` : "";
+  copyText(`${state.owner.mbti} 방 이렇게 나옴 ㅋㅋ\n${p.headline}\n${first}\n너도 해봐 → myroom.kr/${state.owner.name.toLowerCase()}`);
 }
 function openShareInvite(){
   const url="https://myroom.kr/"+state.owner.name.toLowerCase();
