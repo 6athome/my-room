@@ -428,6 +428,25 @@ input:focus,select:focus{border-color:#111}
   .room-grid{grid-template-columns:100px 1fr}
   .profile{padding:9px}.content{padding:9px}
 }
+
+.resume-card,.save-card,.handle-card{
+  border:1.5px solid #111;border-radius:18px;padding:15px;margin-top:14px;background:#fff;
+}
+.resume-card{background:#dfeeff}
+.save-card{background:#fff7d4}
+.handle-card{background:#f7f4ed}
+.resume-card h3,.save-card h3,.handle-card h3{margin:3px 0 8px;font-size:17px}
+.resume-card p,.save-card p,.handle-card p{font-size:11px;line-height:1.5;color:#555}
+.inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.inline-actions button{padding:12px;border-radius:11px;border:1px solid #111;background:#fff;font-weight:800}
+.inline-actions .dark{background:#111;color:#fff}
+.handle-row{display:flex;align-items:center;gap:6px;margin-top:10px}
+.handle-prefix{font-size:12px;color:#555}
+.handle-row input{flex:1;padding:12px;border:1px solid #ccc;border-radius:10px}
+.status-ok{font-size:10px;color:#157347;margin-top:7px}
+.status-bad{font-size:10px;color:#b42318;margin-top:7px}
+.saved-badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#111;color:#fff;font-size:10px;font-weight:800}
+
 </style>
 </head>
 <body>
@@ -741,7 +760,7 @@ function go(id){
   window.scrollTo(0,0);
 }
 
-function makeRoom(){
+function makeRoom(persist=true){
   const name=(document.getElementById("ownerName").value||"JISU").trim().toUpperCase();
   const birth=document.getElementById("ownerBirth").value||"1993-08-06";
   const mbti=document.getElementById("ownerMbti").value||"ENFP";
