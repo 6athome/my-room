@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V2.0</title>
+<title>MY ROOM V2.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -221,7 +221,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-body{background:#ff8cab}
 
 
-/* V2.0: generated-room-only MBTI visual exaggeration */
+/* V2.1: generated-room-only MBTI visual exaggeration */
 :root{
   --mbti-infp:#ece7ff;
   --mbti-entp:#fff4a5;
@@ -300,7 +300,7 @@ input:focus,select:focus{border-color:#111}
 .pixel-person.mbti-ESFP .pixel-hair:after{background:#3a241c}
 
 
-/* V2.0 — all 16 MBTI character skins */
+/* V2.1 — all 16 MBTI character skins */
 .pixel-person.mbti-INTP .pixel-body{background:#4d75a8}
 .pixel-person.mbti-INTP .prop-tablet{display:block;left:82px;top:86px;width:48px;height:62px;background:#b9d8ff;border:5px solid #111;transform:rotate(4deg)}
 .pixel-person.mbti-INTP .prop-tablet:after{content:"47 TABS";position:absolute;left:5px;top:18px;font:900 7px monospace}
@@ -466,7 +466,7 @@ input:focus,select:focus{border-color:#111}
 .login-option.dark{background:#111;color:#fff}
 
 
-/* V2.0 — retention + participation layers */
+/* V2.1 — retention + participation layers */
 .today-card,.friends-say,.unlock-card{
   border:1.5px solid #111;border-radius:16px;padding:12px;margin-top:10px;background:#fff;
 }
@@ -496,7 +496,7 @@ input:focus,select:focus{border-color:#111}
 .participation-note{font-size:10px;line-height:1.45;color:#555;margin-top:7px}
 
 
-/* V2.0 local account/save prototype */
+/* V2.1 local account/save prototype */
 .save-card,.handle-card{
   border:1.5px solid #111;border-radius:16px;padding:13px;margin-top:12px;background:#fff7d8
 }
@@ -544,7 +544,7 @@ body.visitor-mode.chemistry-done #visitorFriendsSay{display:block!important}
 #saveStateReady .inline-actions .dark{background:#111;color:#fff}
 
 
-/* V2.0 visitor-first flow */
+/* V2.1 visitor-first flow */
 .visitor-entry-card,.visitor-result-card,.visitor-next-card{
   border:1.5px solid #111;border-radius:18px;padding:14px;margin-top:12px;background:#fff;
 }
@@ -576,7 +576,7 @@ body.visitor-mode .room-shell{display:none!important}
 body.visitor-mode #visitorFlow{display:block!important}
 
 
-/* V2.0 — actual mini-home room */
+/* V2.1 — actual mini-home room */
 .minihome-hero{
   border:1.5px solid #111;border-radius:22px;overflow:hidden;background:#fff;margin-top:12px;
   box-shadow:5px 5px 0 #111;
@@ -667,7 +667,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 .bottom-share .dark{background:#111;color:#fff}
 
 
-/* V2.0 — MBTI room showcase + stronger character presence */
+/* V2.1 — MBTI room showcase + stronger character presence */
 .mbti-showcase{
   margin:12px 0 16px;padding:12px;border:1.5px solid #111;border-radius:18px;background:#fff;
 }
@@ -720,7 +720,7 @@ body.visitor-mode #visitorFlow{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V2.0</div>
+    <div class="micro">V2.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1098,7 +1098,7 @@ function syncRealAuthUI(){
   if(currentAuthUser && currentRemoteRoom){
     showSaveState("ready");
     const readyUrl=document.getElementById("readyRoomUrl");
-    if(readyUrl) readyUrl.textContent="공유 링크가 만들어졌어요.";
+    if(readyUrl) readyUrl.textContent=currentRemoteRoom?.slug ? "친구용 링크가 준비됐어요." : "공유 링크를 만드는 중이에요.";
   }else{
     showSaveState("loggedout");
   }
@@ -1242,27 +1242,42 @@ async function refreshVisitCounts(roomId){
 }
 
 async function loadPublicRoomBySlug(slug){
-  const { data, error }=await sb.from("myroom_rooms").select("*").eq("slug",slug).eq("is_public",true).maybeSingle();
-  if(error||!data) return false;
+  const { data, error }=await sb.from("myroom_rooms")
+    .select("*").eq("slug",slug).eq("is_public",true).maybeSingle();
+
+  if(error){
+    console.error("public room load failed",error);
+    return false;
+  }
+  if(!data) return false;
+
   currentRemoteRoom=data;
   state.owner={name:data.nickname,birth:"2000-01-01",mbti:data.mbti};
+
+  VIEW_MODE="visitor";
   document.body.classList.add("visitor-mode");
   document.body.classList.remove("chemistry-done");
-  VIEW_MODE="visitor";
+
   renderRoom();
   initVisitorFlow();
   go("room");
+  window.scrollTo(0,0);
+
   await recordPublicRoomVisit(data);
   return true;
 }
 
 async function bootSupabase(){
-  const params=new URLSearchParams(location.search);
+  const params=new URLSearchParams(window.location.search);
   const roomSlug=params.get("room");
+
+  // A shared ROOM link always opens visitor chemistry first.
   if(roomSlug){
+    await getAuthUser();
     const ok=await loadPublicRoomBySlug(roomSlug);
     if(ok) return;
   }
+
   await getAuthUser();
   if(currentAuthUser){
     const existing=await loadMyRemoteRoom();
@@ -1273,6 +1288,13 @@ async function bootSupabase(){
 
 sb.auth.onAuthStateChange(async(event,session)=>{
   currentAuthUser=session?.user||null;
+
+  // Shared links remain in visitor mode even when this browser already has a Kakao session.
+  const sharedSlug=new URLSearchParams(window.location.search).get("room");
+  if(sharedSlug){
+    return;
+  }
+
   syncRealAuthUI();
   if(event==="SIGNED_IN" && currentAuthUser){
     closeKakaoModal();
@@ -1824,28 +1846,26 @@ function renderResult(){
 
 
 function copySavedRoomLink(){
-  if(!(currentAuthUser && currentRemoteRoom)){
-    alert("ROOM을 저장하려면 카카오 로그인이 필요해요.");
-    startRealSave();
+  if(!(currentAuthUser && currentRemoteRoom?.slug)){
+    alert("ROOM 저장이 완료된 후 링크를 복사할 수 있어요.");
     return;
   }
   const url=publicRoomUrl();
   navigator.clipboard?.writeText(url);
-  toast("링크를 복사했어요");
+  toast("친구용 링크를 복사했어요");
 }
 async function shareSavedRoom(){
-  if(!(currentAuthUser && currentRemoteRoom)){
-    alert("ROOM을 저장하려면 카카오 로그인이 필요해요.");
-    startRealSave();
+  if(!(currentAuthUser && currentRemoteRoom?.slug)){
+    alert("ROOM 저장이 완료된 후 친구에게 공유할 수 있어요.");
     return;
   }
   const url=publicRoomUrl();
-  const text=`${state.owner.name}의 MY ROOM 구경하고 우리 궁합도 확인해봐 ✦`;
+  const text=`${state.owner.name}의 MY ROOM에 놀러와서 우리 궁합 확인해봐 ✦`;
   if(navigator.share){
     try{ await navigator.share({title:"MY ROOM",text,url}); }catch(e){}
   }else{
-    navigator.clipboard?.writeText(text+"\\n"+url);
-    toast("공유 문구를 복사했어요");
+    navigator.clipboard?.writeText(text+"\n"+url);
+    toast("친구용 링크를 복사했어요");
   }
 }
 
@@ -1915,10 +1935,9 @@ function initVisitorFlow(){
 }
 
 function publicRoomUrl(){
-  if(currentRemoteRoom?.slug){
-    return window.location.origin+window.location.pathname+"?room="+encodeURIComponent(currentRemoteRoom.slug);
-  }
-  return window.location.origin+window.location.pathname;
+  if(!currentRemoteRoom?.slug) return "";
+  const base=window.location.origin+window.location.pathname;
+  return base+"?room="+encodeURIComponent(currentRemoteRoom.slug);
 }
 function toast(msg){
   const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
@@ -1948,7 +1967,7 @@ function copyResult(){
   const f=state.latest;
   copyText(`MY ROOM · ${state.owner.name} × ${f.name} ${f.score}%\\nmyroom.kr/${state.owner.name.toLowerCase()}`);
 }
-// V2.0 startup
+// V2.1 startup
 if(!autoEnterMyRoom()){
   renderRoom();
   syncAccountUI();
