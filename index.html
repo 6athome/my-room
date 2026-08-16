@@ -1282,7 +1282,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="topbar">
     <div>
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
-      <div class="micro">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
+      <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
     </div>
     <div class="auth-top-actions">
@@ -1352,7 +1352,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div class="minihome-hero">
     <div class="minihome-head">
       <div>
-        <h2 id="zipTitle">JISU.zip</h2>
         <div class="sub" id="roomOwnerLabel">ISTP'S ROOM</div>
       </div>
       <div class="micro" id="roomVisitMeta">TODAY 0 · TOTAL 0</div>
@@ -2106,6 +2105,8 @@ async function refreshVisitCounts(roomId){
     const today=Number(row?.today_count||0);
     const total=Number(row?.total_count||0);
     meta.textContent=`TODAY ${today} · TOTAL ${total}`;
+    const topMeta=document.getElementById("roomVisitMetaTop");
+    if(topMeta) topMeta.textContent=`TODAY ${today} · TOTAL ${total}`;
   }catch(e){
     console.warn("visit count load failed",e);
   }
@@ -2614,7 +2615,7 @@ function renderSocialSnapshot(){
 function renderRoomVisitors(){
   const avatars=document.getElementById("visitorAvatars");
   if(!avatars) return;
-  const friends=(roomSocialSnapshot.recent_friends||[]).slice(0,8);
+  const friends=(roomSocialSnapshot.recent_friends||[]);
   avatars.innerHTML=friends.map(f=>`
     <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
       <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
@@ -2791,7 +2792,7 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
   const friends=getRecentFriends();
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
-    avatars.innerHTML=friends.slice(0,8).map(f=>`
+    avatars.innerHTML=friends.map(f=>`
       <div class="visitor-character" title="${f.name} · ${f.mbti} · ${f.score}%">
         <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
           <i class="prop prop-headset"></i><i class="prop prop-book"></i>
@@ -3232,3 +3233,30 @@ window.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
+<style>
+/* V4.2 — persistent visitor crowd */
+.visitor-avatars{
+  display:grid!important;
+  grid-template-columns:repeat(6, 1fr);
+  gap:2px 0!important;
+  align-items:end!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:8px!important;
+  max-height:150px;
+  overflow:hidden;
+}
+.visitor-character{
+  width:44px!important;
+  height:62px!important;
+  justify-self:center;
+}
+.visitor-character .pixel-person{
+  transform:translateX(-50%) scale(.24)!important;
+}
+.visitor-character .visitor-name{
+  max-width:44px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+</style>
