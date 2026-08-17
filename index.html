@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.1</title>
+<title>MY ROOM V6.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.1</div>
+    <div class="micro">V6.2</div>
   </div>
 
   <div class="hero-blob">
@@ -4135,4 +4135,16 @@ body[data-room-time="night"] .sky-star{display:block}
 /* Keep actual room content and visitors in front of decoration. */
 #visitorAvatars{z-index:3!important}
 .room-atmosphere ~ *{position:relative;z-index:1}
+</style>
+
+<style>
+/* V6.2 — keep window clear of today's status copy */
+.room-window{
+  top:52px!important;
+  right:12px!important;
+}
+.room-plant{
+  top:76px!important;
+  right:91px!important;
+}
 </style>
