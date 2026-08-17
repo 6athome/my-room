@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.3</title>
+<title>MY ROOM V7.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.3</div>
+    <div class="micro">V7.4</div>
   </div>
 
   <div class="hero-blob">
@@ -1282,7 +1282,12 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="topbar">
     <div>
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
-      <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0 · FRIENDS 0</div><div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
+      <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0 · FRIENDS 0</div>
+<button class="collection-pill owner-only" id="collectionBtn" onclick="openCollection()">
+  COLLECTION <b id="collectionCount">0/16</b>
+  <span id="collectionNew" class="collection-new" style="display:none">NEW</span>
+</button>
+<div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
     </div>
     <div class="auth-top-actions">
@@ -2821,6 +2826,71 @@ async function loadRoomSocialSnapshot(roomId, markSeen=false){
   return roomSocialSnapshot;
 }
 
+
+const COLLECTION_TYPES=["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
+
+function getCollectionCounts(){
+  const counts={};
+  COLLECTION_TYPES.forEach(t=>counts[t]=0);
+
+  const friends=Array.isArray(roomSocialSnapshot?.recent_friends)
+    ? roomSocialSnapshot.recent_friends
+    : [];
+
+  friends.forEach(friend=>{
+    const mbti=String(friend?.mbti||"").toUpperCase();
+    if(Object.prototype.hasOwnProperty.call(counts,mbti)) counts[mbti]+=1;
+  });
+
+  return counts;
+}
+
+function renderCollection(){
+  const counts=getCollectionCounts();
+  const unlocked=COLLECTION_TYPES.filter(t=>counts[t]>0).length;
+
+  const count=document.getElementById("collectionCount");
+  const modalCount=document.getElementById("collectionModalCount");
+  if(count) count.textContent=`${unlocked}/16`;
+  if(modalCount) modalCount.textContent=`${unlocked}/16`;
+
+  const grid=document.getElementById("collectionGrid");
+  if(!grid) return;
+
+  grid.innerHTML=COLLECTION_TYPES.map(type=>{
+    const n=counts[type]||0;
+    const unlockedCard=n>0;
+
+    return `
+      <div class="collection-card ${unlockedCard ? "is-unlocked" : "is-locked"}">
+        <div class="collection-card-art">
+          ${unlockedCard ? svgAvatar(type,true) : '<div class="collection-question">?</div>'}
+        </div>
+        <div class="collection-card-bottom">
+          <b>${unlockedCard ? type : "???"}</b>
+          <span>${unlockedCard ? "×"+n : "LOCKED"}</span>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function openCollection(){
+  renderCollection();
+  const modal=document.getElementById("collectionModal");
+  if(!modal) return;
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+  document.body.classList.add("collection-open");
+}
+
+function closeCollection(){
+  const modal=document.getElementById("collectionModal");
+  if(!modal) return;
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden","true");
+  document.body.classList.remove("collection-open");
+}
+
 function renderSocialSnapshot(){
   const names=document.getElementById("todayFriendNames");
   const badge=document.getElementById("newFriendBadge");
@@ -2848,6 +2918,7 @@ function renderSocialSnapshot(){
   }
 
   renderRoomVisitors();
+  renderCollection();
 }
 
 
@@ -3815,7 +3886,29 @@ window.addEventListener("DOMContentLoaded",()=>{
     
   });
 });
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeCollection();
+});
+
 </script>
+
+<div class="collection-modal" id="collectionModal" aria-hidden="true">
+  <div class="collection-backdrop" onclick="closeCollection()"></div>
+  <div class="collection-sheet" role="dialog" aria-modal="true" aria-labelledby="collectionTitle">
+    <div class="collection-head">
+      <div>
+        <div class="micro">MY FRIENDS</div>
+        <h3 id="collectionTitle">COLLECTION <span id="collectionModalCount">0/16</span></h3>
+      </div>
+      <button class="collection-close" onclick="closeCollection()" aria-label="닫기">×</button>
+    </div>
+
+    <div class="collection-grid" id="collectionGrid"></div>
+    <p class="collection-hint">친구가 새로운 MBTI로 놀러오면 카드가 열려요.</p>
+  </div>
+</div>
+
 </body>
 </html>
 
@@ -5563,5 +5656,157 @@ body[data-room-time="night"] .basic-window-sky{
 #roomScene #visitorAvatars .crowd-friend{
   visibility:visible!important;
   opacity:1!important;
+}
+</style>
+
+<style>
+/* V7.4 — simple 16 TYPE collection */
+
+.collection-pill{
+  margin:8px auto 0;
+  min-height:30px;
+  border:1.5px solid #111;
+  border-radius:999px;
+  padding:6px 11px;
+  background:#fff7d4;
+  color:#111;
+  font:inherit;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.02em;
+  cursor:pointer;
+}
+.collection-pill b{
+  margin-left:4px;
+}
+.collection-new{
+  margin-left:5px;
+  padding:2px 5px;
+  border-radius:999px;
+  background:#f4c8d6;
+  font-size:6px;
+}
+
+.collection-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:9999;
+}
+.collection-modal.show{
+  display:block;
+}
+.collection-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.42);
+}
+.collection-sheet{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(420px,calc(100vw - 28px));
+  max-height:82vh;
+  overflow:auto;
+  transform:translate(-50%,-50%);
+  border:2px solid #111;
+  border-radius:20px;
+  background:#f7f3e8;
+  padding:14px;
+  box-shadow:5px 6px 0 rgba(0,0,0,.18);
+}
+.collection-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.collection-head h3{
+  margin:3px 0 0;
+  font-size:18px;
+}
+.collection-close{
+  width:30px;
+  height:30px;
+  border:1.5px solid #111;
+  border-radius:50%;
+  background:#fff;
+  font-size:19px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.collection-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+}
+.collection-card{
+  aspect-ratio:.78;
+  min-width:0;
+  border:1.5px solid #111;
+  border-radius:11px;
+  overflow:hidden;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+}
+.collection-card.is-locked{
+  border-color:#aaa;
+  background:#e4e1da;
+  opacity:.75;
+}
+.collection-card-art{
+  flex:1;
+  min-height:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:#f3efe5;
+}
+.collection-card-art .svg-avatar{
+  width:58px;
+  height:78px;
+}
+.collection-card.is-locked .collection-card-art{
+  filter:grayscale(1);
+}
+.collection-question{
+  width:38px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border:1.5px dashed #999;
+  border-radius:10px;
+  color:#999;
+  font-size:23px;
+  font-weight:900;
+}
+.collection-card-bottom{
+  min-height:30px;
+  padding:5px 4px;
+  border-top:1px solid rgba(0,0,0,.16);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:3px;
+}
+.collection-card-bottom b{
+  font-size:8px;
+}
+.collection-card-bottom span{
+  font-size:7px;
+  color:#777;
+}
+.collection-hint{
+  margin:10px 0 1px;
+  text-align:center;
+  font-size:8px;
+  color:#777;
+  line-height:1.4;
+}
+body.collection-open{
+  overflow:hidden;
 }
 </style>
