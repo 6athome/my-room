@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.0</title>
+<title>MY ROOM V7.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.0</div>
+    <div class="micro">V7.1</div>
   </div>
 
   <div class="hero-blob">
@@ -2854,33 +2854,24 @@ function renderSocialSnapshot(){
 function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
-
-  const n=Number(count||0);
-  const rows=n<=8 ? 1 : 1+Math.ceil((n-8)/10);
-  scene.style.setProperty("--crowd-rows",String(Math.max(1,rows)));
+  const rows=Math.max(1,Math.ceil(Number(count||0)/10));
+  scene.style.setProperty("--crowd-rows",String(rows));
 }
 
 function renderRoomVisitors(){
   const avatars=document.getElementById("visitorAvatars");
   if(!avatars) return;
 
-  const friends=(roomSocialSnapshot.recent_friends||[]);
+  const friends=Array.isArray(roomSocialSnapshot.recent_friends)
+    ? roomSocialSnapshot.recent_friends
+    : [];
+
   resizeRoomForVisitorCrowd(friends.length);
 
+  // Simple rule: 10 per row, bottom row first.
   avatars.innerHTML=friends.map((f,i)=>{
-    let row, col;
-
-    if(i < 8){
-      // Owner row: preserve an empty center zone.
-      const ownerRowSlots=[0,1,2,3,6,7,8,9];
-      row=0;
-      col=ownerRowSlots[i];
-    }else{
-      // All lower rows run continuously across the full width.
-      const j=i-8;
-      row=1+Math.floor(j/10);
-      col=j%10;
-    }
+    const row=Math.floor(i/10);
+    const col=i%10;
 
     return `
       <div class="visitor-character visitor-svg crowd-friend"
@@ -2890,6 +2881,9 @@ function renderRoomVisitors(){
         <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`;
   }).join("");
+
+  // Debug-safe count: what DB returned is exactly what we draw.
+  avatars.dataset.renderedCount=String(friends.length);
 }
 
 function getRecentFriends(){
@@ -5110,4 +5104,170 @@ body[data-room-time="night"] .basic-window-sky{
   height:50px!important;
   transform:translateX(-50%)!important;
 }
+</style>
+
+<style>
+/* V7.1 — simple, reliable bottom-up friend stacking */
+
+/* No pink pedestal under owner */
+#profileAvatarCard:after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Keep the mini-home square */
+.room-scene{
+  width:100%!important;
+  aspect-ratio:1/1!important;
+  height:auto!important;
+  min-height:0!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+
+/*
+  Owner stands on the BACK area of the wooden floor.
+  It is still on the floor, but not inside the friend rows.
+*/
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:37%!important;
+  width:118px!important;
+  height:178px!important;
+  transform:translateX(-50%)!important;
+  z-index:35!important;
+  overflow:visible!important;
+}
+
+#profileAvatarCard{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:118px!important;
+  height:178px!important;
+  transform:none!important;
+  z-index:36!important;
+}
+
+#profileAvatarCard .svg-avatar{
+  width:110px!important;
+  height:170px!important;
+  margin:0 auto!important;
+  transform:none!important;
+}
+
+/* Friend crowd uses the lower half only */
+#visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:43%!important;
+  display:block!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+  z-index:50!important;
+}
+
+/*
+  Reset ALL accumulated historical rules:
+  no top positioning, no hidden children, no translate/scale.
+*/
+#visitorAvatars .crowd-friend,
+#visitorAvatars .crowd-friend:nth-child(n),
+#visitorAvatars .crowd-friend[style*="--crowd-row"]{
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  margin:0!important;
+  margin-left:0!important;
+  width:40px!important;
+  height:52px!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+
+  /* 10 equal slots across the full room width */
+  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
+
+  /* bottom row first, then one row upward */
+  bottom:calc(var(--crowd-row) * 44px)!important;
+
+  /*
+    row 0 is visually in front.
+    row 1 is behind row 0, etc.
+  */
+  z-index:calc(90 - var(--crowd-row))!important;
+}
+
+/* Explicit first rows so older CSS can never override them */
+#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
+  bottom:0!important;
+  z-index:90!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
+  bottom:44px!important;
+  z-index:80!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
+  bottom:88px!important;
+  z-index:70!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
+  bottom:132px!important;
+  z-index:60!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
+  bottom:176px!important;
+  z-index:50!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{
+  bottom:220px!important;
+  z-index:40!important;
+  transform:none!important;
+}
+
+/*
+  Each back row is 44px higher while the character is ~50px tall.
+  This tiny overlap feels crowded, but the front row cannot cover
+  the face of the row behind it.
+*/
+#visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:4px!important;
+  width:40px!important;
+  height:50px!important;
+  transform:translateX(-50%)!important;
+}
+
+#visitorAvatars .visitor-name{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-2px!important;
+  width:38px!important;
+  max-width:38px!important;
+  transform:translateX(-50%)!important;
+  padding:1px!important;
+  font-size:5.8px!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  background:rgba(255,255,255,.84)!important;
+  border-radius:4px!important;
+}
+
+/* Window/decor stays behind everybody */
+.room-basic-window{z-index:1!important;}
+.owner-avatar-stage{z-index:35!important;}
+#visitorAvatars{z-index:50!important;}
 </style>
