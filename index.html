@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.9</title>
+<title>MY ROOM V7.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.9</div>
+    <div class="micro">V7.0</div>
   </div>
 
   <div class="hero-blob">
@@ -4999,4 +4999,115 @@ body[data-room-time="night"] .basic-window-sky{
 
 /* Owner remains in front of all visitors */
 .owner-avatar-stage{z-index:90!important;}
+</style>
+
+<style>
+/* V7.0 — all friends visible + no owner pedestal */
+
+/* Remove pink owner floor marker completely */
+#profileAvatarCard:after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Give the square room a clear floor area */
+.room-scene{
+  aspect-ratio:1/1!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+
+/* Owner stands on the rear edge of the floor, not in the middle of friend rows */
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  top:auto!important;
+  bottom:31%!important;
+  transform:translateX(-50%)!important;
+  width:118px!important;
+  height:178px!important;
+  z-index:75!important;
+}
+
+/* The friend crowd occupies the foreground floor */
+#visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:43%!important;
+  overflow:visible!important;
+  z-index:20!important;
+}
+
+/* Reset all historical placement rules */
+#visitorAvatars .crowd-friend,
+#visitorAvatars .crowd-friend:nth-child(n){
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  width:40px!important;
+  height:52px!important;
+  margin:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+
+/*
+  row 0 = row closest to owner: center gap because it shares the owner's visual line.
+  row 1+ = full-width rows in front of that line.
+  Moving later rows DOWN toward the viewer prevents the owner from hiding them.
+*/
+#visitorAvatars .crowd-friend{
+  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
+  bottom:calc((5 - var(--crowd-row)) * 33px)!important;
+  z-index:calc(40 + var(--crowd-row))!important;
+}
+
+/* We only need sensible positioning for the practical number of visible rows.
+   First row is nearest owner; later rows progressively move toward the bottom/front. */
+#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
+  bottom:165px!important;
+  z-index:40!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
+  bottom:126px!important;
+  z-index:45!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
+  bottom:87px!important;
+  z-index:50!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
+  bottom:48px!important;
+  z-index:55!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
+  bottom:9px!important;
+  z-index:60!important;
+}
+
+/* More rows continue by compressing slightly at the front rather than disappearing */
+#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{
+  bottom:4px!important;
+  z-index:61!important;
+  transform:translateY(8px) scale(.92)!important;
+}
+#visitorAvatars .crowd-friend[style*="--crowd-row:6"]{
+  bottom:2px!important;
+  z-index:62!important;
+  transform:translateY(16px) scale(.85)!important;
+}
+
+/* Friends remain readable */
+#visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  bottom:4px!important;
+  width:40px!important;
+  height:50px!important;
+  transform:translateX(-50%)!important;
+}
 </style>
