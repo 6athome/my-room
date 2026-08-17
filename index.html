@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V5.6</title>
+<title>MY ROOM V5.7</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V5.6</div>
+    <div class="micro">V5.7</div>
   </div>
 
   <div class="hero-blob">
@@ -2847,17 +2847,8 @@ function renderRoomVisitors(){
   const friends=(roomSocialSnapshot.recent_friends||[]);
   resizeRoomForVisitorCrowd(friends.length);
   avatars.innerHTML=friends.map(f=>`
-    <div class="visitor-character" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
-      <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
-        <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-        <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-        <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-        <div class="pixel-hair"></div><div class="pixel-head"></div>
-        <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-        <div class="pixel-body"></div>
-        <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-        <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-      </div>
+    <div class="visitor-character visitor-svg" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
+      ${svgAvatar(f.mbti,true)}
       <div class="visitor-name">${escapeHtml(f.name)}</div>
     </div>`).join("");
 }
@@ -2925,67 +2916,132 @@ function previewCharacterType(m,btn){
 }
 
 
-function svgAvatar(mbti){
-  const commonStart=`<div class="svg-avatar"><svg viewBox="0 0 110 170" aria-label="${mbti} character">`;
-  const end=`</svg></div>`;
 
-  const faces={
-    INFP:`<circle class="skin" cx="54" cy="45" r="22"/><path class="hair" d="M32 44c0-23 43-30 47-2l-9-9-7 7-9-8-8 8-14 4z"/>
-      <circle class="eye" cx="47" cy="47" r="2"/><circle class="eye" cx="62" cy="47" r="2"/>
-      <path class="line" d="M49 56q6 4 11 0"/>`,
-    ESFP:`<circle class="skin" cx="53" cy="40" r="21"/><path class="hair" d="M32 38c3-23 39-28 43-2l-9-8-9 7-8-8-8 8z"/>
-      <circle class="eye" cx="46" cy="42" r="2"/><circle class="eye" cx="61" cy="42" r="2"/><path class="line" d="M47 51q7 7 14 0"/>`,
-    ENTP:`<circle class="skin" cx="48" cy="42" r="21"/><path class="hair" d="M27 41c1-23 41-29 43-2l-8-10-8 8-9-7-8 9z"/>
-      <circle class="eye" cx="41" cy="44" r="2"/><circle class="eye" cx="56" cy="43" r="2"/><path class="line" d="M43 52q7 2 12-2"/>`,
-    INTJ:`<circle class="skin" cx="55" cy="40" r="21"/><path class="hair" d="M34 39c1-24 40-27 42-3l-7-9-9 8-9-8-8 9z"/>
-      <path class="line" d="M45 42h5M61 42h5"/><path class="line" d="M50 52h10"/>`
+const MBTI_AVATAR_DESIGN={
+  INTJ:{shirt:"#20242b",pants:"#b9c7ff",hair:"#24242a",pose:"arms",prop:"blueprint",face:"serious"},
+  INTP:{shirt:"#4b6cb7",pants:"#d8e1ff",hair:"#302b34",pose:"lean",prop:"laptop",face:"sleepy"},
+  ENTJ:{shirt:"#7b2e87",pants:"#e8c7ec",hair:"#251d28",pose:"point",prop:"megaphone",face:"sharp"},
+  ENTP:{shirt:"#f0c419",pants:"#fff1a8",hair:"#2e251c",pose:"wide",prop:"why",face:"smirk"},
+  INFJ:{shirt:"#557c6b",pants:"#cfe0d7",hair:"#392f35",pose:"soft",prop:"letter",face:"calm"},
+  INFP:{shirt:"#8066b3",pants:"#e5d9ff",hair:"#4a354e",pose:"sit",prop:"diary",face:"soft"},
+  ENFJ:{shirt:"#27a88a",pants:"#c8f0e6",hair:"#3d2c28",pose:"wave",prop:"heart",face:"smile"},
+  ENFP:{shirt:"#ff7a6e",pants:"#ffe0d8",hair:"#583b2e",pose:"jump",prop:"camera",face:"happy"},
+  ISTJ:{shirt:"#3e5b79",pants:"#ccd8e5",hair:"#2d2c2c",pose:"straight",prop:"calendar",face:"serious"},
+  ISFJ:{shirt:"#d9909b",pants:"#f7dce1",hair:"#493436",pose:"hold",prop:"cup",face:"soft"},
+  ESTJ:{shirt:"#236a73",pants:"#c8e5e8",hair:"#2c2523",pose:"point",prop:"clipboard",face:"sharp"},
+  ESFJ:{shirt:"#e85e8b",pants:"#ffd7e5",hair:"#4a322d",pose:"wave",prop:"gift",face:"smile"},
+  ISTP:{shirt:"#5a6066",pants:"#d8dbdd",hair:"#272a2d",pose:"crouch",prop:"wrench",face:"calm"},
+  ISFP:{shirt:"#6e8b62",pants:"#dce9d7",hair:"#45352d",pose:"sit",prop:"flower",face:"soft"},
+  ESTP:{shirt:"#e4772e",pants:"#ffe0c7",hair:"#302720",pose:"forward",prop:"board",face:"smirk"},
+  ESFP:{shirt:"#ff3f93",pants:"#ffd2e6",hair:"#3c2b36",pose:"pose",prop:"phone",face:"happy"}
+};
+
+function avatarFace(face){
+  const eyes={
+    serious:`<path class="av-line" d="M42 44h7M61 44h7"/><path class="av-line" d="M49 55h12"/>`,
+    sleepy:`<path class="av-line" d="M41 46q4 2 8 0M60 46q4 2 8 0"/><path class="av-line" d="M51 56q4 2 8 0"/>`,
+    sharp:`<path class="av-line" d="M41 43l8 1M61 44l8-2"/><circle cx="46" cy="47" r="2"/><circle cx="64" cy="47" r="2"/><path class="av-line" d="M50 56h11"/>`,
+    smirk:`<circle cx="46" cy="46" r="2"/><circle cx="63" cy="45" r="2"/><path class="av-line" d="M49 55q8 5 15-1"/>`,
+    calm:`<circle cx="46" cy="46" r="2"/><circle cx="63" cy="46" r="2"/><path class="av-line" d="M51 56q5 2 10 0"/>`,
+    soft:`<circle cx="46" cy="46" r="2"/><circle cx="63" cy="46" r="2"/><path class="av-line" d="M50 55q6 5 12 0"/>`,
+    smile:`<circle cx="46" cy="45" r="2"/><circle cx="63" cy="45" r="2"/><path class="av-line" d="M48 54q9 9 17 0"/>`,
+    happy:`<path class="av-line" d="M41 45q4-5 8 0M60 45q4-5 8 0"/><path class="av-line" d="M47 53q10 10 19 0"/>`
   };
+  return eyes[face]||eyes.calm;
+}
 
-  if(mbti==="INFP") return commonStart+faces.INFP+`
-    <!-- seated body -->
-    <path d="M38 68q16-10 32 0l5 42H34z" fill="#8066b3" stroke="#181818" stroke-width="2.4"/>
-    <path class="skin" d="M37 78q-16 12-10 28l10-3q-2-10 8-17z"/>
-    <path class="skin" d="M70 78q16 11 9 27l-10-3q3-10-7-17z"/>
-    <path d="M38 108q-17 10-19 28h28l7-19 7 19h29q-3-18-20-28z" fill="#e5d9ff" stroke="#181818" stroke-width="2.4"/>
-    <path class="shoe" d="M18 134h29v10H15z"/><path class="shoe" d="M61 134h30l3 10H61z"/>
-    <!-- headphones + diary -->
-    <path class="line" d="M34 43q2-27 40-4"/><rect x="28" y="40" width="8" height="17" rx="3" fill="#292929"/><rect x="73" y="39" width="8" height="17" rx="3" fill="#292929"/>
-    <rect class="prop-white" x="39" y="94" width="31" height="23" rx="2"/><path class="line" d="M54 95v21"/><text x="42" y="106" font-size="5">DIARY</text>`+end;
+function avatarHair(type,color){
+  const shapes={
+    INTJ:`<path d="M32 43c0-25 45-29 47-2l-8-10-9 8-9-8-9 10z" fill="${color}"/>`,
+    INTP:`<path d="M31 43c-1-23 43-30 48-4l-8-5-5 8-10-7-8 8-8-5z" fill="${color}"/>`,
+    ENTJ:`<path d="M31 42c2-25 44-29 48-2l-7-11-10 9-8-9-10 11z" fill="${color}"/>`,
+    ENTP:`<path d="M29 42c1-24 43-31 49-3l-10-9-6 8-10-7-8 9z" fill="${color}"/>`,
+    INFJ:`<path d="M30 42c1-25 44-30 49-2l-5 18-7-25-8 8-8-9-10 24z" fill="${color}"/>`,
+    INFP:`<path d="M30 44c0-26 45-31 49-2l-8-8-7 8-10-9-8 9-10 5z" fill="${color}"/>`,
+    ENFJ:`<path d="M31 42c3-24 43-27 47-2l-8-9-8 7-7-8-10 10z" fill="${color}"/>`,
+    ENFP:`<path d="M29 43c0-23 43-31 49-3l-7-6-7 7-8-8-8 8-10-2z" fill="${color}"/>`,
+    ISTJ:`<path d="M32 41c2-23 42-25 45-1l-5-8-10 6-10-6-9 8z" fill="${color}"/>`,
+    ISFJ:`<path d="M30 42c2-25 44-29 49-2l-7-8-9 7-8-8-10 10z" fill="${color}"/>`,
+    ESTJ:`<path d="M31 40c4-22 42-24 46 0l-8-7-8 5-8-6-9 8z" fill="${color}"/>`,
+    ESFJ:`<path d="M30 41c2-24 44-28 49-1l-8-8-7 7-9-8-9 10z" fill="${color}"/>`,
+    ISTP:`<path d="M31 42c2-22 42-26 47-2l-6-7-9 5-9-6-10 9z" fill="${color}"/>`,
+    ISFP:`<path d="M29 43c1-25 45-31 50-3l-8-7-8 8-10-9-8 10z" fill="${color}"/>`,
+    ESTP:`<path d="M30 40c5-21 40-25 47 0l-9-8-8 6-8-7-9 9z" fill="${color}"/>`,
+    ESFP:`<path d="M30 39c4-23 42-28 47-2l-8-8-9 7-8-8-9 9z" fill="${color}"/>`
+  };
+  return shapes[type]||shapes.ISTP;
+}
 
-  if(mbti==="ESFP") return commonStart+faces.ESFP+`
-    <!-- energetic asymmetric pose -->
-    <path d="M36 64q17-8 33 1l5 48H34z" fill="#ff3f93" stroke="#181818" stroke-width="2.4"/>
-    <path class="skin" d="M37 72L18 55l-6 8 22 24z"/><path class="skin" d="M68 72l24-9 4 10-25 15z"/>
-    <path d="M38 111l-6 37h13l10-28 11 26 13-5-12-31z" fill="#ffd2e6" stroke="#181818" stroke-width="2.4"/>
-    <path class="shoe" d="M30 145h18v10H27z"/><path class="shoe" d="M67 141l15-5 5 9-18 7z"/>
-    <!-- sunglasses + phone -->
-    <path class="line" d="M37 38h31"/><rect x="39" y="35" width="12" height="9" rx="3" fill="#181818"/><rect x="55" y="35" width="12" height="9" rx="3" fill="#181818"/>
-    <rect x="89" y="52" width="10" height="18" rx="2" fill="#d8d8d8" stroke="#181818" stroke-width="2.4"/>`+end;
+function avatarProp(prop){
+  const p={
+    blueprint:`<rect x="41" y="91" width="31" height="22" rx="2" fill="#dbe4ff" class="av-outline"/><path class="av-line" d="M46 97h20M46 102h13M46 107h17"/>`,
+    laptop:`<path d="M38 94h35v20H38z" fill="#e6ebff" class="av-outline"/><path class="av-line" d="M34 116h44"/>`,
+    megaphone:`<path d="M82 65l19-8v19l-19-6z" fill="#f3d3f5" class="av-outline"/><rect x="76" y="64" width="8" height="9" fill="#fff" class="av-outline"/>`,
+    why:`<rect x="68" y="12" width="36" height="22" rx="4" fill="#fff" class="av-outline"/><text x="75" y="27" font-size="11" font-weight="900">WHY?</text>`,
+    letter:`<rect x="42" y="91" width="30" height="21" rx="2" fill="#fff8ee" class="av-outline"/><path class="av-line" d="M43 93l14 11 14-11"/>`,
+    diary:`<rect x="40" y="92" width="31" height="23" rx="2" fill="#fff" class="av-outline"/><path class="av-line" d="M55 93v21"/><text x="43" y="106" font-size="5">DIARY</text>`,
+    heart:`<path d="M88 58c-8-9-18 3-5 14l5 4 5-4c13-11 3-23-5-14z" fill="#ff8fab" class="av-outline"/>`,
+    camera:`<rect x="79" y="58" width="23" height="17" rx="3" fill="#fff" class="av-outline"/><circle cx="91" cy="66" r="5" fill="#bcd7ff" class="av-outline"/><rect x="83" y="54" width="8" height="5" fill="#fff" class="av-outline"/>`,
+    calendar:`<rect x="41" y="90" width="31" height="24" rx="2" fill="#fff" class="av-outline"/><path class="av-line" d="M42 97h29M48 87v7M65 87v7"/><text x="49" y="108" font-size="8">12</text>`,
+    cup:`<path d="M43 94h24v18H43z" fill="#fff5ef" class="av-outline"/><path class="av-line" d="M67 98q12 0 8 9q-2 5-8 3"/><path class="av-line" d="M49 89q-4-5 0-9M58 89q-4-5 0-9"/>`,
+    clipboard:`<rect x="41" y="89" width="31" height="27" rx="2" fill="#effafa" class="av-outline"/><rect x="49" y="86" width="15" height="6" rx="2" fill="#fff" class="av-outline"/><path class="av-line" d="M47 98h19M47 104h16M47 110h18"/>`,
+    gift:`<rect x="40" y="94" width="32" height="23" fill="#fff0f6" class="av-outline"/><path class="av-line" d="M56 94v23M40 102h32"/><path class="av-line" d="M56 94q-12-11-10 0M56 94q12-11 10 0"/>`,
+    wrench:`<path d="M79 88l17-17q-3-8 4-14q4-4 9-3l-7 7 5 5 7-7q1 6-3 10q-6 7-14 4l-17 18z" fill="#dfe3e6" class="av-outline"/>`,
+    flower:`<path class="av-line" d="M86 77v22"/><circle cx="86" cy="72" r="5" fill="#ffd17d" class="av-outline"/><circle cx="80" cy="72" r="5" fill="#ffc4d6" class="av-outline"/><circle cx="92" cy="72" r="5" fill="#ffc4d6" class="av-outline"/><circle cx="86" cy="66" r="5" fill="#ffc4d6" class="av-outline"/>`,
+    board:`<rect x="72" y="115" width="34" height="8" rx="4" fill="#c7daf0" class="av-outline"/><circle cx="80" cy="126" r="3" fill="#111"/><circle cx="98" cy="126" r="3" fill="#111"/>`,
+    phone:`<rect x="86" y="53" width="12" height="22" rx="3" fill="#e8e8e8" class="av-outline"/><path class="av-line" d="M88 57h8"/>`
+  };
+  return p[prop]||"";
+}
 
-  if(mbti==="ENTP") return commonStart+faces.ENTP+`
-    <!-- forward debating stance -->
-    <path d="M30 65q17-9 33 0l10 45-39 6z" fill="#f0c419" stroke="#181818" stroke-width="2.4" transform="rotate(-4 50 90)"/>
-    <path class="skin" d="M34 74L17 88l5 8 19-11z"/><path class="skin" d="M62 73l22 14 5-8-21-18z"/>
-    <path d="M38 111l-8 36h14l9-26 15 25h14l-18-38z" fill="#fff1a8" stroke="#181818" stroke-width="2.4"/>
-    <path class="shoe" d="M28 145h18v10H25z"/><path class="shoe" d="M68 143h18l4 10H69z"/>
-    <!-- spear / argument placard -->
-    <path class="line" d="M20 91L96 34"/><path d="M96 34l-14 3 8 10z" fill="#181818"/>
-    <rect class="prop-white" x="68" y="12" width="38" height="22" rx="3"/><text x="73" y="27" font-size="10">WHY?</text>`+end;
+function svgAvatar(mbti,compact=false){
+  const d=MBTI_AVATAR_DESIGN[mbti]||MBTI_AVATAR_DESIGN.ISTP;
+  const sizeClass=compact?" compact":"";
+  const headY=(d.pose==="jump")?35:40;
+  const bodyY=(d.pose==="crouch")?73:66;
 
-  if(mbti==="INTJ") return commonStart+faces.INTJ+`
-    <!-- calm straight pose with crossed arms -->
-    <path d="M38 63q17-7 34 0l3 51H35z" fill="#20242b" stroke="#181818" stroke-width="2.4"/>
-    <path class="skin" d="M39 76l29 23 6-8-28-25z"/><path class="skin" d="M70 76L42 98l-6-8 28-24z"/>
-    <path d="M39 112l-3 37h14l5-29 6 29h14l-4-37z" fill="#b9c7ff" stroke="#181818" stroke-width="2.4"/>
-    <path class="shoe" d="M34 147h18v10H32z"/><path class="shoe" d="M60 147h18l2 10H60z"/>
-    <rect x="43" y="85" width="27" height="20" rx="2" fill="#dbe4ff" stroke="#181818" stroke-width="2.4"/><text x="47" y="97" font-size="5">PLAN</text>`+end;
+  let arms="";
+  if(d.pose==="arms") arms=`<path class="av-skin" d="M38 78l31 23 6-8-29-26z"/><path class="av-skin" d="M70 78L40 100l-6-8 29-25z"/>`;
+  else if(d.pose==="point") arms=`<path class="av-skin" d="M39 76L22 91l6 8 17-12z"/><path class="av-skin" d="M68 74l25-13 5 9-26 18z"/>`;
+  else if(d.pose==="wave") arms=`<path class="av-skin" d="M38 75L23 91l7 7 16-12z"/><path class="av-skin" d="M69 74l17-27 9 5-17 30z"/>`;
+  else if(d.pose==="jump") arms=`<path class="av-skin" d="M39 70L18 54l-6 8 24 23z"/><path class="av-skin" d="M68 70l24-17 6 8-25 24z"/>`;
+  else if(d.pose==="sit") arms=`<path class="av-skin" d="M38 79q-15 12-10 27l10-3q-2-10 8-17z"/><path class="av-skin" d="M69 79q15 11 9 26l-10-3q3-10-7-17z"/>`;
+  else if(d.pose==="crouch") arms=`<path class="av-skin" d="M39 82L22 96l7 7 17-11z"/><path class="av-skin" d="M67 81l19 10-5 9-18-9z"/>`;
+  else if(d.pose==="forward") arms=`<path class="av-skin" d="M37 75L18 85l5 9 20-8z"/><path class="av-skin" d="M67 73l25 5-2 10-25-3z"/>`;
+  else if(d.pose==="wide") arms=`<path class="av-skin" d="M37 75L16 87l5 9 23-10z"/><path class="av-skin" d="M67 74l25 13 5-9-24-15z"/>`;
+  else arms=`<path class="av-skin" d="M39 77l-13 24 9 5 12-22z"/><path class="av-skin" d="M68 77l13 24-9 5-12-22z"/>`;
 
-  return "";
+  let legs="";
+  if(d.pose==="sit" || d.pose==="crouch"){
+    legs=`<path d="M39 109q-17 10-19 27h28l7-18 8 18h29q-4-18-21-28z" fill="${d.pants}" class="av-outline"/>
+          <path d="M18 134h29v10H15z" fill="#111"/><path d="M62 134h30l3 10H62z" fill="#111"/>`;
+  } else if(d.pose==="jump"){
+    legs=`<path d="M40 108l-13 36h14l14-25 12 25h14l-17-36z" fill="${d.pants}" class="av-outline"/>
+          <path d="M23 141h20v10H19z" fill="#111"/><path d="M68 141h20l4 10H69z" fill="#111"/>`;
+  } else {
+    legs=`<path d="M40 110l-5 38h14l6-29 7 29h14l-6-38z" fill="${d.pants}" class="av-outline"/>
+          <path d="M33 146h19v10H30z" fill="#111"/><path d="M61 146h19l3 10H61z" fill="#111"/>`;
+  }
+
+  const glasses=mbti==="ESFP" ? `<path class="av-line" d="M37 42h33"/><rect x="39" y="38" width="13" height="9" rx="3" fill="#111"/><rect x="56" y="38" width="13" height="9" rx="3" fill="#111"/>` : "";
+  const headset=mbti==="INFP" ? `<path class="av-line" d="M34 43q2-27 40-4"/><rect x="29" y="40" width="8" height="17" rx="3" fill="#292929"/><rect x="73" y="39" width="8" height="17" rx="3" fill="#292929"/>` : "";
+
+  return `<div class="svg-avatar${sizeClass}" data-mbti="${mbti}">
+    <svg viewBox="0 0 110 170" aria-label="${mbti} character">
+      <circle class="av-skin" cx="55" cy="${headY+5}" r="22"/>
+      ${avatarHair(mbti,d.hair)}
+      ${avatarFace(d.face)}
+      ${glasses}${headset}
+      <path d="M38 ${bodyY}q17-9 34 0l4 45H34z" fill="${d.shirt}" class="av-outline"/>
+      ${arms}
+      ${legs}
+      ${avatarProp(d.prop)}
+    </svg>
+  </div>`;
 }
 
 function useSvgPilotAvatar(){
-  const mbti=state.owner?.mbti;
-  if(!["ESFP","INFP","ENTP","INTJ"].includes(mbti)) return false;
+  const mbti=state.owner?.mbti||"ISTP";
   const card=document.getElementById("profileAvatarCard");
   if(!card) return false;
   card.innerHTML=svgAvatar(mbti);
@@ -3019,17 +3075,8 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
   const avatars=document.getElementById("visitorAvatars");
   if(avatars){
     avatars.innerHTML=friends.map(f=>`
-      <div class="visitor-character" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
-        <div class="pixel-person mbti-${f.mbti} pose-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).pose} hook-${(MBTI_CHARACTER_STYLE[f.mbti]||MBTI_CHARACTER_STYLE.ISTP).hook}">
-          <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-          <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-          <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-          <div class="pixel-hair"></div><div class="pixel-head"></div>
-          <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-          <div class="pixel-body"></div>
-          <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-          <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-        </div>
+      <div class="visitor-character visitor-svg" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
+        ${svgAvatar(f.mbti,true)}
         <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`).join("");
   }
@@ -3491,18 +3538,7 @@ function showVisitorStayedCard(name,mbti){
   const copy=document.getElementById("visitorStayedText");
   if(!card || !stage) return;
 
-  const cfg=MBTI_CHARACTER_STYLE[mbti]||MBTI_CHARACTER_STYLE.ISTP;
-  stage.innerHTML=`
-    <div class="pixel-person mbti-${mbti} pose-${cfg.pose} hook-${cfg.hook}">
-      <i class="prop prop-headset"></i><i class="prop prop-book"></i>
-      <i class="prop prop-pointer"></i><i class="prop prop-board"></i>
-      <i class="prop prop-tablet"></i><i class="prop prop-phone"></i><i class="prop prop-glasses"></i>
-      <div class="pixel-hair"></div><div class="pixel-head"></div>
-      <div class="pixel-eye eye1"></div><div class="pixel-eye eye2"></div>
-      <div class="pixel-body"></div>
-      <div class="pixel-leg leg1"></div><div class="pixel-leg leg2"></div>
-      <div class="pixel-shoe shoe1"></div><div class="pixel-shoe shoe2"></div>
-    </div>`;
+  stage.innerHTML=svgAvatar(mbti);
   if(title) title.textContent=`${name} 캐릭터가 ${state.owner.name}의 ROOM에 남았어요 ✦`;
   if(copy) copy.textContent="방 주인이 다시 들어오면 내 캐릭터와 궁합 기록을 볼 수 있어요.";
   card.style.display="block";
@@ -3852,4 +3888,63 @@ body.visitor-mode.friend-room-preview .room-shell .owner-social-summary.owner-on
 body.visitor-mode.friend-room-preview .status-editor.owner-only,
 body.visitor-mode.friend-room-preview #realSaveCard.owner-only{display:none!important}
 body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
+</style>
+
+<style>
+/* V5.7 — complete 16 MBTI character system */
+.svg-avatar{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+}
+.svg-avatar svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+.svg-avatar .av-skin{fill:#efb287;stroke:#181818;stroke-width:2.4;stroke-linejoin:round}
+.svg-avatar .av-outline{stroke:#181818;stroke-width:2.4;stroke-linejoin:round}
+.svg-avatar .av-line{fill:none;stroke:#181818;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.svg-avatar text{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111}
+
+#profileAvatarCard .svg-avatar{
+  width:110px;
+  height:170px;
+  margin:auto;
+}
+
+.visitor-character.visitor-svg{
+  width:46px!important;
+  height:56px!important;
+}
+.visitor-character.visitor-svg .svg-avatar{
+  position:absolute;
+  left:50%;
+  bottom:7px;
+  width:44px;
+  height:54px;
+  transform:translateX(-50%);
+}
+.visitor-character.visitor-svg .visitor-name{
+  z-index:5;
+}
+.visitor-svg .svg-avatar.compact svg{
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.08));
+}
+
+#visitorStayedCharacter .svg-avatar{
+  width:58px;
+  height:78px;
+  margin:auto;
+}
+
+/* Small individual motion signatures */
+.svg-avatar[data-mbti="ENFP"]{animation:avatarBounce 2.2s ease-in-out infinite}
+.svg-avatar[data-mbti="ESFP"]{animation:avatarTilt 2.6s ease-in-out infinite}
+.svg-avatar[data-mbti="ENTP"]{animation:avatarTilt 3s ease-in-out infinite}
+.svg-avatar[data-mbti="ISTP"]{transform:translateY(3px)}
+.svg-avatar[data-mbti="INFP"],.svg-avatar[data-mbti="ISFP"]{transform:translateY(4px)}
+@keyframes avatarBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes avatarTilt{0%,100%{transform:rotate(0)}50%{transform:rotate(-2deg)}}
 </style>
