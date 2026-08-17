@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.7</title>
+<title>ROOM.zip V9.9</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -262,7 +262,7 @@ input:focus,select:focus{border-color:#111}
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
   background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-size:12px;
-  opacity:0;pointer-events:none;transition:.2s;z-index:100
+  opacity:0;pointer-events:auto;transition:.2s;z-index:100
 }
 .toast.show{opacity:1}
 .small-link{font-size:11px;color:#555;text-align:center;margin-top:12px}
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.7</div>
+    <div class="micro">V9.9</div>
   </div>
 
   <div class="hero-blob">
@@ -1402,7 +1402,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="room-type-keywords" id="roomTypeKeywords">마이웨이 · 관찰형 · 은근다정</div>
 </div>
 
-<div class="collection-row owner-only" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
+<div class="collection-row" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
   <div class="collection-row-left">
     <span class="collection-row-title">★ COLLECTION CARD</span>
     <span class="collection-row-count" id="collectionCount">0 / 16 TYPES</span>
@@ -3313,7 +3313,7 @@ function renderRoomVisitors(){
            data-friend-index="${i}"
            onclick="openFriendChemistry(${i})"
            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFriendChemistry(${i});}">
-        ${i===0 ? '<div class="friend-tap-bubble" aria-hidden="true">…</div>' : ''}
+        ${i===0 ? '<button type="button" class="friend-tap-bubble" aria-label="이 친구와의 궁합 보기" onclick="event.stopPropagation();openFriendChemistry(0)">…</button>' : ''}
         ${svgAvatar(f.mbti,true)}
         <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`;
@@ -5056,6 +5056,9 @@ body.collection-open{
 /* V9.7 — one subtle tap hint on the most recent friend */
 .crowd-friend{overflow:visible!important}
 .friend-tap-bubble{
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
   position:absolute;
   left:50%;
   top:-8px;
