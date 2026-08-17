@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V10.0</title>
+<title>ROOM.zip V10.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V10.0</div>
+    <div class="micro">V10.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1711,8 +1711,16 @@ function getEmailAuthFields(){
   };
 }
 function openExistingLogin(){
+  // A shared-room visit can leave transient overlays/state behind after HOME.
+  // Clear them before opening login so the button always works on mobile/Kakao WebView.
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  document.body.style.overflow="";
+  document.getElementById("friendChemBackdrop")?.classList.remove("show");
+  document.getElementById("collectionBackdrop")?.classList.remove("show");
+
   const modal=document.getElementById("loginModal");
   if(!modal) return;
+  modal.style.pointerEvents="auto";
   const title=document.getElementById("loginModalTitle");
   const desc=document.getElementById("loginModalDesc");
   if(title) title.innerHTML="이미 계정이 있나요?<br>로그인해 주세요.";
@@ -1720,6 +1728,15 @@ function openExistingLogin(){
   setEmailAuthMsg("");
   modal.classList.add("show");
 }
+
+document.addEventListener("click",event=>{
+  const btn=event.target?.closest?.(".existing-login-link button");
+  if(!btn) return;
+  event.preventDefault();
+  event.stopPropagation();
+  openExistingLogin();
+},{capture:true});
+
 async function signUpWithEmail(){
   const {email,password}=getEmailAuthFields();
   if(!email){setEmailAuthMsg("이메일을 입력해 주세요.",true);return}
@@ -1929,6 +1946,10 @@ function showCreateHome(){
   currentRemoteRoom=null;
   VIEW_MODE="owner";
   document.body.classList.remove("visitor-mode","chemistry-done");
+  document.body.style.overflow="";
+  document.getElementById("friendChemBackdrop")?.classList.remove("show");
+  document.getElementById("collectionBackdrop")?.classList.remove("show");
+  document.getElementById("loginModal")?.classList.remove("show");
   go("landing");
   syncRealAuthUI();
   window.scrollTo(0,0);
@@ -5114,5 +5135,24 @@ body.collection-open{
   pointer-events:auto!important;
   touch-action:manipulation!important;
   z-index:999!important;
+}
+</style>
+
+<style>
+/* V10.1 — shared ROOM → HOME → create → existing login reliability */
+body:not(.visitor-mode) #visitorFlow{
+  pointer-events:none!important;
+}
+body:not(.visitor-mode) #loginModal.show{
+  display:flex!important;
+  pointer-events:auto!important;
+  z-index:12000!important;
+}
+.existing-login-link,
+.existing-login-link button{
+  position:relative;
+  z-index:20;
+  pointer-events:auto!important;
+  touch-action:manipulation;
 }
 </style>
