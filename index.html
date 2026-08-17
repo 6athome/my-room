@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.3</title>
+<title>MY ROOM V6.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.3</div>
+    <div class="micro">V6.4</div>
   </div>
 
   <div class="hero-blob">
@@ -2868,9 +2868,10 @@ function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
   const n=Number(count||0);
-  const extra=n>24 ? Math.ceil((n-24)/12)*38 : 0;
+  const rows=Math.max(1,Math.ceil(n/8));
+  const extra=Math.max(0,rows-5)*42;
   scene.style.minHeight=(390+extra)+"px";
-  scene.style.setProperty("--crowd-count",String(n));
+  scene.style.setProperty("--crowd-rows",String(rows));
 }
 
 function renderRoomVisitors(){
@@ -2878,13 +2879,18 @@ function renderRoomVisitors(){
   if(!avatars) return;
   const friends=(roomSocialSnapshot.recent_friends||[]);
   resizeRoomForVisitorCrowd(friends.length);
-  avatars.innerHTML=friends.map((f,i)=>`
-    <div class="visitor-character visitor-svg crowd-friend"
-         style="--friend-index:${i};"
-         title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
-      ${svgAvatar(f.mbti,true)}
-      <div class="visitor-name">${escapeHtml(f.name)}</div>
-    </div>`).join("");
+  avatars.innerHTML=friends.map((f,i)=>{
+    const cols=8;
+    const row=Math.floor(i/cols);
+    const col=i%cols;
+    return `
+      <div class="visitor-character visitor-svg crowd-friend"
+           style="--crowd-row:${row};--crowd-col:${col};"
+           title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
+        ${svgAvatar(f.mbti,true)}
+        <div class="visitor-name">${escapeHtml(f.name)}</div>
+      </div>`;
+  }).join("");
 }
 
 function getRecentFriends(){
@@ -4267,4 +4273,122 @@ body[data-room-time="night"] .sky-star{display:block}
 
 /* The decorative window stays behind everyone */
 .room-atmosphere{z-index:0!important}
+</style>
+
+<style>
+/* V6.4 — friends grow upward from the floor; room copy stays visually clean */
+
+/* Remove descriptive MBTI copy from the ROOM scene itself */
+#mbtiOneLiner,
+#mbtiTraitChips,
+#detailA,
+#detailB,
+#detailC{
+  display:none!important;
+}
+
+/* Give the room more breathing room now that copy is removed */
+.room-scene{
+  position:relative!important;
+  min-height:390px;
+  overflow:hidden!important;
+}
+
+/* Owner stays the visual center and always sits above friends */
+#profileAvatarCard{
+  position:relative!important;
+  z-index:40!important;
+}
+#profileAvatarCard .svg-avatar,
+#profileAvatarCard .pixel-person{
+  position:relative!important;
+  z-index:41!important;
+}
+
+/* Friends occupy the floor only, then build upward row by row */
+#visitorAvatars{
+  position:absolute!important;
+  left:4px!important;
+  right:4px!important;
+  top:auto!important;
+  bottom:8px!important;
+  height:300px!important;
+  display:block!important;
+  overflow:visible!important;
+  z-index:12!important;
+  pointer-events:none;
+}
+
+#visitorAvatars .crowd-friend{
+  position:absolute!important;
+  width:46px!important;
+  height:58px!important;
+  left:calc((var(--crowd-col) + .5) * 12.5% - 23px)!important;
+  bottom:calc(var(--crowd-row) * 43px)!important;
+  margin:0!important;
+  z-index:calc(12 + var(--crowd-row))!important;
+  transform:none!important;
+  opacity:1!important;
+}
+
+/* Small natural staggering so rows don't look like a spreadsheet */
+#visitorAvatars .crowd-friend:nth-child(odd){
+  margin-left:3px!important;
+}
+#visitorAvatars .crowd-friend:nth-child(3n){
+  transform:translateY(2px)!important;
+}
+#visitorAvatars .crowd-friend:nth-child(5n){
+  transform:translateY(-2px)!important;
+}
+
+/* Friend avatar itself */
+#visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  bottom:5px!important;
+  width:44px!important;
+  height:54px!important;
+  transform:translateX(-50%)!important;
+}
+
+/* Slight overlap makes a crowded room feel intentional */
+#visitorAvatars .crowd-friend:nth-child(n+33){
+  transform:scale(.94)!important;
+}
+#visitorAvatars .crowd-friend:nth-child(n+65){
+  transform:scale(.88)!important;
+}
+
+/* Keep names legible but unobtrusive */
+#visitorAvatars .visitor-name{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-1px!important;
+  transform:translateX(-50%)!important;
+  width:44px!important;
+  max-width:44px!important;
+  padding:1px 2px!important;
+  font-size:6.5px!important;
+  line-height:1!important;
+  text-align:center!important;
+  background:rgba(255,255,255,.82)!important;
+  border-radius:4px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  z-index:4!important;
+}
+
+/* The plant/window remain part of the background, never competing with people */
+.room-atmosphere{z-index:0!important}
+
+/* Ensure room header/status stays above decorative/friend layers */
+.room-status,
+#roomStatusBubble,
+#roomVisitMeta,
+#roomVisitMetaTop{
+  position:relative!important;
+  z-index:50!important;
+}
 </style>
