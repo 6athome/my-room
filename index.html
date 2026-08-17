@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.7</title>
+<title>MY ROOM V6.8</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.7</div>
+    <div class="micro">V6.8</div>
   </div>
 
   <div class="hero-blob">
@@ -1314,36 +1314,14 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     </div>
 
     <div class="room-scene" id="roomScene">
-<div class="room-v66-decor" aria-hidden="true">
-  <div class="v66-window">
-    <div class="v66-curtain left"></div>
-    <div class="v66-curtain right"></div>
-    <div class="v66-sky"></div>
-    <div class="v66-window-cross v"></div>
-    <div class="v66-window-cross h"></div>
-    <div class="v66-window-plant">
-      <span class="leaf a"></span><span class="leaf b"></span><span class="leaf c"></span>
-      <span class="stem"></span><span class="pot"></span>
-    </div>
-    <div class="v66-photo"></div>
-    <div class="v66-sill"></div>
-  </div>
 
-  <div class="v66-shelf">
-    <div class="v66-frame">♥</div>
-    <div class="v66-radio"></div>
-    <div class="v66-cat">•ᴥ•</div>
-    <div class="v66-books"></div>
-  </div>
-
-  <div class="v66-hanging-plant">
-    <span class="rope"></span><span class="basket"></span>
-    <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span>
-  </div>
-
-  <div class="v66-wall-art art-a">KEEP<br>GOING<br>♥</div>
-  <div class="v66-wall-art art-b">✦</div>
+<div class="room-basic-window" aria-hidden="true">
+  <div class="basic-window-sky"></div>
+  <i class="basic-window-v"></i>
+  <i class="basic-window-h"></i>
+  <div class="basic-window-sill"></div>
 </div>
+
 
 
 <div class="mbti-room-details" id="mbtiRoomDetails">
@@ -2877,10 +2855,9 @@ function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
 
-  const rows=Math.max(1,Math.ceil(Number(count||0)/8));
-  const extra=Math.max(0,rows-7)*36;
-  scene.style.minHeight=(520+extra)+"px";
-  scene.style.setProperty("--crowd-rows",String(rows));
+  const n=Number(count||0);
+  const rows=n<=8 ? 1 : 1+Math.ceil((n-8)/10);
+  scene.style.setProperty("--crowd-rows",String(Math.max(1,rows)));
 }
 
 function renderRoomVisitors(){
@@ -2890,13 +2867,20 @@ function renderRoomVisitors(){
   const friends=(roomSocialSnapshot.recent_friends||[]);
   resizeRoomForVisitorCrowd(friends.length);
 
-  // Eight usable positions per row: 4 left + 4 right.
-  // The middle stays permanently clear for the owner's character.
-  const slots=[0,1,2,3,6,7,8,9];
-
   avatars.innerHTML=friends.map((f,i)=>{
-    const row=Math.floor(i/8);
-    const col=slots[i%8];
+    let row, col;
+
+    if(i < 8){
+      // Owner row: preserve an empty center zone.
+      const ownerRowSlots=[0,1,2,3,6,7,8,9];
+      row=0;
+      col=ownerRowSlots[i];
+    }else{
+      // All lower rows run continuously across the full width.
+      const j=i-8;
+      row=1+Math.floor(j/10);
+      col=j%10;
+    }
 
     return `
       <div class="visitor-character visitor-svg crowd-friend"
@@ -4811,4 +4795,195 @@ body[data-room-time="night"] .v66-sky{background:linear-gradient(#26334d 0 60%,#
 .room-v66-decor{z-index:1!important;}
 #visitorAvatars{z-index:20!important;}
 .owner-avatar-stage{z-index:70!important;}
+</style>
+
+<style>
+/* V6.8 — square room, clean basic window, floor-first crowd */
+
+/* Square mini-home */
+.room-scene{
+  width:100%!important;
+  aspect-ratio:1 / 1!important;
+  min-height:0!important;
+  height:auto!important;
+  position:relative!important;
+  overflow:hidden!important;
+  background:
+    linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),
+    repeating-linear-gradient(90deg,#efe9df 0,#efe9df 30px,#e7e0d6 31px,#efe9df 32px)!important;
+  border-bottom:18px solid #9b714e!important;
+}
+
+/* Remove every decorative element the user asked to delete */
+.room-v66-decor,
+.v66-shelf,
+.v66-hanging-plant,
+.v66-wall-art,
+.v66-window-plant,
+.room-plant,
+.room-bed,
+.room-rug,
+.room-atmosphere,
+.room-scene > .room-window{
+  display:none!important;
+}
+
+/* Simple original-style window */
+.room-basic-window{
+  position:absolute!important;
+  left:16px!important;
+  top:18px!important;
+  width:92px!important;
+  height:78px!important;
+  border:3px solid #42392f!important;
+  background:#cfe7f2!important;
+  z-index:1!important;
+  pointer-events:none!important;
+}
+.basic-window-sky{
+  position:absolute;inset:0;
+  background:#cfe7f2;
+}
+body[data-room-time="sunset"] .basic-window-sky{
+  background:linear-gradient(#efb6a5,#f4d5a8);
+}
+body[data-room-time="night"] .basic-window-sky{
+  background:#29354f;
+}
+.basic-window-v{
+  position:absolute;left:50%;top:0;bottom:0;width:2px;background:#42392f;transform:translateX(-50%);
+}
+.basic-window-h{
+  position:absolute;left:0;right:0;top:50%;height:2px;background:#42392f;transform:translateY(-50%);
+}
+.basic-window-sill{
+  position:absolute;left:-6px;right:-6px;bottom:-7px;height:5px;background:#8a674c;border:2px solid #42392f;
+}
+
+/* Remove right-side pink decor / KEEP GOING card completely */
+.v66-wall-art.art-a,
+.v66-wall-art.art-b{
+  display:none!important;
+}
+
+/* Status sits away from the window */
+#roomStatusBubble{
+  position:absolute!important;
+  top:18px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  z-index:90!important;
+  max-width:150px!important;
+  white-space:nowrap!important;
+}
+
+/* Owner stays centered and never overlaps the crowd */
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  top:34%!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:118px!important;
+  height:178px!important;
+  z-index:80!important;
+}
+#profileAvatarCard{
+  width:118px!important;
+  height:178px!important;
+}
+#profileAvatarCard .svg-avatar{
+  width:110px!important;
+  height:170px!important;
+}
+
+/* Floor */
+.room-scene:after{
+  content:"";
+  position:absolute!important;
+  left:0!important;right:0!important;bottom:0!important;
+  height:18px!important;
+  background:#9b714e!important;
+  border-top:2px solid #745139!important;
+  z-index:10!important;
+}
+
+/* Crowd layer fills the lower half of the square room */
+#visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:52%!important;
+  display:block!important;
+  overflow:visible!important;
+  z-index:20!important;
+  pointer-events:none!important;
+}
+
+/* Reset all previous crowd positioning */
+#visitorAvatars .crowd-friend,
+#visitorAvatars .crowd-friend:nth-child(n){
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
+  width:40px!important;
+  height:52px!important;
+  margin:0!important;
+  transform:none!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+/* Floor row is the FRONT row.
+   Higher rows are progressively behind and higher on screen. */
+#visitorAvatars .crowd-friend{
+  bottom:calc(var(--crowd-row) * 34px)!important;
+  z-index:calc(60 - var(--crowd-row))!important;
+}
+
+/* Row 0 in front, row 1 behind it, etc.
+   Vertical gap is enough so back-row bodies do not cover front-row faces. */
+#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{z-index:60!important;}
+#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{z-index:50!important;}
+#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{z-index:40!important;}
+#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{z-index:30!important;}
+#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{z-index:25!important;}
+#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{z-index:22!important;}
+
+/* Friend character */
+#visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  bottom:4px!important;
+  width:40px!important;
+  height:50px!important;
+  transform:translateX(-50%)!important;
+}
+
+/* Tiny labels */
+#visitorAvatars .visitor-name{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-2px!important;
+  width:38px!important;
+  max-width:38px!important;
+  transform:translateX(-50%)!important;
+  padding:1px!important;
+  font-size:5.8px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-align:center!important;
+  background:rgba(255,255,255,.84)!important;
+  border-radius:4px!important;
+}
+
+/* Layer ordering */
+.room-basic-window{z-index:1!important;}
+#visitorAvatars{z-index:20!important;}
+.owner-avatar-stage{z-index:80!important;}
 </style>
