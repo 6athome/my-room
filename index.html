@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V8.1</title>
+<title>MY ROOM V8.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1222,7 +1222,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V8.1</div>
+    <div class="micro">V8.2</div>
   </div>
 
   <div class="hero-blob">
@@ -1758,6 +1758,7 @@ function closeKakaoModal(){
 
 let loggedInOwnRoom=null;
 let routeLock=false;
+let sharedRoomOpenPromise=null;
 
 async function fetchOwnRoom(){
   if(!currentAuthUser) return null;
@@ -1916,6 +1917,19 @@ function getSharedRoomSlug(){
 }
 
 async function openSharedRoomFromUrl(){
+  if(sharedRoomOpenPromise) return sharedRoomOpenPromise;
+
+  sharedRoomOpenPromise=openSharedRoomFromUrlImpl();
+  try{
+    return await sharedRoomOpenPromise;
+  }finally{
+    // Let a genuinely later user action reopen the shared room,
+    // while coalescing auth/boot calls that happen at the same time.
+    setTimeout(()=>{ sharedRoomOpenPromise=null; },0);
+  }
+}
+
+async function openSharedRoomFromUrlImpl(){
   const sharedSlug=getSharedRoomSlug();
   if(!sharedSlug) return false;
 
@@ -2250,6 +2264,13 @@ async function loadMyRemoteRoom(){
 }
 
 
+
+// One physical page opening must create at most one visit per ROOM.
+// Supabase auth callbacks can reopen the same shared ROOM several times
+// (INITIAL_SESSION / SIGNED_IN / TOKEN_REFRESHED), especially in Kakao WebView.
+const recordedVisitRoomsThisPage=new Set();
+const recordingVisitRoomsThisPage=new Set();
+
 function getVisitorToken(){
   const key="myroom_visitor_token_v1";
   let token=null;
@@ -2263,21 +2284,51 @@ function getVisitorToken(){
 
 async function recordPublicRoomVisit(room){
   if(!room?.id) return;
-  // Do not count the owner viewing their own room.
-  if(currentAuthUser && room.owner_id===currentAuthUser.id) return;
+
+  // The owner should not increase their own visit count,
+  // but MUST still load the current TODAY/TOTAL values.
+  if(currentAuthUser && room.owner_id===currentAuthUser.id){
+    await refreshVisitCounts(room.id);
+    return;
+  }
+
+  // Auth/session callbacks may enter the same shared room repeatedly
+  // during a single page load. Count only the first actual page entry.
+  if(recordedVisitRoomsThisPage.has(room.id)){
+    await refreshVisitCounts(room.id);
+    return;
+  }
+
+  // Also protect concurrent duplicate calls before the first RPC finishes.
+  if(recordingVisitRoomsThisPage.has(room.id)){
+    // A sibling call is already recording this exact visit.
+    // It will refresh the counter when finished.
+    return;
+  }
+
+  recordingVisitRoomsThisPage.add(room.id);
+  // Reserve immediately so another auth callback cannot also record.
+  recordedVisitRoomsThisPage.add(room.id);
 
   try{
     const token=getVisitorToken();
-    await sb.rpc("myroom_record_visit",{target_room:room.id,token});
+    const {error}=await sb.rpc("myroom_record_visit",{target_room:room.id,token});
+    if(error) throw error;
   }catch(e){
     console.warn("visit record failed",e);
+    // If the RPC genuinely failed, allow a later retry in this page.
+    recordedVisitRoomsThisPage.delete(room.id);
+  }finally{
+    recordingVisitRoomsThisPage.delete(room.id);
   }
+
   await refreshVisitCounts(room.id);
 }
 
 async function refreshVisitCounts(roomId){
-  const meta=document.getElementById("roomVisitMeta");
-  if(!roomId || !meta) return;
+  // The top counter exists in both owner and visitor views.
+  // Never depend on the hidden inner mini-home counter being visible/present.
+  if(!roomId) return;
   try{
     const {data,error}=await sb.rpc("myroom_room_visit_counts",{target_room:roomId});
     if(error) throw error;
