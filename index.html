@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.0</title>
+<title>MY ROOM V6.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.0</div>
+    <div class="micro">V6.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1323,7 +1323,26 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
       <div class="room-window"></div>
       <div class="room-bed"></div>
-      <div class="room-rug"></div>
+      <div class="room-rug">
+  <div class="room-atmosphere" aria-hidden="true">
+    <div class="room-window">
+      <div class="window-sky">
+        <span class="sky-sun"></span>
+        <span class="sky-cloud cloud-a"></span>
+        <span class="sky-cloud cloud-b"></span>
+        <span class="sky-star star-a">✦</span>
+        <span class="sky-star star-b">·</span>
+        <span class="sky-star star-c">✦</span>
+      </div>
+      <i class="window-v"></i><i class="window-h"></i>
+      <div class="window-sill"></div>
+    </div>
+    <div class="room-plant">
+      <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span>
+      <span class="stem"></span><span class="pot"></span>
+    </div>
+  </div>
+</div>
       <div class="status-bubble" id="roomStatusBubble">TODAY · 그냥 살아있음</div>
 
       <div class="owner-avatar-stage">
@@ -3176,8 +3195,20 @@ function resetRoomRuntimeForNewOwner(){
   updateRoomCounters();
 }
 
+
+function applyRoomAtmosphere(){
+  const hour=new Date().getHours();
+  const phase=hour>=6&&hour<17 ? "day" : (hour>=17&&hour<20 ? "sunset" : "night");
+  document.body.dataset.roomTime=phase;
+
+  const mbti=state.owner?.mbti||"ISTP";
+  const group=mbti.includes("N") ? (mbti.includes("T") ? "nt" : "nf") : (mbti.includes("J") ? "sj" : "sp");
+  document.body.dataset.roomGroup=group;
+}
+
 function renderRoom(){
   const o=state.owner;
+  applyRoomAtmosphere();
   refreshAvatars();
   applyRoomSkin();
   applyCurrentOwnerContent();
@@ -4056,4 +4087,52 @@ body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
   font-size:10px!important;
   line-height:1.4!important;
 }
+</style>
+
+<style>
+/* V6.1 — room atmosphere. Decorative only; no interaction/flow changes. */
+.room-atmosphere{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;border-radius:inherit}
+.room-window{
+  position:absolute;right:12px;top:12px;width:68px;height:55px;
+  border:3px solid #2a2926;background:#dcecff;
+  box-shadow:3px 3px 0 rgba(0,0,0,.12);
+}
+.window-sky{position:absolute;inset:0;overflow:hidden;background:#cfe7f2;transition:background .35s ease}
+.window-v{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#2a2926;transform:translateX(-50%)}
+.window-h{position:absolute;left:0;right:0;top:50%;height:2px;background:#2a2926;transform:translateY(-50%)}
+.window-sill{position:absolute;left:-6px;right:-6px;bottom:-7px;height:5px;background:#e7dfcf;border:2px solid #2a2926}
+.sky-sun{position:absolute;width:12px;height:12px;border-radius:50%;right:8px;top:7px;background:#fff1a5;border:1.5px solid #333}
+.sky-cloud{position:absolute;width:18px;height:5px;border-radius:8px;background:rgba(255,255,255,.82)}
+.cloud-a{left:5px;top:12px}.cloud-b{right:5px;bottom:9px;width:13px}
+.sky-star{display:none;position:absolute;color:#fff;font-size:8px}.star-a{left:9px;top:8px}.star-b{left:26px;top:16px}.star-c{right:9px;bottom:7px}
+
+.room-plant{position:absolute;right:91px;top:36px;width:29px;height:43px}
+.room-plant .stem{position:absolute;width:2px;height:21px;left:14px;top:8px;background:#587354}
+.room-plant .leaf{position:absolute;width:12px;height:7px;background:#78936c;border:1.5px solid #2d342b;border-radius:80% 15% 80% 15%}
+.room-plant .l1{left:4px;top:8px;transform:rotate(20deg)}
+.room-plant .l2{left:14px;top:13px;transform:scaleX(-1) rotate(20deg)}
+.room-plant .l3{left:5px;top:18px;transform:rotate(12deg)}
+.room-plant .pot{position:absolute;left:8px;bottom:0;width:15px;height:14px;background:#b96f58;border:2px solid #333;clip-path:polygon(0 0,100% 0,82% 100%,18% 100%)}
+
+/* Four restrained MBTI room palettes */
+body[data-room-group="nt"] .room-scene,
+body[data-room-group="nt"] .mini-room{background-color:#e5e7ef!important}
+body[data-room-group="nf"] .room-scene,
+body[data-room-group="nf"] .mini-room{background-color:#eee5ed!important}
+body[data-room-group="sj"] .room-scene,
+body[data-room-group="sj"] .mini-room{background-color:#e8e7d9!important}
+body[data-room-group="sp"] .room-scene,
+body[data-room-group="sp"] .mini-room{background-color:#eee2d5!important}
+
+/* Window follows the visitor's local time */
+body[data-room-time="sunset"] .window-sky{background:linear-gradient(#efb6a5,#f4d5a8)}
+body[data-room-time="sunset"] .sky-sun{background:#f49a6c;top:24px}
+body[data-room-time="night"] .window-sky{background:#29354f}
+body[data-room-time="night"] .sky-sun{width:10px;height:10px;background:#f4edcf;right:9px;top:8px}
+body[data-room-time="night"] .sky-cloud{display:none}
+body[data-room-time="night"] .sky-star{display:block}
+
+/* Keep actual room content and visitors in front of decoration. */
+#visitorAvatars{z-index:3!important}
+.room-atmosphere ~ *{position:relative;z-index:1}
 </style>
