@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V5.2</title>
+<title>MY ROOM V5.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1293,58 +1293,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
   
 
-<div id="visitorFlow" class="visitor-only">
-  <div class="visitor-entry-card" id="visitorEntryCard">
-    <div class="micro">OUR CHEMISTRY</div>
-  <h3>이제 내 ROOM도 만들어볼까?</h3>
-  <p>방문한 친구들이 캐릭터로 남고, TODAY · TOTAL · FRIENDS가 쌓이는 내 공간을 만들 수 있어요.</p>
-  <button class="primary" id="visitorPrimaryCta" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
-</div>
-
-    <h3><span id="visitorOwnerName">JISU</span>랑 나는 몇 점?</h3>
-    <div class="visitor-fields">
-      <input id="visitorNameInput" placeholder="내 이름" maxlength="40" autocomplete="name">
-      <input id="visitorBirthInput" type="date" aria-label="내 생년월일">
-      <select id="visitorMbtiInput">
-        <option value="">내 MBTI</option>
-        <option>INTJ</option><option>INTP</option><option>ENTJ</option><option>ENTP</option>
-        <option>INFJ</option><option>INFP</option><option>ENFJ</option><option>ENFP</option>
-        <option>ISTJ</option><option>ISFJ</option><option>ESTJ</option><option>ESFJ</option>
-        <option>ISTP</option><option>ISFP</option><option>ESTP</option><option>ESFP</option>
-      </select>
-    </div>
-    <div class="participation-note">생년월일은 궁합 계산에만 사용되고 저장되지 않아요.</div>
-    <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
-  </div>
-
-  <div class="visitor-result-card" id="visitorResultCard" style="display:none">
-    <div class="micro">OUR CHEMISTRY</div>
-    <div class="visitor-score" id="visitorScore">94%</div>
-    <div class="visitor-relation" id="visitorRelation">대화가 안 끝나는 친구</div>
-    <p id="visitorResultText"></p>
-
-<div class="visitor-rank-box" id="visitorRankBox" style="display:none">
-  <div class="visitor-rank-main" id="visitorRankMain">현재 1위!</div>
-  <div class="visitor-rank-list" id="visitorRankList"></div>
-</div>
-
-
-
-    <div class="visitor-stayed-card" id="visitorStayedCard" style="display:none">
-      <div class="micro">I'M IN THE ROOM ✦</div>
-      <div class="visitor-stayed-row">
-        <div class="visitor-character visitor-stayed-character" id="visitorStayedCharacter"></div>
-        <div>
-          <b id="visitorStayedTitle">내 캐릭터가 ROOM에 남았어요.</b>
-          <p id="visitorStayedText">다음에 다시 와도 이 ROOM에서 만날 수 있어요.</p>
-        </div>
-      </div>
-    </div>
-    <button class="visitor-extra-btn" onclick="downloadChemistryStoryCard()">결과 카드 저장</button>
-    
-  </div>
-</div>
-
+<div id="visitorFlow" class="visitor-only"></div>
 
 <div class="room-shell owner-only">
 
@@ -1460,7 +1409,12 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   
 </div>
 
-  <p class="small-link" id="fakeUrl">myroom.kr/jisu</p>
+  <div id="fakeUrl" class="fake-url" style="display:none!important"></div>
+<div class="ready-share-actions">
+  <button class="ready-action ready-copy" onclick="copyRoomLink()"><b>링크 복사</b></button>
+  <button class="ready-action ready-invite" onclick="openShareInvite()"><b>친구 초대</b></button>
+  <button class="ready-action ready-story" onclick="shareStory()"><b>스토리 카드 저장</b></button>
+</div>
 </section>
 
 <!-- FRIEND -->
@@ -1560,7 +1514,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <div class="micro" style="color:#111"><span id="spRank">02 / 03</span> · 친구 케미 랭킹</div>
     </div>
     <div class="share-actions">
-      <button onclick="shareStory()">인스타 스토리용</button>
+      <button onclick="shareStory()" style="display:none!important">인스타 스토리용</button>
       <button onclick="shareKakao()">카톡으로 보내기</button>
       <button onclick="copyResult()">결과 링크 복사</button>
       <button onclick="go('create')">나도 ROOM 만들기</button>
@@ -1891,11 +1845,28 @@ function buildVisitorFlowMarkup(ownerName){
       <div class="participation-note">생년월일은 궁합 계산에만 사용되고 저장되지 않아요.</div>
       <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
     </div>
+
     <div class="visitor-result-card" id="visitorResultCard" style="display:none">
       <div class="micro">OUR CHEMISTRY</div>
-      <div class="visitor-score" id="visitorScore">94%</div>
+      <div class="visitor-score" id="visitorScore">--%</div>
       <div class="visitor-relation" id="visitorRelation"></div>
       <p id="visitorResultText"></p>
+
+      <div class="visitor-rank-box" id="visitorRankBox" style="display:none">
+        <div class="visitor-rank-main" id="visitorRankMain"></div>
+        <div class="visitor-rank-list" id="visitorRankList"></div>
+      </div>
+
+      <div class="visitor-stayed-card" id="visitorStayedCard" style="display:none">
+        <div class="micro">I'M IN THE ROOM ✦</div>
+        <div class="visitor-stayed-row">
+          <div class="visitor-character visitor-stayed-character" id="visitorStayedCharacter"></div>
+          <div>
+            <b id="visitorStayedTitle">내 캐릭터가 ROOM에 남았어요.</b>
+            <p id="visitorStayedText">방 주인이 다시 들어오면 내 캐릭터와 궁합 기록을 볼 수 있어요.</p>
+          </div>
+        </div>
+      </div>
 
       <button class="secondary" style="margin-top:12px" onclick="showFriendRoomAfterChemistry()">친구 ROOM 다시 보기 →</button>
       <button class="primary" id="visitorPrimaryCta" style="margin-top:8px" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
@@ -1960,7 +1931,7 @@ async function openSharedRoomFromUrl(){
 
     VIEW_MODE="visitor";
     document.body.classList.add("visitor-mode");
-    document.body.classList.remove("chemistry-done");
+    document.body.classList.remove("chemistry-done","friend-room-preview");
 
     renderRoom();
     go("room");
@@ -3400,6 +3371,7 @@ async function runVisitorChemistry(){
   }
   showVisitorStayedCard(name,mbti);
 
+  document.body.classList.remove("friend-room-preview");
   document.body.classList.add("chemistry-done");
   showPostChemistryRoomExperience(name);
 
@@ -3410,7 +3382,7 @@ async function runVisitorChemistry(){
     const r=Number(rankData.rank||1), total=Number(rankData.total||1);
     main.textContent=r===1 ? `🥇 현재 ${owner.name}의 친구 중 1위!` : `현재 ${total}명 중 ${r}위`;
     const top3=rankData.top3||[];
-    list.innerHTML=top3.map(x=>`<div>${x.rank}위 <b>${escapeHtml(x.name)}</b> · ${x.mbti} · ${x.score}%</div>`).join("");
+    list.innerHTML=top3.map((x,i)=>`<div>${Number(x.rank||i+1)}위 <b>${escapeHtml(x.name)}</b> · ${x.mbti} · ${x.score}%</div>`).join("");
     box.style.display="block";
   }
 
@@ -3436,25 +3408,16 @@ function spotlightVisitorCharacter(name){
 
 
 function showFriendRoomAfterChemistry(){
-  const result=document.getElementById("visitorResultCard");
-  const flow=document.getElementById("visitorFlow");
-  if(result) result.style.display="none";
-
-  // Keep visitor mode and the friend's currentRemoteRoom.
   VIEW_MODE="visitor";
-  document.body.classList.add("visitor-mode","chemistry-done");
+  document.body.classList.add("visitor-mode","chemistry-done","friend-room-preview");
 
   try{
     renderRoom();
     if(typeof renderRoomVisitors==="function") renderRoomVisitors();
-  }catch(e){
-    console.warn("friend room render failed",e);
-  }
+  }catch(e){ console.warn("friend room render failed",e); }
 
   const shell=document.querySelector(".room-shell");
-  if(shell){
-    shell.scrollIntoView({behavior:"smooth",block:"start"});
-  }
+  if(shell) shell.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function showPostChemistryRoomExperience(name){
@@ -3598,17 +3561,29 @@ async function copyText(text){
   try{await navigator.clipboard.writeText(text);toast("복사했어요")}
   catch(e){toast("이 환경에서는 복사 버튼만 시연돼요")}
 }
+function copyRoomLink(){
+  const url=publicRoomUrl();
+  if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
+  copyText(url);
+}
 function shareMyRoom(){
   const url=publicRoomUrl();
   if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
   copyText(`${state.owner.name}의 MY ROOM에 놀러와 ✦
 우리 궁합도 확인해봐 → ${url}`);
 }
-function openShareInvite(){
+async function openShareInvite(){
   const url=publicRoomUrl();
   if(!url){ toast("ROOM 저장 후 공유할 수 있어요"); return; }
-  copyText(`나랑 제일 잘 맞는 친구 찾는 중 👀
-너는 몇 점인지 해봐 → ${url}`);
+  const shareData={
+    title:`${state.owner.name}의 MY ROOM`,
+    text:"나랑 궁합 몇 점인지 해봐 👀",
+    url
+  };
+  try{
+    if(navigator.share){ await navigator.share(shareData); return; }
+  }catch(e){ if(e?.name==="AbortError") return; }
+  copyText(`나랑 궁합 몇 점인지 해봐 👀\n${url}`);
 }
 function shareStory(){
   const url=publicRoomUrl();
@@ -3716,4 +3691,39 @@ window.addEventListener("DOMContentLoaded",()=>{
 .visitor-result-card .secondary{
   background:#fff;
 }
+</style>
+
+<style>
+/* V5.3: compact sharing controls inside MY ROOM IS READY */
+#fakeUrl{display:none!important}
+.ready-share-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.ready-action{
+  min-height:52px;
+  border:1.5px solid #111;
+  border-radius:14px;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.ready-copy{background:#f5f3df}
+.ready-invite{background:#dfe98f}
+.ready-story{
+  grid-column:1/-1;
+  background:#f4c8d6;
+}
+</style>
+
+<style>
+/* V5.4 — one result card + real friend-room preview */
+body.visitor-mode.friend-room-preview .room-shell.owner-only{display:block!important}
+body.visitor-mode.friend-room-preview .room-shell .owner-social-summary.owner-only,
+body.visitor-mode.friend-room-preview .room-shell .status-editor.owner-only,
+body.visitor-mode.friend-room-preview .room-shell .save-card.owner-only{display:none!important}
+body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
 </style>
