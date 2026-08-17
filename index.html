@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.2</title>
+<title>MY ROOM V6.3</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.2</div>
+    <div class="micro">V6.3</div>
   </div>
 
   <div class="hero-blob">
@@ -2867,11 +2867,10 @@ function renderSocialSnapshot(){
 function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
-  const cols=8;
-  const rows=Math.max(1,Math.ceil(Number(count||0)/cols));
-  const base=360;
-  const extra=Math.max(0,rows-3)*50;
-  scene.style.minHeight=(base+extra)+"px";
+  const n=Number(count||0);
+  const extra=n>24 ? Math.ceil((n-24)/12)*38 : 0;
+  scene.style.minHeight=(390+extra)+"px";
+  scene.style.setProperty("--crowd-count",String(n));
 }
 
 function renderRoomVisitors(){
@@ -2879,8 +2878,10 @@ function renderRoomVisitors(){
   if(!avatars) return;
   const friends=(roomSocialSnapshot.recent_friends||[]);
   resizeRoomForVisitorCrowd(friends.length);
-  avatars.innerHTML=friends.map(f=>`
-    <div class="visitor-character visitor-svg" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
+  avatars.innerHTML=friends.map((f,i)=>`
+    <div class="visitor-character visitor-svg crowd-friend"
+         style="--friend-index:${i};"
+         title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
       ${svgAvatar(f.mbti,true)}
       <div class="visitor-name">${escapeHtml(f.name)}</div>
     </div>`).join("");
@@ -4147,4 +4148,123 @@ body[data-room-time="night"] .sky-star{display:block}
   top:76px!important;
   right:91px!important;
 }
+</style>
+
+<style>
+/* V6.3 — friends surround the owner and fill the whole room */
+.room-scene{
+  position:relative!important;
+  min-height:390px;
+  overflow:hidden!important;
+}
+
+/* Owner stays visually dominant, always above the crowd */
+#profileAvatarCard{
+  position:relative!important;
+  z-index:30!important;
+}
+#profileAvatarCard .svg-avatar,
+#profileAvatarCard .pixel-person{
+  position:relative!important;
+  z-index:31!important;
+  filter:drop-shadow(0 4px 4px rgba(0,0,0,.12));
+}
+
+/* Crowd becomes an absolute full-room layer rather than a bottom row */
+#visitorAvatars{
+  position:absolute!important;
+  inset:56px 4px 10px 4px!important;
+  display:block!important;
+  overflow:visible!important;
+  z-index:8!important;
+  pointer-events:none;
+}
+
+/* Base friend */
+#visitorAvatars .crowd-friend{
+  position:absolute!important;
+  width:46px!important;
+  height:58px!important;
+  margin:0!important;
+  z-index:8!important;
+  opacity:.98;
+  transform-origin:bottom center;
+}
+
+/* 24 repeating anchor positions. These intentionally fill walls/floor and surround the owner. */
+#visitorAvatars .crowd-friend:nth-child(24n+1){left:3%;top:7%}
+#visitorAvatars .crowd-friend:nth-child(24n+2){left:17%;top:5%}
+#visitorAvatars .crowd-friend:nth-child(24n+3){left:33%;top:9%}
+#visitorAvatars .crowd-friend:nth-child(24n+4){right:31%;top:8%}
+#visitorAvatars .crowd-friend:nth-child(24n+5){right:16%;top:4%}
+#visitorAvatars .crowd-friend:nth-child(24n+6){right:2%;top:10%}
+
+#visitorAvatars .crowd-friend:nth-child(24n+7){left:1%;top:31%}
+#visitorAvatars .crowd-friend:nth-child(24n+8){left:14%;top:35%}
+#visitorAvatars .crowd-friend:nth-child(24n+9){left:29%;top:30%}
+#visitorAvatars .crowd-friend:nth-child(24n+10){right:28%;top:33%}
+#visitorAvatars .crowd-friend:nth-child(24n+11){right:13%;top:29%}
+#visitorAvatars .crowd-friend:nth-child(24n+12){right:0%;top:37%}
+
+#visitorAvatars .crowd-friend:nth-child(24n+13){left:4%;top:58%}
+#visitorAvatars .crowd-friend:nth-child(24n+14){left:18%;top:61%}
+#visitorAvatars .crowd-friend:nth-child(24n+15){left:34%;top:57%}
+#visitorAvatars .crowd-friend:nth-child(24n+16){right:32%;top:60%}
+#visitorAvatars .crowd-friend:nth-child(24n+17){right:17%;top:56%}
+#visitorAvatars .crowd-friend:nth-child(24n+18){right:3%;top:63%}
+
+#visitorAvatars .crowd-friend:nth-child(24n+19){left:8%;bottom:0}
+#visitorAvatars .crowd-friend:nth-child(24n+20){left:23%;bottom:3%}
+#visitorAvatars .crowd-friend:nth-child(24n+21){left:38%;bottom:0}
+#visitorAvatars .crowd-friend:nth-child(24n+22){right:37%;bottom:2%}
+#visitorAvatars .crowd-friend:nth-child(24n+23){right:21%;bottom:0}
+#visitorAvatars .crowd-friend:nth-child(24n+24){right:6%;bottom:4%}
+
+/* When more than 24 friends exist, later layers are slightly smaller and shifted.
+   This lets 50–100 friends fill the room without hiding the owner. */
+#visitorAvatars .crowd-friend:nth-child(n+25):nth-child(-n+48){
+  transform:translate(7px,8px) scale(.88);
+  z-index:7!important;
+}
+#visitorAvatars .crowd-friend:nth-child(n+49):nth-child(-n+72){
+  transform:translate(-8px,14px) scale(.78);
+  z-index:6!important;
+}
+#visitorAvatars .crowd-friend:nth-child(n+73){
+  transform:translate(11px,20px) scale(.70);
+  z-index:5!important;
+  opacity:.92;
+}
+
+/* Keep name labels readable but tiny */
+#visitorAvatars .visitor-name{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-1px!important;
+  transform:translateX(-50%)!important;
+  max-width:44px!important;
+  width:44px!important;
+  font-size:6.5px!important;
+  line-height:1!important;
+  padding:1px 2px!important;
+  background:rgba(255,255,255,.80)!important;
+  border-radius:4px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+}
+
+/* Friends may overlap the owner, but only behind it */
+#visitorAvatars .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  bottom:5px!important;
+  width:44px!important;
+  height:54px!important;
+  transform:translateX(-50%)!important;
+}
+
+/* The decorative window stays behind everyone */
+.room-atmosphere{z-index:0!important}
 </style>
