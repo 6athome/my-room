@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.2</title>
+<title>ROOM.zip V9.3</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.2</div>
+    <div class="micro">V9.3</div>
   </div>
 
   <div class="hero-blob">
@@ -1738,40 +1738,53 @@ async function deleteMyAccount(){
     return;
   }
 
-  const first=confirm("정말 탈퇴할까요?\\n지금까지 만든 ROOM과 친구 기록이 모두 삭제돼요.");
-  if(!first) return;
-
-  const second=confirm("삭제된 ROOM과 기록은 복구할 수 없어요.\\n그래도 탈퇴할까요?");
-  if(!second) return;
+  if(!confirm("정말 탈퇴할까요?\n지금까지 만든 ROOM과 친구 기록이 모두 삭제돼요.")) return;
+  if(!confirm("삭제된 ROOM과 기록은 복구할 수 없어요.\n그래도 탈퇴할까요?")) return;
 
   const btn=document.querySelector(".account-delete-link");
   if(btn){ btn.disabled=true; btn.textContent="탈퇴 처리 중..."; }
 
   try{
+    // Refresh session once so the Edge Function always receives a valid current token.
+    const {data:refreshData,error:refreshError}=await sb.auth.refreshSession();
+    if(refreshError) console.warn("session refresh skipped",refreshError);
+
     const {data:{session},error:sessionError}=await sb.auth.getSession();
-    if(sessionError || !session?.access_token) throw sessionError || new Error("로그인 세션이 없습니다.");
-
-    const response=await fetch(SUPABASE_URL+"/functions/v1/delete-my-account",{
-      method:"POST",
-      headers:{
-        "Authorization":"Bearer "+session.access_token,
-        "apikey":SUPABASE_PUBLISHABLE_KEY,
-        "Content-Type":"application/json"
-      },
-      body:"{}"
-    });
-
-    if(!response.ok){
-      let detail="";
-      try{ detail=(await response.json())?.error||""; }catch(e){}
-      throw new Error(detail||"회원 탈퇴에 실패했습니다.");
+    if(sessionError || !session?.access_token){
+      throw sessionError || new Error("로그인 세션이 없습니다.");
     }
 
-    // Auth user is already deleted server-side. Clear browser-side session/state.
+    // Use the Supabase SDK rather than manually constructing the Functions request.
+    // Explicit Authorization is supplied to avoid stale/missing session headers.
+    const {data,error}=await sb.functions.invoke("delete-my-account",{
+      body:{},
+      headers:{
+        Authorization:"Bearer "+session.access_token
+      }
+    });
+
+    if(error){
+      let message=error.message||"회원 탈퇴에 실패했습니다.";
+      // FunctionsHttpError exposes the response body through context.
+      try{
+        if(error.context){
+          const body=await error.context.json();
+          message=body?.detail||body?.error||message;
+        }
+      }catch(e){}
+      throw new Error(message);
+    }
+    if(!data?.ok) throw new Error(data?.detail||data?.error||"회원 탈퇴에 실패했습니다.");
+
+    // Account is deleted server-side. Remove local auth and ROOM state.
     try{ await sb.auth.signOut({scope:"local"}); }catch(e){}
     try{
-      Object.keys(localStorage).forEach(key=>{
-        if(key.startsWith("myroom_") || key.includes("supabase")) localStorage.removeItem(key);
+      const keys=[];
+      for(let i=0;i<localStorage.length;i++) keys.push(localStorage.key(i));
+      keys.filter(Boolean).forEach(key=>{
+        if(key.startsWith("myroom_") || key.startsWith("sb-") || key.includes("supabase")){
+          localStorage.removeItem(key);
+        }
       });
       sessionStorage.clear();
     }catch(e){}
@@ -1786,7 +1799,7 @@ async function deleteMyAccount(){
     window.location.replace("https://roomzip.cloud/");
   }catch(e){
     console.error("account deletion failed",e);
-    alert("회원 탈퇴에 실패했어요. 잠시 후 다시 시도해주세요.");
+    alert("회원 탈퇴에 실패했어요.\n"+(e?.message||"잠시 후 다시 시도해주세요."));
     if(btn){ btn.disabled=false; btn.textContent="회원 탈퇴"; }
   }
 }
