@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.4</title>
+<title>MY ROOM V6.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.4</div>
+    <div class="micro">V6.5</div>
   </div>
 
   <div class="hero-blob">
@@ -4390,5 +4390,59 @@ body[data-room-time="night"] .sky-star{display:block}
 #roomVisitMetaTop{
   position:relative!important;
   z-index:50!important;
+}
+</style>
+
+<style>
+/* V6.5 — clean floor: remove obsolete legacy props */
+.rug,
+.room-rug,
+.floor-rug,
+.oval-rug,
+.sofa,
+.room-sofa,
+.floor-sofa,
+.pink-sofa,
+.room-bench,
+.floor-bench{
+  display:none!important;
+}
+
+/* Some legacy decor is drawn inside the room SVG. Hide the two lower prop groups
+   while leaving owner/avatar artwork intact. */
+#roomScene svg .rug,
+#roomScene svg .floor-rug,
+#roomScene svg .room-rug,
+#roomScene svg .sofa,
+#roomScene svg .bench,
+#roomScene svg .floor-prop{
+  display:none!important;
+}
+
+/* Friends now start visibly at the floor baseline and grow upward. */
+#visitorAvatars{
+  bottom:0!important;
+  height:255px!important;
+}
+#visitorAvatars .crowd-friend{
+  bottom:calc(var(--crowd-row) * 39px)!important;
+}
+
+/* First rows overlap slightly like a real crowd instead of floating on the wall. */
+#visitorAvatars .crowd-friend:nth-child(-n+8){
+  bottom:0!important;
+}
+#visitorAvatars .crowd-friend:nth-child(n+9):nth-child(-n+16){
+  bottom:39px!important;
+}
+#visitorAvatars .crowd-friend:nth-child(n+17):nth-child(-n+24){
+  bottom:78px!important;
+}
+
+/* Owner remains unmistakably in front. */
+#profileAvatarCard,
+#profileAvatarCard .svg-avatar,
+#profileAvatarCard .pixel-person{
+  z-index:60!important;
 }
 </style>
