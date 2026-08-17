@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V10.1</title>
+<title>ROOM.zip V10.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V10.1</div>
+    <div class="micro">V10.2</div>
   </div>
 
   <div class="hero-blob">
@@ -1294,7 +1294,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
   <div class="existing-login-link">
     이미 계정이 있나요?
-    <button type="button" onclick="openExistingLogin()">로그인하기</button>
+    <button type="button" onclick="openExistingLoginPage()">로그인하기</button>
   </div>
 
   <p class="hint">ROOM을 만들면 이 브라우저에 자동으로 임시 저장돼요.</p>
@@ -1595,6 +1595,32 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="footer-space"></div>
 </section>
 
+<section class="page" id="existingLoginPage">
+  <div class="topbar">
+    <button class="chip" type="button" onclick="showCreateHome()">← BACK</button>
+    <div class="micro">ROOM.zip LOGIN</div>
+  </div>
+
+  <div class="existing-login-page-card">
+    <div class="micro">LOGIN TO ROOM.zip</div>
+    <h2>기존 ROOM을<br>불러올게요.</h2>
+    <p>ROOM을 만들 때 사용한 계정으로 로그인해 주세요.</p>
+
+    <button class="login-option dark existing-kakao-login" type="button"
+      onclick="signInWithKakao()" style="background:#FEE500;color:#111">
+      카카오로 로그인
+    </button>
+
+    <div class="email-auth-box">
+      <div class="micro">EMAIL</div>
+      <input id="existingEmail" type="email" inputmode="email" autocomplete="email" placeholder="이메일">
+      <input id="existingPassword" type="password" autocomplete="current-password" placeholder="비밀번호">
+      <button class="login-option" type="button" onclick="signInWithEmailFromPage()">이메일로 로그인</button>
+      <div id="existingEmailMsg" class="email-auth-msg"></div>
+    </div>
+  </div>
+</section>
+
 </div>
 <div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeKakaoModal()">
   <div class="login-sheet">
@@ -1710,6 +1736,48 @@ function getEmailAuthFields(){
     password:document.getElementById("emailAuthPassword")?.value||""
   };
 }
+
+function openExistingLoginPage(){
+  // Do not use a fixed modal here. Kakao in-app browser is more reliable
+  // when the existing-account flow is a normal page in the document.
+  currentRemoteRoom=null;
+  VIEW_MODE="owner";
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  document.body.style.overflow="";
+  document.getElementById("friendChemBackdrop")?.classList.remove("show");
+  document.getElementById("collectionBackdrop")?.classList.remove("show");
+  document.getElementById("loginModal")?.classList.remove("show");
+  go("existingLoginPage");
+  window.scrollTo(0,0);
+  setTimeout(()=>document.getElementById("existingEmail")?.focus({preventScroll:true}),80);
+}
+
+function setExistingEmailMsg(message,isError=false){
+  const el=document.getElementById("existingEmailMsg");
+  if(!el) return;
+  el.textContent=message||"";
+  el.style.color=isError ? "#b42318" : "#666";
+}
+
+async function signInWithEmailFromPage(){
+  const email=document.getElementById("existingEmail")?.value?.trim()||"";
+  const password=document.getElementById("existingPassword")?.value||"";
+  if(!email||!password){
+    setExistingEmailMsg("이메일과 비밀번호를 입력해 주세요.",true);
+    return;
+  }
+  setExistingEmailMsg("로그인 중...");
+  try{
+    const {error}=await sb.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    setExistingEmailMsg("로그인 완료!");
+    // auth state handler will load the user's existing ROOM.
+  }catch(err){
+    console.error(err);
+    setExistingEmailMsg("로그인 실패: "+err.message,true);
+  }
+}
+
 function openExistingLogin(){
   // A shared-room visit can leave transient overlays/state behind after HOME.
   // Clear them before opening login so the button always works on mobile/Kakao WebView.
@@ -1728,14 +1796,6 @@ function openExistingLogin(){
   setEmailAuthMsg("");
   modal.classList.add("show");
 }
-
-document.addEventListener("click",event=>{
-  const btn=event.target?.closest?.(".existing-login-link button");
-  if(!btn) return;
-  event.preventDefault();
-  event.stopPropagation();
-  openExistingLogin();
-},{capture:true});
 
 async function signUpWithEmail(){
   const {email,password}=getEmailAuthFields();
@@ -5154,5 +5214,38 @@ body:not(.visitor-mode) #loginModal.show{
   z-index:20;
   pointer-events:auto!important;
   touch-action:manipulation;
+}
+</style>
+
+<style>
+/* V10.2 — dedicated existing-account login page for Kakao in-app browser */
+.existing-login-page-card{
+  margin-top:34px;
+  background:#fffdf9;
+  border:1.5px solid #111;
+  border-radius:24px;
+  padding:22px;
+  box-shadow:6px 6px 0 #111;
+}
+.existing-login-page-card h2{
+  font-size:32px;
+  line-height:1.08;
+  letter-spacing:-.045em;
+  margin:12px 0 10px;
+}
+.existing-login-page-card>p{
+  margin:0 0 18px;
+  font-size:12px;
+  line-height:1.6;
+  color:#666;
+}
+.existing-login-page-card .email-auth-box{
+  margin-top:16px;
+}
+.existing-login-page-card input{
+  margin-top:8px;
+}
+.existing-kakao-login{
+  margin-top:4px!important;
 }
 </style>
