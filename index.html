@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V5.4</title>
+<title>MY ROOM V5.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V4.0</div>
+    <div class="micro">V5.5</div>
   </div>
 
   <div class="hero-blob">
@@ -1381,41 +1381,35 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   </div>
 </div>
 
+
 <div class="save-card owner-only" id="realSaveCard">
   <div class="micro">SAVE MY ROOM</div>
 
   <div id="saveStateLoggedOut">
-    <h3>이 ROOM을 저장할까요?</h3>
-    <p>카카오 로그인 후 ROOM이 저장되고, 그때부터 링크 복사와 친구 공유가 가능해요.</p>
-    <button class="primary" style="margin-top:10px" onclick="startRealSave()">카카오로 로그인하고 저장하기</button>
+    <h3 id="realSaveTitle">이 ROOM을 내 것으로 저장할까요?</h3>
+    <p id="realSaveDesc">저장하면 다음에 로그인했을 때 바로 내 ROOM으로 들어오고, 친구에게 공유할 수 있어요.</p>
+    <button class="primary" id="realSaveBtn" style="margin-top:10px" onclick="startRealSave()">카카오 로그인하고 ROOM 저장하기</button>
   </div>
 
   <div id="saveStateReady" style="display:none">
     <h3>MY ROOM IS READY ✦</h3>
-    <p id="readyRoomUrl" style="font-size:14px;font-weight:900;color:#111;margin-top:6px">공유 링크가 만들어졌어요.</p>
+    <p id="readyRoomUrl">친구를 초대해서 ROOM을 채워보세요.</p>
+
+    <div class="ready-share-actions">
+      <button class="ready-action ready-copy" onclick="copyRoomLink()"><b>링크 복사</b></button>
+      <button class="ready-action ready-invite" onclick="openShareInvite()"><b>친구 초대</b></button>
+      <button class="ready-action ready-story" onclick="downloadRoomStoryCard()"><b>스토리 카드 저장</b></button>
+    </div>
   </div>
 </div>
-</div>
 
-</div>
-<h3 id="realSaveTitle">이 ROOM을 내 것으로 저장할까요?</h3>
-  <p id="realSaveDesc">ROOM을 둘러본 뒤 마음에 들면 저장해보세요. 카카오 로그인 후 친구들에게 공유할 수 있는 고유 주소가 만들어져요.</p>
-  <button class="primary" id="realSaveBtn" style="margin-top:10px" onclick="startRealSave()">카카오 로그인하고 ROOM 저장하기</button>
-</div>
-
-  <p>닉네임은 같아도 괜찮아요. 주소만 고유하면 됩니다.</p>
-  
-  
-  
-</div>
-
-  <div id="fakeUrl" class="fake-url" style="display:none!important"></div>
-<div class="ready-share-actions">
-  <button class="ready-action ready-copy" onclick="copyRoomLink()"><b>링크 복사</b></button>
-  <button class="ready-action ready-invite" onclick="openShareInvite()"><b>친구 초대</b></button>
-  <button class="ready-action ready-story" onclick="shareStory()"><b>스토리 카드 저장</b></button>
-</div>
 </section>
+
+
+<div class="visitor-preview-actions visitor-only" id="visitorPreviewActions" style="display:none">
+  <button class="secondary" onclick="showChemistryResultAgain()">궁합 결과 다시 보기</button>
+  <button class="primary" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
+</div>
 
 <!-- FRIEND -->
 <section class="page" id="friend">
@@ -1517,22 +1511,13 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <button onclick="shareStory()" style="display:none!important">인스타 스토리용</button>
       <button onclick="shareKakao()">카톡으로 보내기</button>
       <button onclick="copyResult()">결과 링크 복사</button>
-      <button onclick="go('create')">나도 ROOM 만들기</button>
+      <button onclick="handleVisitorPrimaryCta()">나도 ROOM 만들기</button>
     </div>
   </div>
   <div class="footer-space"></div>
 </section>
 
 </div>
-
-
-
-<div class="bottom-share owner-only" id="bottomShareActions" style="display:none">
-  <button class="dark" onclick="copySavedRoomLink()">링크 복사</button>
-  <button onclick="shareSavedRoom()">친구 초대</button>
-  <button class="story-btn" onclick="downloadRoomStoryCard()">스토리 카드 저장</button>
-</div>
-
 <div class="login-backdrop" id="loginModal" onclick="if(event.target===this)closeKakaoModal()">
   <div class="login-sheet">
     <div class="micro">LOGIN / SAVE MY ROOM</div>
@@ -1699,7 +1684,7 @@ async function signOutMyRoom(){
   currentRemoteRoom=null;
   loggedInOwnRoom=null;
   history.replaceState({}, "", window.location.pathname);
-  document.body.classList.remove("visitor-mode","chemistry-done");
+  document.body.classList.remove("visitor-mode","chemistry-done","friend-room-preview");
   VIEW_MODE="owner";
   syncRealAuthUI();
   go("landing");
@@ -2040,12 +2025,22 @@ function syncRealAuthUI(){
   if(auth) auth.style.display=currentAuthUser?"inline-block":"none";
   if(saved) saved.style.display=currentRemoteRoom?"inline-block":"none";
 
-  if(currentAuthUser && currentRemoteRoom){
+  const ownsCurrentRoom=!!(currentAuthUser && currentRemoteRoom && currentRemoteRoom.owner_id===currentAuthUser.id);
+
+  if(ownsCurrentRoom){
     showSaveState("ready");
     const readyUrl=document.getElementById("readyRoomUrl");
-    if(readyUrl) readyUrl.textContent=currentRemoteRoom?.id ? publicRoomUrl() : "공유 링크를 만드는 중이에요.";
+    if(readyUrl) readyUrl.textContent="친구를 초대해서 ROOM을 채워보세요.";
   }else{
     showSaveState("loggedout");
+    const saveBtn=document.getElementById("realSaveBtn");
+    const saveTitle=document.getElementById("realSaveTitle");
+    const saveDesc=document.getElementById("realSaveDesc");
+    if(saveBtn) saveBtn.textContent=currentAuthUser ? "이 ROOM 저장하기" : "카카오 로그인하고 ROOM 저장하기";
+    if(saveTitle) saveTitle.textContent=currentAuthUser ? "이 ROOM을 저장할까요?" : "이 ROOM을 내 것으로 저장할까요?";
+    if(saveDesc) saveDesc.textContent=currentAuthUser
+      ? "저장하면 친구에게 공유할 수 있고 다음에 바로 내 ROOM으로 들어올 수 있어요."
+      : "카카오 로그인 후 저장하면 다음에 바로 내 ROOM으로 들어오고 친구에게 공유할 수 있어요.";
   }
   syncBottomShare();
   const logoutBtn=document.getElementById("logoutBtn");
@@ -2106,9 +2101,7 @@ async function persistRoomToSupabase(){
     currentRemoteRoom=ownCheck.data[0];
     loggedInOwnRoom=currentRemoteRoom;
     clearPendingRoomDraft();
-    syncRealAuthUI();
-    await refreshVisitCounts(currentRemoteRoom.id);
-  await loadRoomSocialSnapshot(currentRemoteRoom.id,true);
+    await hydrateOwnerRoom(currentRemoteRoom);
     return;
   }
 
@@ -2557,6 +2550,7 @@ function makeRoom(persist=true){
     }
     try{ if(typeof initRetentionLayer==="function") initRetentionLayer(); }catch(err){ console.warn(err); }
     try{ if(typeof syncAccountUI==="function") syncAccountUI(); }catch(err){ console.warn(err); }
+    try{ if(typeof syncRealAuthUI==="function") syncRealAuthUI(); }catch(err){ console.warn(err); }
     go("room");
   },650);
 }
@@ -3200,29 +3194,6 @@ function renderResult(){
 }
 
 
-function copySavedRoomLink(){
-  if(!(currentAuthUser && currentRemoteRoom?.id)){
-    alert("ROOM 저장이 완료된 후 링크를 복사할 수 있어요.");
-    return;
-  }
-  const url=publicRoomUrl();
-  navigator.clipboard?.writeText(url);
-  toast("친구용 링크를 복사했어요");
-}
-async function shareSavedRoom(){
-  if(!(currentAuthUser && currentRemoteRoom?.id)){
-    alert("ROOM 저장이 완료된 후 친구에게 공유할 수 있어요.");
-    return;
-  }
-  const url=publicRoomUrl();
-  const text=`${state.owner.name}의 MY ROOM에 놀러와서 우리 궁합 확인해봐 ✦`;
-  if(navigator.share){
-    try{ await navigator.share({title:"MY ROOM",text,url}); }catch(e){}
-  }else{
-    navigator.clipboard?.writeText(text+"\n"+url);
-    toast("친구용 링크를 복사했어요");
-  }
-}
 
 
 
@@ -3305,7 +3276,8 @@ async function handleVisitorPrimaryCta(){
   if(ownerBirth) ownerBirth.value="";
   if(ownerMbti) ownerMbti.value="";
 
-  go("landing");
+  // Go directly to the creation form. The visitor already understands the product.
+  go("create");
   syncRealAuthUI();
   window.scrollTo(0,0);
 }
@@ -3372,6 +3344,8 @@ async function runVisitorChemistry(){
   showVisitorStayedCard(name,mbti);
 
   document.body.classList.remove("friend-room-preview");
+  const previewActions=document.getElementById("visitorPreviewActions");
+  if(previewActions) previewActions.style.display="none";
   document.body.classList.add("chemistry-done");
   showPostChemistryRoomExperience(name);
 
@@ -3416,8 +3390,23 @@ function showFriendRoomAfterChemistry(){
     if(typeof renderRoomVisitors==="function") renderRoomVisitors();
   }catch(e){ console.warn("friend room render failed",e); }
 
+  const actions=document.getElementById("visitorPreviewActions");
+  if(actions) actions.style.display="grid";
+
   const shell=document.querySelector(".room-shell");
   if(shell) shell.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function showChemistryResultAgain(){
+  document.body.classList.remove("friend-room-preview");
+  const actions=document.getElementById("visitorPreviewActions");
+  if(actions) actions.style.display="none";
+
+  const result=document.getElementById("visitorResultCard");
+  if(result){
+    result.style.display="block";
+    result.scrollIntoView({behavior:"smooth",block:"start"});
+  }
 }
 
 function showPostChemistryRoomExperience(name){
@@ -3477,6 +3466,8 @@ function initVisitorFlow(){
 
   if(entry) entry.style.display="block";
   if(result) result.style.display="none";
+  const previewActions=document.getElementById("visitorPreviewActions");
+  if(previewActions) previewActions.style.display="none";
   const stayed=document.getElementById("visitorStayedCard");
   if(stayed) stayed.style.display="none";
 
@@ -3558,8 +3549,28 @@ function toast(msg){
   setTimeout(()=>t.classList.remove("show"),1500);
 }
 async function copyText(text){
-  try{await navigator.clipboard.writeText(text);toast("복사했어요")}
-  catch(e){toast("이 환경에서는 복사 버튼만 시연돼요")}
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      const ta=document.createElement("textarea");
+      ta.value=text;
+      ta.setAttribute("readonly","");
+      ta.style.position="fixed";
+      ta.style.opacity="0";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok=document.execCommand("copy");
+      ta.remove();
+      if(!ok) throw new Error("copy failed");
+    }
+    toast("링크를 복사했어요");
+    return true;
+  }catch(e){
+    console.warn("copy failed",e);
+    window.prompt("아래 링크를 복사해 주세요.",text);
+    return false;
+  }
 }
 function copyRoomLink(){
   const url=publicRoomUrl();
@@ -3725,5 +3736,59 @@ body.visitor-mode.friend-room-preview .room-shell.owner-only{display:block!impor
 body.visitor-mode.friend-room-preview .room-shell .owner-social-summary.owner-only,
 body.visitor-mode.friend-room-preview .room-shell .status-editor.owner-only,
 body.visitor-mode.friend-room-preview .room-shell .save-card.owner-only{display:none!important}
+body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
+</style>
+
+<style>
+/* V5.5 — one share surface, one clear visitor conversion path */
+.bottom-share{display:none!important;}
+
+#readyRoomUrl{
+  font-size:11px!important;
+  line-height:1.5;
+  font-weight:600!important;
+  color:#666!important;
+  margin:6px 0 0!important;
+}
+
+.ready-share-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.ready-share-actions .ready-action{
+  min-height:52px;
+  border:1.5px solid #111;
+  border-radius:14px;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  color:#111;
+}
+.ready-copy{background:#f5f3df}
+.ready-invite{background:#dfe98f}
+.ready-story{
+  grid-column:1/-1;
+  background:#f4c8d6;
+}
+
+.visitor-preview-actions{
+  grid-template-columns:1fr;
+  gap:8px;
+  margin:14px 0 110px;
+}
+body.visitor-mode.friend-room-preview .visitor-preview-actions{
+  display:grid!important;
+}
+body:not(.friend-room-preview) .visitor-preview-actions{
+  display:none!important;
+}
+
+/* Friend preview: show only the experiential room, never owner controls. */
+body.visitor-mode.friend-room-preview .room-shell.owner-only{display:block!important}
+body.visitor-mode.friend-room-preview .room-shell .owner-social-summary.owner-only,
+body.visitor-mode.friend-room-preview .status-editor.owner-only,
+body.visitor-mode.friend-room-preview #realSaveCard.owner-only{display:none!important}
 body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
 </style>
