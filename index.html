@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V5.1</title>
+<title>MY ROOM V5.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1296,8 +1296,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div id="visitorFlow" class="visitor-only">
   <div class="visitor-entry-card" id="visitorEntryCard">
     <div class="micro">OUR CHEMISTRY</div>
-<div id="postChemistryRoomCta" class="post-room-cta" style="display:none">
-  <div class="micro">YOUR NEXT ROOM ✦</div>
   <h3>이제 내 ROOM도 만들어볼까?</h3>
   <p>방문한 친구들이 캐릭터로 남고, TODAY · TOTAL · FRIENDS가 쌓이는 내 공간을 만들 수 있어요.</p>
   <button class="primary" id="visitorPrimaryCta" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
@@ -1898,6 +1896,9 @@ function buildVisitorFlowMarkup(ownerName){
       <div class="visitor-score" id="visitorScore">94%</div>
       <div class="visitor-relation" id="visitorRelation"></div>
       <p id="visitorResultText"></p>
+
+      <button class="secondary" style="margin-top:12px" onclick="showFriendRoomAfterChemistry()">친구 ROOM 다시 보기 →</button>
+      <button class="primary" id="visitorPrimaryCta" style="margin-top:8px" onclick="handleVisitorPrimaryCta()">나도 내 ROOM 만들기 →</button>
     </div>`;
 }
 
@@ -3433,26 +3434,41 @@ function spotlightVisitorCharacter(name){
   setTimeout(()=>target.classList.remove("visitor-spotlight"),2600);
 }
 
-function showPostChemistryRoomExperience(name){
-  const entry=document.getElementById("visitorEntryCard");
+
+function showFriendRoomAfterChemistry(){
   const result=document.getElementById("visitorResultCard");
-  const cta=document.getElementById("postChemistryRoomCta");
+  const flow=document.getElementById("visitorFlow");
+  if(result) result.style.display="none";
 
-  if(entry) entry.style.display="none";
-  if(result) result.style.display="block";
-  if(cta) cta.style.display="block";
+  // Keep visitor mode and the friend's currentRemoteRoom.
+  VIEW_MODE="visitor";
+  document.body.classList.add("visitor-mode","chemistry-done");
 
-  // Show the actual room first so the visitor understands what they're joining.
+  try{
+    renderRoom();
+    if(typeof renderRoomVisitors==="function") renderRoomVisitors();
+  }catch(e){
+    console.warn("friend room render failed",e);
+  }
+
   const shell=document.querySelector(".room-shell");
   if(shell){
     shell.scrollIntoView({behavior:"smooth",block:"start"});
-    setTimeout(()=>spotlightVisitorCharacter(name),500);
   }
+}
 
-  // After a short delay, reveal the creation CTA lower down.
-  if(cta){
-    cta.classList.add("post-room-cta-ready");
-  }
+function showPostChemistryRoomExperience(name){
+  const entry=document.getElementById("visitorEntryCard");
+  const result=document.getElementById("visitorResultCard");
+
+  if(entry) entry.style.display="none";
+  if(result) result.style.display="block";
+
+  // Refresh the room in the background so "친구 ROOM 다시 보기" immediately shows my character.
+  try{
+    if(typeof renderRoomVisitors==="function") renderRoomVisitors();
+    setTimeout(()=>spotlightVisitorCharacter(name),100);
+  }catch(e){}
 }
 
 function showVisitorStayedCard(name,mbti){
@@ -3500,8 +3516,6 @@ function initVisitorFlow(){
   if(result) result.style.display="none";
   const stayed=document.getElementById("visitorStayedCard");
   if(stayed) stayed.style.display="none";
-  const postCta=document.getElementById("postChemistryRoomCta");
-  if(postCta) postCta.style.display="none";
 
   const nameInput=document.getElementById("visitorNameInput");
   const birthInput=document.getElementById("visitorBirthInput");
@@ -3696,31 +3710,10 @@ window.addEventListener("DOMContentLoaded",()=>{
 </style>
 
 <style>
-/* V5.1 — make the friend ROOM itself the conversion moment */
-.post-room-cta{
-  margin-top:18px;
-  border:1.5px solid #111;
-  border-radius:18px;
-  padding:16px;
-  background:#fff7d4;
-}
-.post-room-cta h3{
-  margin:6px 0 8px;
-  font-size:20px;
-  letter-spacing:-.03em;
-}
-.post-room-cta p{
-  margin:0 0 12px;
-  font-size:11px;
-  line-height:1.55;
-  color:#555;
-}
-.visitor-spotlight{
-  animation:visitorSpotlight 1.3s ease-in-out 2;
-  z-index:30!important;
-}
-@keyframes visitorSpotlight{
-  0%,100%{transform:translateY(0) scale(1);filter:none}
-  50%{transform:translateY(-5px) scale(1.18);filter:drop-shadow(0 0 8px rgba(255,215,0,.9))}
+</style>
+
+<style>
+.visitor-result-card .secondary{
+  background:#fff;
 }
 </style>
