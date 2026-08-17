@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.0</title>
+<title>ROOM.zip V9.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1212,6 +1212,18 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
   <meta property="og:url" content="https://roomzip.cloud">
   <link rel="canonical" href="https://roomzip.cloud">
+
+<style>
+.account-danger-zone{margin:22px auto 4px;text-align:center}
+.account-delete-link{
+  appearance:none;border:0;background:transparent;padding:8px 10px;
+  font:inherit;font-size:10px;color:#8a8178;text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer;
+}
+.account-delete-link:hover{color:#5f5750}
+.account-delete-link:disabled{opacity:.45;cursor:wait}
+</style>
+
 </head>
 <body>
 <!-- MY ROOM V8.0 RELEASE CANDIDATE
@@ -1224,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.0</div>
+    <div class="micro">V9.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1443,6 +1455,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   </div>
 </div>
 
+<div class="account-danger-zone owner-only" id="accountDangerZone" style="display:none"><button type="button" class="account-delete-link" onclick="deleteMyAccount()">회원 탈퇴</button></div>
 </section>
 
 
@@ -1718,6 +1731,66 @@ async function signInWithEmail(){
     setEmailAuthMsg("로그인 실패: "+err.message,true);
   }
 }
+
+async function deleteMyAccount(){
+  if(!currentAuthUser){
+    toast("로그인이 필요해요");
+    return;
+  }
+
+  const first=confirm("정말 탈퇴할까요?\\n지금까지 만든 ROOM과 친구 기록이 모두 삭제돼요.");
+  if(!first) return;
+
+  const second=confirm("삭제된 ROOM과 기록은 복구할 수 없어요.\\n그래도 탈퇴할까요?");
+  if(!second) return;
+
+  const btn=document.querySelector(".account-delete-link");
+  if(btn){ btn.disabled=true; btn.textContent="탈퇴 처리 중..."; }
+
+  try{
+    const {data:{session},error:sessionError}=await sb.auth.getSession();
+    if(sessionError || !session?.access_token) throw sessionError || new Error("로그인 세션이 없습니다.");
+
+    const response=await fetch(SUPABASE_URL+"/functions/v1/delete-my-account",{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+session.access_token,
+        "apikey":SUPABASE_ANON_KEY,
+        "Content-Type":"application/json"
+      },
+      body:"{}"
+    });
+
+    if(!response.ok){
+      let detail="";
+      try{ detail=(await response.json())?.error||""; }catch(e){}
+      throw new Error(detail||"회원 탈퇴에 실패했습니다.");
+    }
+
+    // Auth user is already deleted server-side. Clear browser-side session/state.
+    try{ await sb.auth.signOut({scope:"local"}); }catch(e){}
+    try{
+      Object.keys(localStorage).forEach(key=>{
+        if(key.startsWith("myroom_") || key.includes("supabase")) localStorage.removeItem(key);
+      });
+      sessionStorage.clear();
+    }catch(e){}
+
+    currentAuthUser=null;
+    currentRemoteRoom=null;
+    loggedInOwnRoom=null;
+    roomSocialSnapshot={top3:[],recent_friends:[],today_names:[],new_count:0,total_participants:0};
+    roomVisitCounts={today:0,total:0};
+
+    alert("회원 탈퇴가 완료됐어요.");
+    window.location.replace("https://roomzip.cloud/");
+  }catch(e){
+    console.error("account deletion failed",e);
+    alert("회원 탈퇴에 실패했어요. 잠시 후 다시 시도해주세요.");
+    if(btn){ btn.disabled=false; btn.textContent="회원 탈퇴"; }
+  }
+}
+
 async function signOutMyRoom(){
   try{await sb.auth.signOut()}catch(e){console.warn(e)}
   currentAuthUser=null;
@@ -2114,6 +2187,8 @@ function syncRealAuthUI(){
   const logoutBtn=document.getElementById("logoutBtn");
   const sharedSlug=(new URLSearchParams(window.location.search).get("room")||"").trim();
   if(logoutBtn) logoutBtn.style.display=(currentAuthUser && !sharedSlug)?"inline-block":"none";
+  const danger=document.getElementById("accountDangerZone");
+  if(danger) danger.style.display=(currentAuthUser && !sharedSlug)?"block":"none";
 }
 
 function startRealSave(){
