@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.6</title>
+<title>MY ROOM V6.7</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.6</div>
+    <div class="micro">V6.7</div>
   </div>
 
   <div class="hero-blob">
@@ -1352,28 +1352,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="mbti-detail-card bottom" id="detailC"></div>
 </div>
 
-      <div class="room-window"></div>
-      <div class="room-bed"></div>
-      <div class="room-rug">
-  <div class="room-atmosphere" aria-hidden="true">
-    <div class="room-window">
-      <div class="window-sky">
-        <span class="sky-sun"></span>
-        <span class="sky-cloud cloud-a"></span>
-        <span class="sky-cloud cloud-b"></span>
-        <span class="sky-star star-a">✦</span>
-        <span class="sky-star star-b">·</span>
-        <span class="sky-star star-c">✦</span>
-      </div>
-      <i class="window-v"></i><i class="window-h"></i>
-      <div class="window-sill"></div>
-    </div>
-    <div class="room-plant">
-      <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span>
-      <span class="stem"></span><span class="pot"></span>
-    </div>
-  </div>
-</div>
       <div class="status-bubble" id="roomStatusBubble">TODAY · 그냥 살아있음</div>
 
       <div class="owner-avatar-stage">
@@ -2898,9 +2876,9 @@ function renderSocialSnapshot(){
 function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
-  const n=Number(count||0);
-  const rows=Math.max(1,Math.ceil(n/10));
-  const extra=Math.max(0,rows-6)*36;
+
+  const rows=Math.max(1,Math.ceil(Number(count||0)/8));
+  const extra=Math.max(0,rows-7)*36;
   scene.style.minHeight=(520+extra)+"px";
   scene.style.setProperty("--crowd-rows",String(rows));
 }
@@ -2908,17 +2886,17 @@ function resizeRoomForVisitorCrowd(count){
 function renderRoomVisitors(){
   const avatars=document.getElementById("visitorAvatars");
   if(!avatars) return;
+
   const friends=(roomSocialSnapshot.recent_friends||[]);
   resizeRoomForVisitorCrowd(friends.length);
-  avatars.innerHTML=friends.map((f,i)=>{
-    const cols=10;
-    const row=Math.floor(i/cols);
-    const rawCol=i%cols;
 
-    // Keep the owner zone open on the first 3 rows.
-    const lowerRow=row<3;
-    const slots=lowerRow ? [0,1,2,3,6,7,8,9,4,5] : [0,1,2,3,4,5,6,7,8,9];
-    const col=slots[rawCol];
+  // Eight usable positions per row: 4 left + 4 right.
+  // The middle stays permanently clear for the owner's character.
+  const slots=[0,1,2,3,6,7,8,9];
+
+  avatars.innerHTML=friends.map((f,i)=>{
+    const row=Math.floor(i/8);
+    const col=slots[i%8];
 
     return `
       <div class="visitor-character visitor-svg crowd-friend"
@@ -3149,14 +3127,8 @@ const av=document.querySelector("#profileAvatarCard .pixel-person");
   }
 
   const friends=getRecentFriends();
-  const avatars=document.getElementById("visitorAvatars");
-  if(avatars){
-    avatars.innerHTML=friends.map(f=>`
-      <div class="visitor-character visitor-svg" title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
-        ${svgAvatar(f.mbti,true)}
-        <div class="visitor-name">${escapeHtml(f.name)}</div>
-      </div>`).join("");
-  }
+  // Use the same authoritative room crowd renderer everywhere.
+  renderRoomVisitors();
 
   const top=document.getElementById("chemistryTop3");
   if(top){
@@ -4666,4 +4638,177 @@ body[data-room-time="night"] .v66-sky{background:linear-gradient(#26334d 0 60%,#
   position:relative!important;
   z-index:90!important;
 }
+</style>
+
+<style>
+/* V6.7 — final room positioning rules */
+
+/* Old furniture must never come back. */
+.room-bed,
+.room-rug,
+.room-atmosphere,
+.room-scene > .room-window{
+  display:none!important;
+}
+
+/* Stable room canvas */
+.room-scene{
+  min-height:520px!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+
+/* Today's status: clear of the left window */
+#roomStatusBubble{
+  position:absolute!important;
+  top:22px!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  max-width:180px!important;
+  z-index:90!important;
+  white-space:nowrap!important;
+}
+
+/* OWNER: position the outer stage only */
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:94px!important;
+  width:130px!important;
+  height:195px!important;
+  transform:translateX(-50%)!important;
+  z-index:70!important;
+  overflow:visible!important;
+}
+
+#profileAvatarCard{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:130px!important;
+  height:195px!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  z-index:71!important;
+}
+
+#profileAvatarCard .svg-avatar{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:120px!important;
+  height:185px!important;
+  margin:0 auto!important;
+  transform:none!important;
+  z-index:72!important;
+}
+
+/* Owner's subtle floor marker */
+#profileAvatarCard:after{
+  content:"";
+  position:absolute!important;
+  left:50%!important;
+  bottom:1px!important;
+  width:116px!important;
+  height:28px!important;
+  transform:translateX(-50%)!important;
+  border:2px solid #d99ba4!important;
+  border-radius:50%!important;
+  background:rgba(233,167,174,.18)!important;
+  z-index:-1!important;
+}
+
+/* Real floor */
+.room-scene:after{
+  content:"";
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:18px!important;
+  background:#9b714e!important;
+  border-top:2px solid #745139!important;
+  z-index:10!important;
+  pointer-events:none!important;
+}
+
+/* FRIENDS: start at floor and only grow upward */
+#visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:calc(100% - 16px)!important;
+  display:block!important;
+  overflow:visible!important;
+  z-index:20!important;
+  pointer-events:none!important;
+}
+
+#visitorAvatars .crowd-friend,
+#visitorAvatars .crowd-friend:nth-child(n){
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  left:calc((var(--crowd-col) + .5) * 10% - 21px)!important;
+  bottom:calc(var(--crowd-row) * 36px + 1px)!important;
+  width:42px!important;
+  height:54px!important;
+  margin:0!important;
+  margin-left:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+  z-index:calc(20 + var(--crowd-row))!important;
+}
+
+#visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:4px!important;
+  width:42px!important;
+  height:52px!important;
+  transform:translateX(-50%)!important;
+}
+
+#visitorAvatars .visitor-name{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-2px!important;
+  width:40px!important;
+  max-width:40px!important;
+  padding:1px 2px!important;
+  transform:translateX(-50%)!important;
+  font-size:6px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-align:center!important;
+  border-radius:4px!important;
+  background:rgba(255,255,255,.84)!important;
+  z-index:4!important;
+}
+
+/* Layer order */
+.room-v66-decor{z-index:1!important;}
+#visitorAvatars{z-index:20!important;}
+.owner-avatar-stage{z-index:70!important;}
 </style>
