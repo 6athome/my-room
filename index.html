@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.6</title>
+<title>MY ROOM V8.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1196,6 +1196,9 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 </style>
 </head>
 <body>
+<!-- MY ROOM V8.0 RELEASE CANDIDATE
+     Canonical baseline: V7.6 features + V7.3 crowd behavior.
+     Historical ROOM CSS overrides removed before public release. -->
 
 <div class="app">
 
@@ -1203,7 +1206,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.6</div>
+    <div class="micro">V8.0</div>
   </div>
 
   <div class="hero-blob">
@@ -3967,73 +3970,174 @@ document.addEventListener("keydown",e=>{
   </div>
 </div>
 
+
+<style>
+/* V8.0 RELEASE — canonical ROOM layout. Do not add older crowd overrides below this block. */
+.room-scene{
+  width:100%!important;
+  aspect-ratio:1/1!important;
+  min-height:0!important;
+  height:auto!important;
+  position:relative!important;
+  overflow:hidden!important;
+  background:
+    linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),
+    repeating-linear-gradient(90deg,#efe9df 0,#efe9df 30px,#e7e0d6 31px,#efe9df 32px)!important;
+  border-bottom:18px solid #9b714e!important;
+}
+
+/* Deprecated ROOM props remain unavailable. */
+.room-v66-decor,.v66-shelf,.v66-hanging-plant,.v66-wall-art,.v66-window-plant,
+.room-plant,.room-bed,.room-rug,.room-atmosphere,.room-scene>.room-window{
+  display:none!important;
+}
+
+/* Basic window */
+.room-basic-window{
+  position:absolute!important;
+  left:16px!important;
+  top:18px!important;
+  width:92px!important;
+  height:78px!important;
+  border:3px solid #42392f!important;
+  background:#cfe7f2!important;
+  z-index:1!important;
+  pointer-events:none!important;
+}
+.basic-window-sky{position:absolute;inset:0;background:#cfe7f2}
+body[data-room-time="sunset"] .basic-window-sky{background:linear-gradient(#efb6a5,#f4d5a8)}
+body[data-room-time="night"] .basic-window-sky{background:#29354f}
+.basic-window-v{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#42392f;transform:translateX(-50%)}
+.basic-window-h{position:absolute;left:0;right:0;top:50%;height:2px;background:#42392f;transform:translateY(-50%)}
+.basic-window-sill{position:absolute;left:-6px;right:-6px;bottom:-7px;height:5px;background:#8a674c;border:2px solid #42392f}
+
+/* Status */
+#roomStatusBubble{
+  position:absolute!important;
+  top:18px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  z-index:100!important;
+  max-width:150px!important;
+  white-space:nowrap!important;
+}
+
+/* Wooden floor */
+.room-scene:after{
+  content:"";
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:18px!important;
+  background:#9b714e!important;
+  border-top:2px solid #745139!important;
+  z-index:10!important;
+  pointer-events:none!important;
+}
+
+/* Owner */
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:16px!important;
+  width:118px!important;
+  height:178px!important;
+  transform:translateX(-50%)!important;
+  z-index:95!important;
+  overflow:visible!important;
+}
+#profileAvatarCard{
+  width:118px!important;
+  height:178px!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+#profileAvatarCard .svg-avatar{width:110px!important;height:170px!important;margin:0 auto!important}
+#profileAvatarCard:after{content:none!important;display:none!important}
+
+/* Friends: V7.3 capacity rules — rows 1~3: 8, rows 4~7: 10, row 8+: 12 smaller, max 100. */
+#roomScene #visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:66%!important;
+  display:block!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+  z-index:30!important;
+}
+#roomScene #visitorAvatars .crowd-friend,
+#roomScene #visitorAvatars .crowd-friend:nth-child(n),
+#roomScene #visitorAvatars .crowd-friend[style]{
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  margin:0!important;
+  margin-left:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense){
+  width:40px!important;
+  height:52px!important;
+  left:calc((var(--crowd-col) + .5) * (100% / var(--crowd-cols)) - 20px)!important;
+  bottom:calc(var(--crowd-row) * 48px)!important;
+  z-index:calc(90 - var(--crowd-row))!important;
+}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:0"]{bottom:0!important;z-index:90!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:1"]{bottom:48px!important;z-index:80!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:2"]{bottom:96px!important;z-index:70!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:3"]{bottom:144px!important;z-index:60!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:4"]{bottom:192px!important;z-index:55!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:5"]{bottom:240px!important;z-index:50!important}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:6"]{bottom:288px!important;z-index:45!important}
+#roomScene #visitorAvatars .crowd-friend.crowd-dense{
+  width:32px!important;
+  height:43px!important;
+  left:calc((var(--crowd-col) + .5) * (100% / var(--crowd-cols)) - 16px)!important;
+  bottom:calc(336px + (var(--crowd-row) - 7) * 36px)!important;
+  z-index:calc(40 - (var(--crowd-row) - 7))!important;
+}
+#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense) .svg-avatar{
+  position:absolute!important;left:50%!important;top:auto!important;bottom:4px!important;
+  width:40px!important;height:50px!important;transform:translateX(-50%)!important;
+}
+#roomScene #visitorAvatars .crowd-friend.crowd-dense .svg-avatar{
+  position:absolute!important;left:50%!important;top:auto!important;bottom:3px!important;
+  width:32px!important;height:41px!important;transform:translateX(-50%)!important;
+}
+#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense) .visitor-name{width:38px!important;max-width:38px!important;font-size:5.8px!important}
+#roomScene #visitorAvatars .crowd-friend.crowd-dense .visitor-name{width:30px!important;max-width:30px!important;font-size:5px!important}
+#roomScene #visitorAvatars .crowd-friend{visibility:visible!important;opacity:1!important}
+
+/* Mobile-safe collection sheet */
+@media (max-width:380px){
+  .collection-sheet{width:calc(100vw - 18px)!important;padding:11px!important}
+  .collection-grid,.special-grid{gap:5px!important}
+  .collection-card-bottom b{font-size:7px!important}
+}
+</style>
+
 </body>
 </html>
 
 
 
 
-<style>
-/* V4.6 — visitor crowd is a main part of the room */
-.room-scene{
-  transition:min-height .2s ease;
-}
-.visitor-avatars{
-  position:absolute!important;
-  left:10px!important;
-  right:10px!important;
-  bottom:8px!important;
-  display:grid!important;
-  grid-template-columns:repeat(8,minmax(0,1fr))!important;
-  gap:3px 1px!important;
-  align-items:end!important;
-  overflow:visible!important;
-  z-index:12;
-  pointer-events:none;
-}
-.visitor-character{
-  width:42px!important;
-  height:48px!important;
-  position:relative!important;
-  justify-self:center;
-  overflow:visible!important;
-}
-.visitor-character .pixel-person{
-  position:absolute!important;
-  left:50%!important;
-  bottom:8px!important;
-  transform:translateX(-50%) scale(.21)!important;
-  transform-origin:bottom center!important;
-}
-.visitor-character .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:0!important;
-  transform:translateX(-50%)!important;
-  width:48px!important;
-  max-width:48px!important;
-  font-size:7px!important;
-  line-height:1!important;
-  font-weight:900!important;
-  text-align:center!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  background:rgba(255,255,255,.82);
-  border-radius:5px;
-  padding:1px 2px;
-}
-.visitor-stayed-character{
-  width:58px!important;
-  height:72px!important;
-}
-.visitor-stayed-character .pixel-person{
-  transform:translateX(-50%) scale(.32)!important;
-}
-</style>
 
-<style>
-</style>
+
+
 
 <style>
 .visitor-result-card .secondary{
@@ -4041,40 +4145,9 @@ document.addEventListener("keydown",e=>{
 }
 </style>
 
-<style>
-/* V5.3: compact sharing controls inside MY ROOM IS READY */
-#fakeUrl{display:none!important}
-.ready-share-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:14px;
-}
-.ready-action{
-  min-height:52px;
-  border:1.5px solid #111;
-  border-radius:14px;
-  font:inherit;
-  font-size:12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.ready-copy{background:#f5f3df}
-.ready-invite{background:#dfe98f}
-.ready-story{
-  grid-column:1/-1;
-  background:#f4c8d6;
-}
-</style>
 
-<style>
-/* V5.4 — one result card + real friend-room preview */
-body.visitor-mode.friend-room-preview .room-shell.owner-only{display:block!important}
-body.visitor-mode.friend-room-preview .room-shell .owner-social-summary.owner-only,
-body.visitor-mode.friend-room-preview .room-shell .status-editor.owner-only,
-body.visitor-mode.friend-room-preview .room-shell .save-card.owner-only{display:none!important}
-body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
-</style>
+
+
 
 <style>
 /* V5.5 — one share surface, one clear visitor conversion path */
@@ -4267,1455 +4340,31 @@ body.visitor-mode.friend-room-preview #visitorFlow{display:none!important}
 }
 </style>
 
-<style>
-/* V6.1 — room atmosphere. Decorative only; no interaction/flow changes. */
-.room-atmosphere{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;border-radius:inherit}
-.room-window{
-  position:absolute;right:12px;top:12px;width:68px;height:55px;
-  border:3px solid #2a2926;background:#dcecff;
-  box-shadow:3px 3px 0 rgba(0,0,0,.12);
-}
-.window-sky{position:absolute;inset:0;overflow:hidden;background:#cfe7f2;transition:background .35s ease}
-.window-v{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#2a2926;transform:translateX(-50%)}
-.window-h{position:absolute;left:0;right:0;top:50%;height:2px;background:#2a2926;transform:translateY(-50%)}
-.window-sill{position:absolute;left:-6px;right:-6px;bottom:-7px;height:5px;background:#e7dfcf;border:2px solid #2a2926}
-.sky-sun{position:absolute;width:12px;height:12px;border-radius:50%;right:8px;top:7px;background:#fff1a5;border:1.5px solid #333}
-.sky-cloud{position:absolute;width:18px;height:5px;border-radius:8px;background:rgba(255,255,255,.82)}
-.cloud-a{left:5px;top:12px}.cloud-b{right:5px;bottom:9px;width:13px}
-.sky-star{display:none;position:absolute;color:#fff;font-size:8px}.star-a{left:9px;top:8px}.star-b{left:26px;top:16px}.star-c{right:9px;bottom:7px}
 
-.room-plant{position:absolute;right:91px;top:36px;width:29px;height:43px}
-.room-plant .stem{position:absolute;width:2px;height:21px;left:14px;top:8px;background:#587354}
-.room-plant .leaf{position:absolute;width:12px;height:7px;background:#78936c;border:1.5px solid #2d342b;border-radius:80% 15% 80% 15%}
-.room-plant .l1{left:4px;top:8px;transform:rotate(20deg)}
-.room-plant .l2{left:14px;top:13px;transform:scaleX(-1) rotate(20deg)}
-.room-plant .l3{left:5px;top:18px;transform:rotate(12deg)}
-.room-plant .pot{position:absolute;left:8px;bottom:0;width:15px;height:14px;background:#b96f58;border:2px solid #333;clip-path:polygon(0 0,100% 0,82% 100%,18% 100%)}
 
-/* Four restrained MBTI room palettes */
-body[data-room-group="nt"] .room-scene,
-body[data-room-group="nt"] .mini-room{background-color:#e5e7ef!important}
-body[data-room-group="nf"] .room-scene,
-body[data-room-group="nf"] .mini-room{background-color:#eee5ed!important}
-body[data-room-group="sj"] .room-scene,
-body[data-room-group="sj"] .mini-room{background-color:#e8e7d9!important}
-body[data-room-group="sp"] .room-scene,
-body[data-room-group="sp"] .mini-room{background-color:#eee2d5!important}
 
-/* Window follows the visitor's local time */
-body[data-room-time="sunset"] .window-sky{background:linear-gradient(#efb6a5,#f4d5a8)}
-body[data-room-time="sunset"] .sky-sun{background:#f49a6c;top:24px}
-body[data-room-time="night"] .window-sky{background:#29354f}
-body[data-room-time="night"] .sky-sun{width:10px;height:10px;background:#f4edcf;right:9px;top:8px}
-body[data-room-time="night"] .sky-cloud{display:none}
-body[data-room-time="night"] .sky-star{display:block}
 
-/* Keep actual room content and visitors in front of decoration. */
-#visitorAvatars{z-index:3!important}
-.room-atmosphere ~ *{position:relative;z-index:1}
-</style>
 
-<style>
-/* V6.2 — keep window clear of today's status copy */
-.room-window{
-  top:52px!important;
-  right:12px!important;
-}
-.room-plant{
-  top:76px!important;
-  right:91px!important;
-}
-</style>
 
-<style>
-/* V6.3 — friends surround the owner and fill the whole room */
-.room-scene{
-  position:relative!important;
-  min-height:390px;
-  overflow:hidden!important;
-}
 
-/* Owner stays visually dominant, always above the crowd */
-#profileAvatarCard{
-  position:relative!important;
-  z-index:30!important;
-}
-#profileAvatarCard .svg-avatar,
-#profileAvatarCard .pixel-person{
-  position:relative!important;
-  z-index:31!important;
-  filter:drop-shadow(0 4px 4px rgba(0,0,0,.12));
-}
 
-/* Crowd becomes an absolute full-room layer rather than a bottom row */
-#visitorAvatars{
-  position:absolute!important;
-  inset:56px 4px 10px 4px!important;
-  display:block!important;
-  overflow:visible!important;
-  z-index:8!important;
-  pointer-events:none;
-}
 
-/* Base friend */
-#visitorAvatars .crowd-friend{
-  position:absolute!important;
-  width:46px!important;
-  height:58px!important;
-  margin:0!important;
-  z-index:8!important;
-  opacity:.98;
-  transform-origin:bottom center;
-}
 
-/* 24 repeating anchor positions. These intentionally fill walls/floor and surround the owner. */
-#visitorAvatars .crowd-friend:nth-child(24n+1){left:3%;top:7%}
-#visitorAvatars .crowd-friend:nth-child(24n+2){left:17%;top:5%}
-#visitorAvatars .crowd-friend:nth-child(24n+3){left:33%;top:9%}
-#visitorAvatars .crowd-friend:nth-child(24n+4){right:31%;top:8%}
-#visitorAvatars .crowd-friend:nth-child(24n+5){right:16%;top:4%}
-#visitorAvatars .crowd-friend:nth-child(24n+6){right:2%;top:10%}
 
-#visitorAvatars .crowd-friend:nth-child(24n+7){left:1%;top:31%}
-#visitorAvatars .crowd-friend:nth-child(24n+8){left:14%;top:35%}
-#visitorAvatars .crowd-friend:nth-child(24n+9){left:29%;top:30%}
-#visitorAvatars .crowd-friend:nth-child(24n+10){right:28%;top:33%}
-#visitorAvatars .crowd-friend:nth-child(24n+11){right:13%;top:29%}
-#visitorAvatars .crowd-friend:nth-child(24n+12){right:0%;top:37%}
 
-#visitorAvatars .crowd-friend:nth-child(24n+13){left:4%;top:58%}
-#visitorAvatars .crowd-friend:nth-child(24n+14){left:18%;top:61%}
-#visitorAvatars .crowd-friend:nth-child(24n+15){left:34%;top:57%}
-#visitorAvatars .crowd-friend:nth-child(24n+16){right:32%;top:60%}
-#visitorAvatars .crowd-friend:nth-child(24n+17){right:17%;top:56%}
-#visitorAvatars .crowd-friend:nth-child(24n+18){right:3%;top:63%}
 
-#visitorAvatars .crowd-friend:nth-child(24n+19){left:8%;bottom:0}
-#visitorAvatars .crowd-friend:nth-child(24n+20){left:23%;bottom:3%}
-#visitorAvatars .crowd-friend:nth-child(24n+21){left:38%;bottom:0}
-#visitorAvatars .crowd-friend:nth-child(24n+22){right:37%;bottom:2%}
-#visitorAvatars .crowd-friend:nth-child(24n+23){right:21%;bottom:0}
-#visitorAvatars .crowd-friend:nth-child(24n+24){right:6%;bottom:4%}
 
-/* When more than 24 friends exist, later layers are slightly smaller and shifted.
-   This lets 50–100 friends fill the room without hiding the owner. */
-#visitorAvatars .crowd-friend:nth-child(n+25):nth-child(-n+48){
-  transform:translate(7px,8px) scale(.88);
-  z-index:7!important;
-}
-#visitorAvatars .crowd-friend:nth-child(n+49):nth-child(-n+72){
-  transform:translate(-8px,14px) scale(.78);
-  z-index:6!important;
-}
-#visitorAvatars .crowd-friend:nth-child(n+73){
-  transform:translate(11px,20px) scale(.70);
-  z-index:5!important;
-  opacity:.92;
-}
 
-/* Keep name labels readable but tiny */
-#visitorAvatars .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-1px!important;
-  transform:translateX(-50%)!important;
-  max-width:44px!important;
-  width:44px!important;
-  font-size:6.5px!important;
-  line-height:1!important;
-  padding:1px 2px!important;
-  background:rgba(255,255,255,.80)!important;
-  border-radius:4px!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  text-align:center!important;
-}
 
-/* Friends may overlap the owner, but only behind it */
-#visitorAvatars .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  bottom:5px!important;
-  width:44px!important;
-  height:54px!important;
-  transform:translateX(-50%)!important;
-}
 
-/* The decorative window stays behind everyone */
-.room-atmosphere{z-index:0!important}
-</style>
 
-<style>
-/* V6.4 — friends grow upward from the floor; room copy stays visually clean */
 
-/* Remove descriptive MBTI copy from the ROOM scene itself */
-#mbtiOneLiner,
-#mbtiTraitChips,
-#detailA,
-#detailB,
-#detailC{
-  display:none!important;
-}
 
-/* Give the room more breathing room now that copy is removed */
-.room-scene{
-  position:relative!important;
-  min-height:390px;
-  overflow:hidden!important;
-}
 
-/* Owner stays the visual center and always sits above friends */
-#profileAvatarCard{
-  position:relative!important;
-  z-index:40!important;
-}
-#profileAvatarCard .svg-avatar,
-#profileAvatarCard .pixel-person{
-  position:relative!important;
-  z-index:41!important;
-}
 
-/* Friends occupy the floor only, then build upward row by row */
-#visitorAvatars{
-  position:absolute!important;
-  left:4px!important;
-  right:4px!important;
-  top:auto!important;
-  bottom:8px!important;
-  height:300px!important;
-  display:block!important;
-  overflow:visible!important;
-  z-index:12!important;
-  pointer-events:none;
-}
 
-#visitorAvatars .crowd-friend{
-  position:absolute!important;
-  width:46px!important;
-  height:58px!important;
-  left:calc((var(--crowd-col) + .5) * 12.5% - 23px)!important;
-  bottom:calc(var(--crowd-row) * 43px)!important;
-  margin:0!important;
-  z-index:calc(12 + var(--crowd-row))!important;
-  transform:none!important;
-  opacity:1!important;
-}
 
-/* Small natural staggering so rows don't look like a spreadsheet */
-#visitorAvatars .crowd-friend:nth-child(odd){
-  margin-left:3px!important;
-}
-#visitorAvatars .crowd-friend:nth-child(3n){
-  transform:translateY(2px)!important;
-}
-#visitorAvatars .crowd-friend:nth-child(5n){
-  transform:translateY(-2px)!important;
-}
 
-/* Friend avatar itself */
-#visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  bottom:5px!important;
-  width:44px!important;
-  height:54px!important;
-  transform:translateX(-50%)!important;
-}
-
-/* Slight overlap makes a crowded room feel intentional */
-#visitorAvatars .crowd-friend:nth-child(n+33){
-  transform:scale(.94)!important;
-}
-#visitorAvatars .crowd-friend:nth-child(n+65){
-  transform:scale(.88)!important;
-}
-
-/* Keep names legible but unobtrusive */
-#visitorAvatars .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-1px!important;
-  transform:translateX(-50%)!important;
-  width:44px!important;
-  max-width:44px!important;
-  padding:1px 2px!important;
-  font-size:6.5px!important;
-  line-height:1!important;
-  text-align:center!important;
-  background:rgba(255,255,255,.82)!important;
-  border-radius:4px!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  z-index:4!important;
-}
-
-/* The plant/window remain part of the background, never competing with people */
-.room-atmosphere{z-index:0!important}
-
-/* Ensure room header/status stays above decorative/friend layers */
-.room-status,
-#roomStatusBubble,
-#roomVisitMeta,
-#roomVisitMetaTop{
-  position:relative!important;
-  z-index:50!important;
-}
-</style>
-
-<style>
-/* V6.5 — clean floor: remove obsolete legacy props */
-.rug,
-.room-rug,
-.floor-rug,
-.oval-rug,
-.sofa,
-.room-sofa,
-.floor-sofa,
-.pink-sofa,
-.room-bench,
-.floor-bench{
-  display:none!important;
-}
-
-/* Some legacy decor is drawn inside the room SVG. Hide the two lower prop groups
-   while leaving owner/avatar artwork intact. */
-#roomScene svg .rug,
-#roomScene svg .floor-rug,
-#roomScene svg .room-rug,
-#roomScene svg .sofa,
-#roomScene svg .bench,
-#roomScene svg .floor-prop{
-  display:none!important;
-}
-
-/* Friends now start visibly at the floor baseline and grow upward. */
-#visitorAvatars{
-  bottom:0!important;
-  height:255px!important;
-}
-#visitorAvatars .crowd-friend{
-  bottom:calc(var(--crowd-row) * 39px)!important;
-}
-
-/* First rows overlap slightly like a real crowd instead of floating on the wall. */
-#visitorAvatars .crowd-friend:nth-child(-n+8){
-  bottom:0!important;
-}
-#visitorAvatars .crowd-friend:nth-child(n+9):nth-child(-n+16){
-  bottom:39px!important;
-}
-#visitorAvatars .crowd-friend:nth-child(n+17):nth-child(-n+24){
-  bottom:78px!important;
-}
-
-/* Owner remains unmistakably in front. */
-#profileAvatarCard,
-#profileAvatarCard .svg-avatar,
-#profileAvatarCard .pixel-person{
-  z-index:60!important;
-}
-</style>
-
-<style>
-/* V6.6 — approved cozy room composition */
-.room-scene{
-  min-height:520px!important;
-  position:relative!important;
-  overflow:hidden!important;
-  background:
-    linear-gradient(rgba(255,255,255,.38),rgba(255,255,255,.38)),
-    repeating-linear-gradient(90deg,#efe8dc 0,#efe8dc 30px,#e7dfd1 31px,#efe8dc 32px)!important;
-  border-bottom:18px solid #9b714e!important;
-}
-
-/* Remove every legacy floor prop, including the unexplained pink rectangle. */
-.rug,.room-rug,.floor-rug,.oval-rug,
-.sofa,.room-sofa,.floor-sofa,.pink-sofa,.room-bench,.floor-bench,
-.floor-prop,.legacy-room-prop,.room-furniture-right{
-  display:none!important;
-}
-#roomScene svg .rug,
-#roomScene svg .floor-rug,
-#roomScene svg .room-rug,
-#roomScene svg .sofa,
-#roomScene svg .bench,
-#roomScene svg .floor-prop,
-#roomScene svg rect[fill="#f4c8d6"],
-#roomScene svg rect[fill="#F4C8D6"]{
-  display:none!important;
-}
-
-.room-v66-decor{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-}
-
-/* Window — upper-left, away from status and owner */
-.v66-window{
-  position:absolute;
-  left:14px;
-  top:16px;
-  width:126px;
-  height:132px;
-  border:3px solid #5a4636;
-  background:#bfe1f5;
-  box-shadow:0 4px 0 rgba(0,0,0,.11);
-}
-.v66-sky{
-  position:absolute;inset:0;
-  background:linear-gradient(#bfe2f8 0 55%,#bdd7a2 56% 100%);
-}
-body[data-room-time="sunset"] .v66-sky{background:linear-gradient(#e8a4aa 0 48%,#f0c68e 49% 72%,#8aa374 73%)}
-body[data-room-time="night"] .v66-sky{background:linear-gradient(#26334d 0 60%,#485a4c 61%)}
-.v66-window-cross{position:absolute;background:#5a4636;z-index:2}
-.v66-window-cross.v{width:3px;top:0;bottom:0;left:50%}
-.v66-window-cross.h{height:3px;left:0;right:0;top:50%}
-.v66-sill{
-  position:absolute;left:-8px;right:-8px;bottom:-11px;height:9px;
-  background:#76573f;border:2px solid #4d3a2e;
-}
-.v66-curtain{
-  position:absolute;top:-4px;width:23px;height:120px;z-index:4;
-  background:repeating-linear-gradient(90deg,#f8f5ea 0 6px,#ebe3d3 7px 9px);
-  border:1px solid #d4c9b8;
-}
-.v66-curtain.left{left:-10px;border-radius:0 0 20px 0;transform:skewX(-3deg)}
-.v66-curtain.right{right:-10px;border-radius:0 0 0 20px;transform:skewX(3deg)}
-.v66-window-plant{position:absolute;left:7px;bottom:-2px;width:35px;height:46px;z-index:6}
-.v66-window-plant .stem{position:absolute;width:2px;height:24px;background:#466141;left:17px;top:8px}
-.v66-window-plant .leaf{
-  position:absolute;width:16px;height:9px;background:#6e8d5e;border:1.5px solid #33452f;border-radius:70% 15% 70% 15%;
-}
-.v66-window-plant .a{left:2px;top:8px;transform:rotate(20deg)}
-.v66-window-plant .b{left:16px;top:13px;transform:scaleX(-1) rotate(20deg)}
-.v66-window-plant .c{left:4px;top:21px;transform:rotate(10deg)}
-.v66-window-plant .pot{
-  position:absolute;left:8px;bottom:0;width:20px;height:17px;background:#ae7d55;border:2px solid #594432;
-}
-.v66-photo{
-  position:absolute;right:9px;bottom:0;width:18px;height:24px;background:#d8a79f;border:3px solid #8b6954;z-index:6;
-}
-.v66-photo:after{content:"♥";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:8px}
-
-/* Shelf and small wall decor */
-.v66-shelf{
-  position:absolute;left:18px;top:196px;width:120px;height:8px;
-  background:#8b6548;border:2px solid #5b4232;
-}
-.v66-frame{position:absolute;left:4px;bottom:8px;width:24px;height:34px;border:3px solid #866448;background:#fff2e1;display:grid;place-items:center;color:#dd8a90;font-size:12px}
-.v66-radio{position:absolute;left:40px;bottom:8px;width:34px;height:25px;border:2px solid #6c4f3e;background:#cf8b8f;border-radius:4px}
-.v66-radio:after{content:"";position:absolute;width:10px;height:10px;border:2px solid #6c4f3e;border-radius:50%;left:4px;top:6px}
-.v66-cat{position:absolute;left:78px;bottom:8px;width:22px;height:25px;background:#333;color:#f4c579;font-size:7px;border-radius:9px 9px 5px 5px;display:grid;place-items:center}
-.v66-books{position:absolute;left:102px;bottom:8px;width:18px;height:22px;background:linear-gradient(#e1a87a 0 30%,#6d8a9e 31% 60%,#e2cf9f 61%);border:1px solid #5a493c}
-.v66-hanging-plant{position:absolute;left:12px;top:258px;width:50px;height:70px}
-.v66-hanging-plant .rope{position:absolute;left:24px;top:0;width:2px;height:28px;background:#8f7255}
-.v66-hanging-plant .basket{position:absolute;left:12px;top:25px;width:28px;height:18px;background:#a9754d;border:2px solid #6b4f38}
-.v66-hanging-plant .leaf{position:absolute;width:20px;height:10px;background:#668355;border:1px solid #3f5438;border-radius:70% 15% 70% 15%}
-.v66-hanging-plant .l1{left:2px;top:36px;transform:rotate(-20deg)}
-.v66-hanging-plant .l2{left:25px;top:38px;transform:scaleX(-1) rotate(-15deg)}
-.v66-hanging-plant .l3{left:14px;top:49px;transform:rotate(15deg)}
-.v66-wall-art{position:absolute;border:2px solid #b48870;background:#f2d0cb;color:#bb777a;text-align:center;font-size:7px;font-weight:900;line-height:1.3;padding:6px}
-.v66-wall-art.art-a{right:28px;top:214px;width:55px;height:62px}
-.v66-wall-art.art-b{right:8px;top:287px;width:35px;height:44px;display:grid;place-items:center}
-
-/* Keep the owner in a clean center zone */
-#profileAvatarCard{
-  position:absolute!important;
-  left:50%!important;
-  top:170px!important;
-  transform:translateX(-50%)!important;
-  z-index:70!important;
-  width:120px!important;
-  min-height:190px!important;
-  background:transparent!important;
-  border:none!important;
-  box-shadow:none!important;
-}
-#profileAvatarCard .svg-avatar{
-  width:120px!important;
-  height:185px!important;
-}
-#profileAvatarCard:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:2px;
-  transform:translateX(-50%);
-  width:122px;
-  height:38px;
-  border:2px solid #d99ba4;
-  border-radius:50%;
-  background:#e9a7ae55;
-  z-index:-1;
-}
-
-/* Friends start at the real wooden floor and stack upward.
-   Center gap protects the owner for the first 3 rows. */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  height:240px!important;
-  z-index:20!important;
-  overflow:visible!important;
-  display:block!important;
-}
-#visitorAvatars .crowd-friend{
-  position:absolute!important;
-  width:42px!important;
-  height:54px!important;
-  left:calc((var(--crowd-col) + .5) * 10% - 21px)!important;
-  bottom:calc(var(--crowd-row) * 37px)!important;
-  z-index:calc(20 + var(--crowd-row))!important;
-  transform:none!important;
-  margin:0!important;
-}
-#visitorAvatars .crowd-friend .svg-avatar{
-  width:42px!important;height:52px!important;
-}
-#visitorAvatars .visitor-name{
-  width:40px!important;
-  max-width:40px!important;
-  font-size:6px!important;
-  bottom:-2px!important;
-}
-
-/* First three rows: reserve center lane around owner */
-
-
-/* Header/status/stat blocks remain above room layers */
-#roomStatusBubble,#roomVisitMeta,#roomVisitMetaTop{
-  position:relative!important;
-  z-index:90!important;
-}
-</style>
-
-<style>
-/* V6.7 — final room positioning rules */
-
-/* Old furniture must never come back. */
-.room-bed,
-.room-rug,
-.room-atmosphere,
-.room-scene > .room-window{
-  display:none!important;
-}
-
-/* Stable room canvas */
-.room-scene{
-  min-height:520px!important;
-  position:relative!important;
-  overflow:hidden!important;
-}
-
-/* Today's status: clear of the left window */
-#roomStatusBubble{
-  position:absolute!important;
-  top:22px!important;
-  left:50%!important;
-  right:auto!important;
-  bottom:auto!important;
-  transform:translateX(-50%)!important;
-  max-width:180px!important;
-  z-index:90!important;
-  white-space:nowrap!important;
-}
-
-/* OWNER: position the outer stage only */
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  right:auto!important;
-  bottom:94px!important;
-  width:130px!important;
-  height:195px!important;
-  transform:translateX(-50%)!important;
-  z-index:70!important;
-  overflow:visible!important;
-}
-
-#profileAvatarCard{
-  position:relative!important;
-  left:auto!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:auto!important;
-  width:130px!important;
-  height:195px!important;
-  min-height:0!important;
-  margin:0!important;
-  padding:0!important;
-  transform:none!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-  overflow:visible!important;
-  z-index:71!important;
-}
-
-#profileAvatarCard .svg-avatar{
-  position:relative!important;
-  left:auto!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:auto!important;
-  width:120px!important;
-  height:185px!important;
-  margin:0 auto!important;
-  transform:none!important;
-  z-index:72!important;
-}
-
-/* Owner's subtle floor marker */
-#profileAvatarCard:after{
-  content:"";
-  position:absolute!important;
-  left:50%!important;
-  bottom:1px!important;
-  width:116px!important;
-  height:28px!important;
-  transform:translateX(-50%)!important;
-  border:2px solid #d99ba4!important;
-  border-radius:50%!important;
-  background:rgba(233,167,174,.18)!important;
-  z-index:-1!important;
-}
-
-/* Real floor */
-.room-scene:after{
-  content:"";
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  height:18px!important;
-  background:#9b714e!important;
-  border-top:2px solid #745139!important;
-  z-index:10!important;
-  pointer-events:none!important;
-}
-
-/* FRIENDS: start at floor and only grow upward */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:calc(100% - 16px)!important;
-  display:block!important;
-  overflow:visible!important;
-  z-index:20!important;
-  pointer-events:none!important;
-}
-
-#visitorAvatars .crowd-friend,
-#visitorAvatars .crowd-friend:nth-child(n){
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  left:calc((var(--crowd-col) + .5) * 10% - 21px)!important;
-  bottom:calc(var(--crowd-row) * 36px + 1px)!important;
-  width:42px!important;
-  height:54px!important;
-  margin:0!important;
-  margin-left:0!important;
-  opacity:1!important;
-  visibility:visible!important;
-  transform:none!important;
-  z-index:calc(20 + var(--crowd-row))!important;
-}
-
-#visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:4px!important;
-  width:42px!important;
-  height:52px!important;
-  transform:translateX(-50%)!important;
-}
-
-#visitorAvatars .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-2px!important;
-  width:40px!important;
-  max-width:40px!important;
-  padding:1px 2px!important;
-  transform:translateX(-50%)!important;
-  font-size:6px!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  text-align:center!important;
-  border-radius:4px!important;
-  background:rgba(255,255,255,.84)!important;
-  z-index:4!important;
-}
-
-/* Layer order */
-.room-v66-decor{z-index:1!important;}
-#visitorAvatars{z-index:20!important;}
-.owner-avatar-stage{z-index:70!important;}
-</style>
-
-<style>
-/* V6.8 — square room, clean basic window, floor-first crowd */
-
-/* Square mini-home */
-.room-scene{
-  width:100%!important;
-  aspect-ratio:1 / 1!important;
-  min-height:0!important;
-  height:auto!important;
-  position:relative!important;
-  overflow:hidden!important;
-  background:
-    linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),
-    repeating-linear-gradient(90deg,#efe9df 0,#efe9df 30px,#e7e0d6 31px,#efe9df 32px)!important;
-  border-bottom:18px solid #9b714e!important;
-}
-
-/* Remove every decorative element the user asked to delete */
-.room-v66-decor,
-.v66-shelf,
-.v66-hanging-plant,
-.v66-wall-art,
-.v66-window-plant,
-.room-plant,
-.room-bed,
-.room-rug,
-.room-atmosphere,
-.room-scene > .room-window{
-  display:none!important;
-}
-
-/* Simple original-style window */
-.room-basic-window{
-  position:absolute!important;
-  left:16px!important;
-  top:18px!important;
-  width:92px!important;
-  height:78px!important;
-  border:3px solid #42392f!important;
-  background:#cfe7f2!important;
-  z-index:1!important;
-  pointer-events:none!important;
-}
-.basic-window-sky{
-  position:absolute;inset:0;
-  background:#cfe7f2;
-}
-body[data-room-time="sunset"] .basic-window-sky{
-  background:linear-gradient(#efb6a5,#f4d5a8);
-}
-body[data-room-time="night"] .basic-window-sky{
-  background:#29354f;
-}
-.basic-window-v{
-  position:absolute;left:50%;top:0;bottom:0;width:2px;background:#42392f;transform:translateX(-50%);
-}
-.basic-window-h{
-  position:absolute;left:0;right:0;top:50%;height:2px;background:#42392f;transform:translateY(-50%);
-}
-.basic-window-sill{
-  position:absolute;left:-6px;right:-6px;bottom:-7px;height:5px;background:#8a674c;border:2px solid #42392f;
-}
-
-/* Remove right-side pink decor / KEEP GOING card completely */
-.v66-wall-art.art-a,
-.v66-wall-art.art-b{
-  display:none!important;
-}
-
-/* Status sits away from the window */
-#roomStatusBubble{
-  position:absolute!important;
-  top:18px!important;
-  left:50%!important;
-  transform:translateX(-50%)!important;
-  z-index:90!important;
-  max-width:150px!important;
-  white-space:nowrap!important;
-}
-
-/* Owner stays centered and never overlaps the crowd */
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  top:34%!important;
-  bottom:auto!important;
-  transform:translate(-50%,-50%)!important;
-  width:118px!important;
-  height:178px!important;
-  z-index:80!important;
-}
-#profileAvatarCard{
-  width:118px!important;
-  height:178px!important;
-}
-#profileAvatarCard .svg-avatar{
-  width:110px!important;
-  height:170px!important;
-}
-
-/* Floor */
-.room-scene:after{
-  content:"";
-  position:absolute!important;
-  left:0!important;right:0!important;bottom:0!important;
-  height:18px!important;
-  background:#9b714e!important;
-  border-top:2px solid #745139!important;
-  z-index:10!important;
-}
-
-/* Crowd layer fills the lower half of the square room */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:52%!important;
-  display:block!important;
-  overflow:visible!important;
-  z-index:20!important;
-  pointer-events:none!important;
-}
-
-/* Reset all previous crowd positioning */
-#visitorAvatars .crowd-friend,
-#visitorAvatars .crowd-friend:nth-child(n){
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
-  width:40px!important;
-  height:52px!important;
-  margin:0!important;
-  transform:none!important;
-  visibility:visible!important;
-  opacity:1!important;
-}
-
-/* Floor row is the FRONT row.
-   Higher rows are progressively behind and higher on screen. */
-#visitorAvatars .crowd-friend{
-  bottom:calc(var(--crowd-row) * 34px)!important;
-  z-index:calc(60 - var(--crowd-row))!important;
-}
-
-/* Row 0 in front, row 1 behind it, etc.
-   Vertical gap is enough so back-row bodies do not cover front-row faces. */
-#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{z-index:60!important;}
-#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{z-index:50!important;}
-#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{z-index:40!important;}
-#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{z-index:30!important;}
-#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{z-index:25!important;}
-#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{z-index:22!important;}
-
-/* Friend character */
-#visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  bottom:4px!important;
-  width:40px!important;
-  height:50px!important;
-  transform:translateX(-50%)!important;
-}
-
-/* Tiny labels */
-#visitorAvatars .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-2px!important;
-  width:38px!important;
-  max-width:38px!important;
-  transform:translateX(-50%)!important;
-  padding:1px!important;
-  font-size:5.8px!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  text-align:center!important;
-  background:rgba(255,255,255,.84)!important;
-  border-radius:4px!important;
-}
-
-/* Layer ordering */
-.room-basic-window{z-index:1!important;}
-#visitorAvatars{z-index:20!important;}
-.owner-avatar-stage{z-index:80!important;}
-</style>
-
-<style>
-/* V6.9 — owner stands on the floor */
-.owner-avatar-stage{
-  top:auto!important;
-  bottom:18px!important;
-  transform:translateX(-50%)!important;
-  height:178px!important;
-}
-
-/* Owner remains in front of all visitors */
-.owner-avatar-stage{z-index:90!important;}
-</style>
-
-<style>
-/* V7.0 — all friends visible + no owner pedestal */
-
-/* Remove pink owner floor marker completely */
-#profileAvatarCard:after{
-  content:none!important;
-  display:none!important;
-}
-
-/* Give the square room a clear floor area */
-.room-scene{
-  aspect-ratio:1/1!important;
-  min-height:0!important;
-  overflow:hidden!important;
-}
-
-/* Owner stands on the rear edge of the floor, not in the middle of friend rows */
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  bottom:31%!important;
-  transform:translateX(-50%)!important;
-  width:118px!important;
-  height:178px!important;
-  z-index:75!important;
-}
-
-/* The friend crowd occupies the foreground floor */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:43%!important;
-  overflow:visible!important;
-  z-index:20!important;
-}
-
-/* Reset all historical placement rules */
-#visitorAvatars .crowd-friend,
-#visitorAvatars .crowd-friend:nth-child(n){
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  width:40px!important;
-  height:52px!important;
-  margin:0!important;
-  opacity:1!important;
-  visibility:visible!important;
-  transform:none!important;
-}
-
-/*
-  row 0 = row closest to owner: center gap because it shares the owner's visual line.
-  row 1+ = full-width rows in front of that line.
-  Moving later rows DOWN toward the viewer prevents the owner from hiding them.
-*/
-#visitorAvatars .crowd-friend{
-  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
-  bottom:calc((5 - var(--crowd-row)) * 33px)!important;
-  z-index:calc(40 + var(--crowd-row))!important;
-}
-
-/* We only need sensible positioning for the practical number of visible rows.
-   First row is nearest owner; later rows progressively move toward the bottom/front. */
-#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
-  bottom:165px!important;
-  z-index:40!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
-  bottom:126px!important;
-  z-index:45!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
-  bottom:87px!important;
-  z-index:50!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
-  bottom:48px!important;
-  z-index:55!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
-  bottom:9px!important;
-  z-index:60!important;
-}
-
-/* More rows continue by compressing slightly at the front rather than disappearing */
-#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{
-  bottom:4px!important;
-  z-index:61!important;
-  transform:translateY(8px) scale(.92)!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:6"]{
-  bottom:2px!important;
-  z-index:62!important;
-  transform:translateY(16px) scale(.85)!important;
-}
-
-/* Friends remain readable */
-#visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  bottom:4px!important;
-  width:40px!important;
-  height:50px!important;
-  transform:translateX(-50%)!important;
-}
-</style>
-
-<style>
-/* V7.1 — simple, reliable bottom-up friend stacking */
-
-/* No pink pedestal under owner */
-#profileAvatarCard:after{
-  content:none!important;
-  display:none!important;
-}
-
-/* Keep the mini-home square */
-.room-scene{
-  width:100%!important;
-  aspect-ratio:1/1!important;
-  height:auto!important;
-  min-height:0!important;
-  position:relative!important;
-  overflow:hidden!important;
-}
-
-/*
-  Owner stands on the BACK area of the wooden floor.
-  It is still on the floor, but not inside the friend rows.
-*/
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:37%!important;
-  width:118px!important;
-  height:178px!important;
-  transform:translateX(-50%)!important;
-  z-index:35!important;
-  overflow:visible!important;
-}
-
-#profileAvatarCard{
-  position:relative!important;
-  left:auto!important;
-  top:auto!important;
-  bottom:auto!important;
-  width:118px!important;
-  height:178px!important;
-  transform:none!important;
-  z-index:36!important;
-}
-
-#profileAvatarCard .svg-avatar{
-  width:110px!important;
-  height:170px!important;
-  margin:0 auto!important;
-  transform:none!important;
-}
-
-/* Friend crowd uses the lower half only */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:43%!important;
-  display:block!important;
-  overflow:visible!important;
-  pointer-events:none!important;
-  z-index:50!important;
-}
-
-/*
-  Reset ALL accumulated historical rules:
-  no top positioning, no hidden children, no translate/scale.
-*/
-#visitorAvatars .crowd-friend,
-#visitorAvatars .crowd-friend:nth-child(n),
-#visitorAvatars .crowd-friend[style*="--crowd-row"]{
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  margin:0!important;
-  margin-left:0!important;
-  width:40px!important;
-  height:52px!important;
-  opacity:1!important;
-  visibility:visible!important;
-  transform:none!important;
-
-  /* 10 equal slots across the full room width */
-  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
-
-  /* bottom row first, then one row upward */
-  bottom:calc(var(--crowd-row) * 44px)!important;
-
-  /*
-    row 0 is visually in front.
-    row 1 is behind row 0, etc.
-  */
-  z-index:calc(90 - var(--crowd-row))!important;
-}
-
-/* Explicit first rows so older CSS can never override them */
-#visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
-  bottom:0!important;
-  z-index:90!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
-  bottom:44px!important;
-  z-index:80!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
-  bottom:88px!important;
-  z-index:70!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
-  bottom:132px!important;
-  z-index:60!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
-  bottom:176px!important;
-  z-index:50!important;
-}
-#visitorAvatars .crowd-friend[style*="--crowd-row:5"]{
-  bottom:220px!important;
-  z-index:40!important;
-  transform:none!important;
-}
-
-/*
-  Each back row is 44px higher while the character is ~50px tall.
-  This tiny overlap feels crowded, but the front row cannot cover
-  the face of the row behind it.
-*/
-#visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:4px!important;
-  width:40px!important;
-  height:50px!important;
-  transform:translateX(-50%)!important;
-}
-
-#visitorAvatars .visitor-name{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-2px!important;
-  width:38px!important;
-  max-width:38px!important;
-  transform:translateX(-50%)!important;
-  padding:1px!important;
-  font-size:5.8px!important;
-  line-height:1!important;
-  text-align:center!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  background:rgba(255,255,255,.84)!important;
-  border-radius:4px!important;
-}
-
-/* Window/decor stays behind everybody */
-.room-basic-window{z-index:1!important;}
-.owner-avatar-stage{z-index:35!important;}
-#visitorAvatars{z-index:50!important;}
-</style>
-
-<style>
-/* V7.2 — fix hidden friends + owner shares the floor baseline */
-
-/* There must never be a hidden friend character. */
-#roomScene #visitorAvatars .crowd-friend,
-#roomScene #visitorAvatars .crowd-friend:nth-child(n),
-#roomScene #visitorAvatars .crowd-friend[style]{
-  visibility:visible!important;
-  opacity:1!important;
-}
-
-/* Real wood-floor baseline */
-#visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:44%!important;
-  overflow:visible!important;
-  display:block!important;
-  pointer-events:none!important;
-  z-index:40!important;
-}
-
-/* Owner now stands on exactly the same floor line as friend row 0. */
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:16px!important;
-  width:118px!important;
-  height:178px!important;
-  transform:translateX(-50%)!important;
-  z-index:85!important;
-  overflow:visible!important;
-}
-
-#profileAvatarCard{
-  height:178px!important;
-  width:118px!important;
-  margin:0!important;
-}
-
-#profileAvatarCard .svg-avatar{
-  width:110px!important;
-  height:170px!important;
-  margin:0 auto!important;
-}
-
-/* Pink pedestal stays removed. */
-#profileAvatarCard:after{
-  content:none!important;
-  display:none!important;
-}
-
-/* Authoritative friend coordinates */
-#roomScene #visitorAvatars .crowd-friend,
-#roomScene #visitorAvatars .crowd-friend:nth-child(n),
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row"]{
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
-  width:40px!important;
-  height:52px!important;
-  margin:0!important;
-  margin-left:0!important;
-  transform:none!important;
-
-  /* row 0 is on the floor, later rows rise behind it */
-  bottom:calc(var(--crowd-row) * 48px)!important;
-  z-index:calc(70 - var(--crowd-row))!important;
-}
-
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
-  bottom:0!important;
-  z-index:70!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
-  bottom:48px!important;
-  z-index:60!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
-  bottom:96px!important;
-  z-index:50!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
-  bottom:144px!important;
-  z-index:45!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
-  bottom:192px!important;
-  z-index:40!important;
-}
-
-/* Character itself */
-#roomScene #visitorAvatars .crowd-friend .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  bottom:4px!important;
-  width:40px!important;
-  height:50px!important;
-  transform:translateX(-50%)!important;
-}
-
-/*
-  The owner's row has an empty center because the renderer uses
-  columns 0,1,2,3 and 6,7,8,9 only.
-  No friend is hidden; those center slots simply aren't assigned.
-*/
-</style>
-
-<style>
-/* V7.3 — final crowd system */
-
-/* Keep room square */
-.room-scene{
-  width:100%!important;
-  aspect-ratio:1/1!important;
-  min-height:0!important;
-  height:auto!important;
-  position:relative!important;
-  overflow:hidden!important;
-}
-
-/* Owner stays on the wooden floor, centered */
-.owner-avatar-stage{
-  position:absolute!important;
-  left:50%!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:16px!important;
-  width:118px!important;
-  height:178px!important;
-  transform:translateX(-50%)!important;
-  z-index:95!important;
-}
-#profileAvatarCard:after{
-  content:none!important;
-  display:none!important;
-}
-
-/* Friends occupy the full floor area and stack upward from the bottom */
-#roomScene #visitorAvatars{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  top:auto!important;
-  bottom:16px!important;
-  height:66%!important;
-  display:block!important;
-  overflow:visible!important;
-  pointer-events:none!important;
-  z-index:30!important;
-}
-
-/* Reset every older crowd positioning rule */
-#roomScene #visitorAvatars .crowd-friend,
-#roomScene #visitorAvatars .crowd-friend:nth-child(n),
-#roomScene #visitorAvatars .crowd-friend[style]{
-  position:absolute!important;
-  top:auto!important;
-  right:auto!important;
-  margin:0!important;
-  margin-left:0!important;
-  opacity:1!important;
-  visibility:visible!important;
-  transform:none!important;
-}
-
-/* Base size for rows 1~7 */
-#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense){
-  width:40px!important;
-  height:52px!important;
-  left:calc((var(--crowd-col) + .5) * (100% / var(--crowd-cols)) - 20px)!important;
-
-  /* row 0 at floor, then grow upward */
-  bottom:calc(var(--crowd-row) * 48px)!important;
-
-  /* front row visually in front */
-  z-index:calc(90 - var(--crowd-row))!important;
-}
-
-/* Rows 1~3: center gap is created by renderer, not hiding */
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
-  bottom:0!important;
-  z-index:90!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
-  bottom:48px!important;
-  z-index:80!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
-  bottom:96px!important;
-  z-index:70!important;
-}
-
-/* Rows 4~7: full-width 10 per row */
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
-  bottom:144px!important;
-  z-index:60!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
-  bottom:192px!important;
-  z-index:55!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:5"]{
-  bottom:240px!important;
-  z-index:50!important;
-}
-#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:6"]{
-  bottom:288px!important;
-  z-index:45!important;
-}
-
-/* Rows 8+: smaller, 12 per row, enough for 100 friends */
-#roomScene #visitorAvatars .crowd-friend.crowd-dense{
-  width:32px!important;
-  height:43px!important;
-  left:calc((var(--crowd-col) + .5) * (100% / var(--crowd-cols)) - 16px)!important;
-  bottom:calc(336px + (var(--crowd-row) - 7) * 36px)!important;
-  z-index:calc(40 - (var(--crowd-row) - 7))!important;
-}
-
-/* Regular friend avatar */
-#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense) .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  bottom:4px!important;
-  width:40px!important;
-  height:50px!important;
-  transform:translateX(-50%)!important;
-}
-
-/* Dense friend avatar */
-#roomScene #visitorAvatars .crowd-friend.crowd-dense .svg-avatar{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  bottom:3px!important;
-  width:32px!important;
-  height:41px!important;
-  transform:translateX(-50%)!important;
-}
-
-/* Labels */
-#roomScene #visitorAvatars .crowd-friend:not(.crowd-dense) .visitor-name{
-  width:38px!important;
-  max-width:38px!important;
-  font-size:5.8px!important;
-}
-#roomScene #visitorAvatars .crowd-friend.crowd-dense .visitor-name{
-  width:30px!important;
-  max-width:30px!important;
-  font-size:5px!important;
-}
-
-/* No friend is ever hidden */
-#roomScene #visitorAvatars .crowd-friend{
-  visibility:visible!important;
-  opacity:1!important;
-}
-</style>
 
 <style>
 /* V7.4 — simple 16 TYPE collection */
