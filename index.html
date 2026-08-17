@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V4.9</title>
+<title>MY ROOM V5.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1840,6 +1840,7 @@ async function hydrateOwnerRoom(room){
 }
 
 function showCreateHome(){
+  if(getSharedRoomSlug()) history.replaceState({}, "", window.location.pathname);
   currentRemoteRoom=null;
   VIEW_MODE="owner";
   document.body.classList.remove("visitor-mode","chemistry-done");
@@ -2116,6 +2117,15 @@ function calcMoodFromBirth(birth){
 
 async function persistRoomToSupabase(){
   if(!currentAuthUser){ startRealSave(); return; }
+
+  // Never save/update somebody else's shared ROOM.
+  if(currentRemoteRoom && currentRemoteRoom.owner_id !== currentAuthUser.id){
+    currentRemoteRoom=null;
+    history.replaceState({}, "", window.location.pathname);
+    VIEW_MODE="owner";
+    document.body.classList.remove("visitor-mode","chemistry-done");
+  }
+
   const authToast=document.getElementById("authToast");
   if(authToast) authToast.classList.add("show");
 
@@ -2135,7 +2145,7 @@ async function persistRoomToSupabase(){
     return;
   }
 
-  const slug=currentRemoteRoom?.id || generateAutoSlug();
+  const slug=currentRemoteRoom?.slug || generateAutoSlug();
   const owner=state.owner;
 
   const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
@@ -2194,12 +2204,25 @@ async function persistRoomToSupabase(){
   currentRemoteRoom=res.data;
   loggedInOwnRoom=res.data;
   clearPendingRoomDraft();
+
+  history.replaceState({}, "", window.location.pathname);
+  VIEW_MODE="owner";
+  document.body.classList.remove("visitor-mode","chemistry-done");
+
   showSaveState("ready");
   syncRealAuthUI();
+
+  try{ renderRoom(); }catch(e){ console.warn("saved room render failed",e); }
+  go("room");
+
   await refreshVisitCounts(currentRemoteRoom.id);
+  try{ await loadRoomSocialSnapshot(currentRemoteRoom.id,true); }catch(e){}
+
   const fake=document.getElementById("fakeUrl");
-  if(fake) fake.textContent=window.location.origin+window.location.pathname+"?room="+currentRemoteRoom.slug;
-  
+  if(fake) fake.textContent=publicRoomUrl();
+
+  if(authToast) authToast.classList.remove("show");
+  toast("내 ROOM을 저장했어요");
 }
 
 async function loadMyRemoteRoom(){
@@ -3301,11 +3324,27 @@ async function handleVisitorPrimaryCta(){
     return;
   }
 
-  // No account/room yet: start the normal room creation flow.
+  // No account/room yet: fully leave the friend's shared ROOM before creating mine.
+  // IMPORTANT: remove ?room=<friend-room-id>, otherwise auth/boot routing will reopen the friend's ROOM.
+  history.replaceState({}, "", window.location.pathname);
+
   document.body.classList.remove("visitor-mode","chemistry-done");
   VIEW_MODE="owner";
+
   currentRemoteRoom=null;
+  window.__visitorChemistry=null;
+
+  state.owner={name:"",birth:"",mbti:"",today_status:""};
+
+  const ownerName=document.getElementById("ownerName");
+  const ownerBirth=document.getElementById("ownerBirth");
+  const ownerMbti=document.getElementById("ownerMbti");
+  if(ownerName) ownerName.value="";
+  if(ownerBirth) ownerBirth.value="";
+  if(ownerMbti) ownerMbti.value="";
+
   go("landing");
+  syncRealAuthUI();
   window.scrollTo(0,0);
 }
 
