@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V6.8</title>
+<title>MY ROOM V6.9</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V6.8</div>
+    <div class="micro">V6.9</div>
   </div>
 
   <div class="hero-blob">
@@ -4986,4 +4986,17 @@ body[data-room-time="night"] .basic-window-sky{
 .room-basic-window{z-index:1!important;}
 #visitorAvatars{z-index:20!important;}
 .owner-avatar-stage{z-index:80!important;}
+</style>
+
+<style>
+/* V6.9 — owner stands on the floor */
+.owner-avatar-stage{
+  top:auto!important;
+  bottom:18px!important;
+  transform:translateX(-50%)!important;
+  height:178px!important;
+}
+
+/* Owner remains in front of all visitors */
+.owner-avatar-stage{z-index:90!important;}
 </style>
