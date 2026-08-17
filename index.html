@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.5</title>
+<title>ROOM.zip V9.7</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.5</div>
+    <div class="micro">V9.7</div>
   </div>
 
   <div class="hero-blob">
@@ -1462,6 +1462,25 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
       <button class="ready-action ready-invite" onclick="openShareInvite()"><b>친구 초대</b></button>
       <button class="ready-action ready-story" onclick="downloadRoomStoryCard()"><b>스토리 카드 저장</b></button>
     </div>
+  </div>
+</div>
+
+
+<div class="friend-chem-backdrop" id="friendChemBackdrop" onclick="closeFriendChemistry(event)">
+  <div class="friend-chem-popup" role="dialog" aria-modal="true" aria-labelledby="friendChemName" onclick="event.stopPropagation()">
+    <button class="friend-chem-close" type="button" onclick="closeFriendChemistry()">×</button>
+    <div class="micro">FRIEND CHEMISTRY</div>
+    <div class="friend-chem-head">
+      <div>
+        <div class="friend-chem-name" id="friendChemName">FRIEND</div>
+        <div class="friend-chem-pair" id="friendChemPair">ISTP × ENFP</div>
+      </div>
+      <div class="friend-chem-score" id="friendChemScore">87%</div>
+    </div>
+    <div class="friend-chem-title" id="friendChemTitle"></div>
+    <div class="friend-chem-section"><b>잘 맞을 때</b><p id="friendChemGood"></p></div>
+    <div class="friend-chem-section"><b>삐걱거릴 때</b><p id="friendChemFriction"></p></div>
+    <div class="friend-chem-conclusion"><b>한줄 결론</b><p id="friendChemConclusion"></p></div>
   </div>
 </div>
 
@@ -3178,6 +3197,58 @@ function renderSocialSnapshot(){
 }
 
 
+
+function openFriendChemistry(index){
+  const bubble=document.querySelector('.friend-tap-bubble');
+  if(bubble) bubble.classList.add('seen');
+
+  const friends=Array.isArray(roomSocialSnapshot?.recent_friends)
+    ? roomSocialSnapshot.recent_friends.slice(0,100)
+    : [];
+  const friend=friends[Number(index)];
+  if(!friend) return;
+
+  const ownerMbti=String(state?.owner?.mbti||currentRemoteRoom?.mbti||"").toUpperCase();
+  const friendMbti=String(friend?.mbti||"").toUpperCase();
+  if(!ownerMbti || !friendMbti) return;
+
+  const data=getChemistryData(ownerMbti,friendMbti);
+  const score=Number(friend?.score ?? data?.score ?? chemistryScoreFor(ownerMbti,friendMbti));
+  const fallback=chemistryCopy(score,ownerMbti,friendMbti);
+
+  const title=data?.title || fallback[0];
+  const good=data?.good || fallback[1];
+  const friction=data?.friction || "서로 다른 방식으로 생각해서 가끔 타이밍이 엇갈릴 수 있음.";
+  const conclusion=data?.conclusion || "다른 부분까지 알게 될수록 더 재밌어지는 사이.";
+
+  document.getElementById("friendChemName").textContent=String(friend?.name||"FRIEND");
+  document.getElementById("friendChemPair").textContent=`${ownerMbti} × ${friendMbti}`;
+  document.getElementById("friendChemScore").textContent=`${score}%`;
+  document.getElementById("friendChemTitle").textContent=title;
+  document.getElementById("friendChemGood").textContent=good;
+  document.getElementById("friendChemFriction").textContent=friction;
+  document.getElementById("friendChemConclusion").textContent=conclusion;
+
+  const backdrop=document.getElementById("friendChemBackdrop");
+  if(backdrop){
+    backdrop.classList.add("show");
+    document.body.style.overflow="hidden";
+  }
+}
+
+function closeFriendChemistry(event){
+  if(event && event.target!==event.currentTarget) return;
+  const backdrop=document.getElementById("friendChemBackdrop");
+  if(backdrop) backdrop.classList.remove("show");
+  document.body.style.overflow="";
+}
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape" && document.getElementById("friendChemBackdrop")?.classList.contains("show")){
+    closeFriendChemistry();
+  }
+});
+
 function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
@@ -3237,7 +3308,12 @@ function renderRoomVisitors(){
     return `
       <div class="visitor-character visitor-svg crowd-friend${dense ? " crowd-dense" : ""}"
            style="--crowd-row:${row};--crowd-col:${col};--crowd-cols:${cols};"
-           title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%">
+           title="${escapeHtml(f.name)} · ${f.mbti} · ${f.score}%"
+           role="button" tabindex="0"
+           data-friend-index="${i}"
+           onclick="openFriendChemistry(${i})"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFriendChemistry(${i});}">
+        ${i===0 ? '<div class="friend-tap-bubble" aria-hidden="true">…</div>' : ''}
         ${svgAvatar(f.mbti,true)}
         <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`;
@@ -4935,4 +5011,84 @@ body.collection-open{
   color:#777;
   font-weight:700;
 }
+</style>
+
+<style>
+/* V9.6 — tap a friend character to reopen chemistry */
+.crowd-friend{cursor:pointer;touch-action:manipulation}
+.crowd-friend:focus-visible{outline:2px solid #111;outline-offset:2px}
+.friend-chem-backdrop{
+  position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.42);
+  display:none;align-items:center;justify-content:center;padding:20px;
+  box-sizing:border-box;
+}
+.friend-chem-backdrop.show{display:flex}
+.friend-chem-popup{
+  width:min(360px,100%);max-height:min(640px,88vh);overflow:auto;
+  position:relative;background:#fffdf7;border:1.5px solid #111;border-radius:20px;
+  box-shadow:5px 5px 0 #111;padding:18px 16px 16px;box-sizing:border-box;
+}
+.friend-chem-close{
+  position:absolute;right:12px;top:10px;width:30px;height:30px;border:0;
+  background:transparent;font-size:25px;line-height:1;cursor:pointer;color:#111;
+}
+.friend-chem-head{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+  margin-top:12px;padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,.16);
+}
+.friend-chem-name{font-size:20px;font-weight:950;letter-spacing:-.035em}
+.friend-chem-pair{font-size:8px;font-weight:800;color:#777;margin-top:3px}
+.friend-chem-score{font-size:35px;font-weight:950;letter-spacing:-.06em;white-space:nowrap}
+.friend-chem-title{font-size:16px;font-weight:950;line-height:1.35;margin:14px 0 11px}
+.friend-chem-section{
+  border-top:1px solid rgba(0,0,0,.13);padding:10px 0 7px;
+}
+.friend-chem-section b,.friend-chem-conclusion b{font-size:9px}
+.friend-chem-section p,.friend-chem-conclusion p{
+  font-size:11px;line-height:1.55;margin:4px 0 0;color:#333;font-weight:650;
+}
+.friend-chem-conclusion{
+  margin-top:7px;background:#f8dce6;border:1px solid #111;border-radius:12px;padding:11px;
+}
+</style>
+
+<style>
+/* V9.7 — one subtle tap hint on the most recent friend */
+.crowd-friend{overflow:visible!important}
+.friend-tap-bubble{
+  position:absolute;
+  left:50%;
+  top:-8px;
+  transform:translate(-50%,-100%);
+  min-width:18px;
+  height:14px;
+  padding:0 4px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:1px solid #111;
+  border-radius:8px;
+  color:#111;
+  font-size:9px;
+  line-height:1;
+  font-weight:900;
+  z-index:12;
+  pointer-events:none;
+  box-shadow:1px 1px 0 rgba(0,0,0,.12);
+}
+.friend-tap-bubble:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-4px;
+  width:5px;
+  height:5px;
+  background:#fff;
+  border-right:1px solid #111;
+  border-bottom:1px solid #111;
+  transform:translateX(-50%) rotate(45deg);
+}
+.friend-tap-bubble.seen{display:none}
 </style>
