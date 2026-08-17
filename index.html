@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.3</title>
+<title>ROOM.zip V9.4</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.3</div>
+    <div class="micro">V9.4</div>
   </div>
 
   <div class="hero-blob">
@@ -1394,7 +1394,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 <div class="collection-row owner-only" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
   <div class="collection-row-left">
-    <span class="collection-row-title">COLLECTION</span>
+    <span class="collection-row-title">★ COLLECTION CARD</span>
     <span class="collection-row-count" id="collectionCount">0 / 16 TYPES</span>
   </div>
   <div class="collection-row-right">
@@ -4811,5 +4811,27 @@ body.collection-open{
 }
 .special-card.is-unlocked .special-card-icon{
   color:#111;
+}
+</style>
+
+<style>
+/* V9.4 — COLLECTION CARD visibility upgrade only */
+.collection-row{
+  background:#f8dce6!important;
+  border:1.5px solid #111!important;
+  box-shadow:2px 2px 0 rgba(0,0,0,.08)!important;
+}
+.collection-row-title{
+  color:#111!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.035em!important;
+}
+.collection-row-count{
+  color:#635a5e!important;
+}
+.collection-row:active{
+  transform:translateY(1px)!important;
+  box-shadow:1px 1px 0 rgba(0,0,0,.08)!important;
 }
 </style>
