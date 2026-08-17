@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.1</title>
+<title>ROOM.zip V9.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.1</div>
+    <div class="micro">V9.2</div>
   </div>
 
   <div class="hero-blob">
@@ -1755,7 +1755,7 @@ async function deleteMyAccount(){
       method:"POST",
       headers:{
         "Authorization":"Bearer "+session.access_token,
-        "apikey":SUPABASE_ANON_KEY,
+        "apikey":SUPABASE_PUBLISHABLE_KEY,
         "Content-Type":"application/json"
       },
       body:"{}"
