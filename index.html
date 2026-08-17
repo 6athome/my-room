@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V10.2</title>
+<title>ROOM.zip V10.3</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V10.2</div>
+    <div class="micro">V10.3</div>
   </div>
 
   <div class="hero-blob">
@@ -1294,7 +1294,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <button class="primary" onclick="makeRoom()">내 ROOM 열어보기 ✦</button>
   <div class="existing-login-link">
     이미 계정이 있나요?
-    <button type="button" onclick="openExistingLoginPage()">로그인하기</button>
+    <a class="existing-login-anchor" href="https://roomzip.cloud/?login=1">로그인하기</a>
   </div>
 
   <p class="hint">ROOM을 만들면 이 브라우저에 자동으로 임시 저장돼요.</p>
@@ -1738,18 +1738,7 @@ function getEmailAuthFields(){
 }
 
 function openExistingLoginPage(){
-  // Do not use a fixed modal here. Kakao in-app browser is more reliable
-  // when the existing-account flow is a normal page in the document.
-  currentRemoteRoom=null;
-  VIEW_MODE="owner";
-  document.body.classList.remove("visitor-mode","chemistry-done");
-  document.body.style.overflow="";
-  document.getElementById("friendChemBackdrop")?.classList.remove("show");
-  document.getElementById("collectionBackdrop")?.classList.remove("show");
-  document.getElementById("loginModal")?.classList.remove("show");
-  go("existingLoginPage");
-  window.scrollTo(0,0);
-  setTimeout(()=>document.getElementById("existingEmail")?.focus({preventScroll:true}),80);
+  window.location.href="https://roomzip.cloud/?login=1";
 }
 
 function setExistingEmailMsg(message,isError=false){
@@ -2002,7 +1991,9 @@ async function hydrateOwnerRoom(room){
 }
 
 function showCreateHome(){
-  if(getSharedRoomSlug()) history.replaceState({}, "", window.location.pathname);
+  if(getSharedRoomSlug() || new URLSearchParams(window.location.search).get("login")==="1"){
+    history.replaceState({}, "", window.location.pathname);
+  }
   currentRemoteRoom=null;
   VIEW_MODE="owner";
   document.body.classList.remove("visitor-mode","chemistry-done");
@@ -2212,8 +2203,30 @@ async function openSharedRoomFromUrlImpl(){
   }
 }
 
+
+function isExistingLoginRoute(){
+  return new URLSearchParams(window.location.search).get("login")==="1";
+}
+
+function showExistingLoginRoute(){
+  currentRemoteRoom=null;
+  VIEW_MODE="owner";
+  document.body.classList.remove("visitor-mode","chemistry-done");
+  document.body.style.overflow="";
+  document.getElementById("friendChemBackdrop")?.classList.remove("show");
+  document.getElementById("collectionBackdrop")?.classList.remove("show");
+  document.getElementById("loginModal")?.classList.remove("show");
+  go("existingLoginPage");
+  window.scrollTo(0,0);
+}
+
 async function routeApp(){
   if(routeLock) return;
+
+  if(isExistingLoginRoute()){
+    showExistingLoginRoute();
+    return;
+  }
   routeLock=true;
   try{
     // Rule #1: a URL with ?room=... is ALWAYS a friend-visit route.
@@ -5247,5 +5260,25 @@ body:not(.visitor-mode) #loginModal.show{
 }
 .existing-kakao-login{
   margin-top:4px!important;
+}
+</style>
+
+<style>
+/* V10.3 — native navigation link for Kakao in-app browser */
+.existing-login-link .existing-login-anchor{
+  display:inline-block;
+  position:relative;
+  z-index:50;
+  margin-left:2px;
+  padding:6px 7px;
+  color:#111;
+  background:transparent;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  font-size:10px;
+  font-weight:850;
+  pointer-events:auto!important;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(0,0,0,.08);
 }
 </style>
