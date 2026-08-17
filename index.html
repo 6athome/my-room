@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.4</title>
+<title>MY ROOM V7.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.4</div>
+    <div class="micro">V7.5</div>
   </div>
 
   <div class="hero-blob">
@@ -1283,10 +1283,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     <div>
       <div class="brand"><span id="roomNameTop">JISU</span>.zip</div>
       <div class="micro" id="roomVisitMetaTop">TODAY 0 · TOTAL 0 · FRIENDS 0</div>
-<button class="collection-pill owner-only" id="collectionBtn" onclick="openCollection()">
-  COLLECTION <b id="collectionCount">0/16</b>
-  <span id="collectionNew" class="collection-new" style="display:none">NEW</span>
-</button>
 <div><span id="authUserBadge" class="auth-user-badge" style="display:none">KAKAO LOGIN</span> <span id="remoteSavedBadge" class="remote-saved-badge" style="display:none">SAVED</span></div>
       <div id="accountBadges"><span id="loginBadge" class="login-badge" style="display:none">LOGGED IN</span> <span id="savedBadge" class="saved-badge" style="display:none">SAVED</span></div>
     </div>
@@ -1361,6 +1357,18 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <div id="mbtiTraitChips"></div>
 </div>
   </div>
+
+
+<div class="collection-row owner-only" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
+  <div class="collection-row-left">
+    <span class="collection-row-title">COLLECTION</span>
+    <span class="collection-row-count" id="collectionCount">0 / 16 TYPES</span>
+  </div>
+  <div class="collection-row-right">
+    <span id="collectionNew" class="collection-new" style="display:none">NEW</span>
+    <span class="collection-chevron">›</span>
+  </div>
+</div>
 
 <div class="status-editor owner-only" id="statusEditor">
   <div class="status-editor-head">
@@ -2851,7 +2859,7 @@ function renderCollection(){
 
   const count=document.getElementById("collectionCount");
   const modalCount=document.getElementById("collectionModalCount");
-  if(count) count.textContent=`${unlocked}/16`;
+  if(count) count.textContent=`${unlocked} / 16 TYPES`;
   if(modalCount) modalCount.textContent=`${unlocked}/16`;
 
   const grid=document.getElementById("collectionGrid");
@@ -3889,6 +3897,15 @@ window.addEventListener("DOMContentLoaded",()=>{
 
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape") closeCollection();
+});
+
+
+document.addEventListener("keydown",e=>{
+  const btn=document.getElementById("collectionBtn");
+  if((e.key==="Enter" || e.key===" ") && document.activeElement===btn){
+    e.preventDefault();
+    openCollection();
+  }
 });
 
 </script>
@@ -5808,5 +5825,76 @@ body[data-room-time="night"] .basic-window-sky{
 }
 body.collection-open{
   overflow:hidden;
+}
+</style>
+
+<style>
+/* V7.5 — COLLECTION as a slim owner-management row */
+
+.collection-pill{
+  display:none!important;
+}
+
+.collection-row{
+  width:100%;
+  min-height:42px;
+  margin:8px 0;
+  padding:9px 12px;
+  border:1.5px solid #111;
+  border-radius:12px;
+  background:#fffaf0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  box-sizing:border-box;
+}
+.collection-row:active{
+  transform:translateY(1px);
+}
+.collection-row-left{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+}
+.collection-row-title{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.035em;
+}
+.collection-row-count{
+  font-size:8px;
+  color:#777;
+  font-weight:800;
+  white-space:nowrap;
+}
+.collection-row-right{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+}
+.collection-chevron{
+  font-size:18px;
+  line-height:1;
+  font-weight:700;
+}
+.collection-new{
+  padding:2px 5px;
+  border:1px solid #111;
+  border-radius:999px;
+  background:#f4c8d6;
+  color:#111;
+  font-size:6px;
+  font-weight:900;
+  line-height:1.1;
+}
+
+/* Keep the row visually attached to the status editor below it */
+.collection-row + .status-editor,
+.collection-row + #statusEditor{
+  margin-top:0!important;
 }
 </style>
