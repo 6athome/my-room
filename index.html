@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.4</title>
+<title>ROOM.zip V9.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.4</div>
+    <div class="micro">V9.5</div>
   </div>
 
   <div class="hero-blob">
@@ -1391,6 +1391,16 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 </div>
   </div>
 
+
+
+<div class="room-type-card" id="roomTypeCard">
+  <div class="room-type-head">
+    <span class="micro">MY ROOM TYPE</span>
+    <span class="room-type-code" id="roomTypeCode">ISTP · SUMMER</span>
+  </div>
+  <div class="room-type-copy" id="roomTypeCopy">혼자가 편한데 내 사람한텐 은근 잘하는 타입</div>
+  <div class="room-type-keywords" id="roomTypeKeywords">마이웨이 · 관찰형 · 은근다정</div>
+</div>
 
 <div class="collection-row owner-only" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
   <div class="collection-row-left">
@@ -3091,6 +3101,51 @@ function closeCollection(){
   document.body.classList.remove("collection-open");
 }
 
+
+const ROOM_TYPE_DATA={
+  ISTP:{SPRING:["재밌어 보이면 조용히 슬쩍 끼는 타입",["호기심","관찰형","마이웨이"]],SUMMER:["마이웨이인데 재밌으면 일단 해보는 타입",["즉흥적","마이웨이","은근다정"]],AUTUMN:["취향 확실하고 마음 맞는 사람만 가까이 두는 타입",["취향확실","관찰형","선택적친화"]],WINTER:["혼자가 편한데 내 사람한텐 은근 잘하는 타입",["담백함","독립적","은근다정"]]},
+  ISFP:{SPRING:["좋아하는 건 조용히 오래 좋아하는 타입",["감성적","취향파","다정함"]],SUMMER:["기분 좋은 건 바로 티 나고 싫은 건 슬쩍 피하는 타입",["솔직함","감성파","자유로움"]],AUTUMN:["사람보다 분위기 먼저 보는 타입",["무드중심","섬세함","취향확실"]],WINTER:["말은 적어도 마음은 은근 따뜻한 타입",["차분함","다정함","내향적"]]},
+  ESTP:{SPRING:["재밌는 냄새 나면 일단 가보는 타입",["행동파","호기심","사교적"]],SUMMER:["고민보다 일단 시작이 빠른 타입",["직진형","즉흥적","에너지"]],AUTUMN:["사람 보는 눈은 빠르고 취향도 확실한 타입",["눈치빠름","현실적","취향파"]],WINTER:["말보다 행동으로 챙기는 타입",["실용적","쿨함","은근다정"]]},
+  ESFP:{SPRING:["처음 본 사람하고도 어느새 같이 웃고 있는 타입",["사교적","밝음","친화력"]],SUMMER:["재밌는 일이 생기면 친구부터 부르는 타입",["에너지","즉흥적","사람좋아"]],AUTUMN:["사람 좋아하지만 분위기와 취향은 은근 따지는 타입",["감성파","취향확실","사교적"]],WINTER:["혼자 있고 싶다면서 결국 사람 찾는 타입",["다정함","사람좋아","감정풍부"]]},
+  INTP:{SPRING:["궁금한 건 많은데 먼저 말 걸진 않는 타입",["호기심","관찰형","생각많음"]],SUMMER:["관심 생기면 갑자기 말 많아지는 타입",["몰입형","논리적","반전매력"]],AUTUMN:["취향 얘기 시작하면 끝이 없는 타입",["덕질형","취향확실","분석형"]],WINTER:["혼자 생각하는 시간이 제일 편한 타입",["독립적","논리형","차분함"]]},
+  INFP:{SPRING:["좋아하는 것에는 마음을 아낌없이 쓰는 타입",["감성적","다정함","상상력"]],SUMMER:["친해지면 생각보다 장난 많은 타입",["반전매력","감성파","친근함"]],AUTUMN:["사람보다 분위기와 마음 결을 보는 타입",["섬세함","취향파","공감형"]],WINTER:["조용하지만 내 사람은 오래 기억하는 타입",["내향적","다정함","깊이있음"]]},
+  ENTP:{SPRING:["새로운 얘기 나오면 일단 끼고 보는 타입",["호기심","말잘함","아이디어"]],SUMMER:["재밌으면 바로 판 키우는 타입",["즉흥적","에너지","도전형"]],AUTUMN:["남들과 다른 취향을 은근 좋아하는 타입",["개성파","아이디어","취향확실"]],WINTER:["장난 많아 보여도 생각은 꽤 깊은 타입",["반전매력","논리형","독립적"]]},
+  ENFP:{SPRING:["처음 본 사람하고도 어느새 친구 돼있는 타입",["친화력","호기심","밝음"]],SUMMER:["재밌는 일이 생기면 친구부터 끌고 가는 타입",["사람좋아","즉흥적","에너지"]],AUTUMN:["사람 좋아하지만 은근 취향은 확실한 타입",["감성파","취향확실","사교적"]],WINTER:["혼자 있고 싶다가도 결국 친구 찾는 타입",["감정풍부","다정함","사람좋아"]]},
+  INTJ:{SPRING:["새로운 건 좋아하지만 내 방식대로 해보고 싶은 타입",["계획형","독립적","호기심"]],SUMMER:["결정하면 생각보다 빠르게 밀어붙이는 타입",["추진력","전략적","직진형"]],AUTUMN:["취향과 기준이 확실해서 아무거나 안 고르는 타입",["기준확실","분석형","취향파"]],WINTER:["혼자가 편하고 내 계획대로일 때 제일 안정적인 타입",["독립적","차분함","계획형"]]},
+  INFJ:{SPRING:["낯가리면서도 먼저 다가와주면 좋아하는 타입",["섬세함","다정함","관찰형"]],SUMMER:["조용해 보여도 친해지면 생각보다 잘 노는 타입",["반전매력","공감형","다정함"]],AUTUMN:["아무나 들이진 않는데 한번 친해지면 오래 가는 타입",["선택적친화","깊이있음","섬세함"]],WINTER:["혼자가 편하지만 내 사람은 제대로 챙기는 타입",["차분함","다정함","내향적"]]},
+  ENTJ:{SPRING:["새로운 일 생기면 자연스럽게 앞장서는 타입",["리더형","호기심","추진력"]],SUMMER:["일단 하자고 하고 방향까지 잡아버리는 타입",["직진형","리더형","에너지"]],AUTUMN:["사람도 일도 기준이 분명한 타입",["기준확실","전략적","현실적"]],WINTER:["표현은 짧아도 책임질 건 확실히 챙기는 타입",["책임감","독립적","단단함"]]},
+  ENFJ:{SPRING:["사람들 사이에서 자연스럽게 분위기 풀어주는 타입",["다정함","친화력","공감형"]],SUMMER:["좋은 건 같이 해야 더 재밌다고 생각하는 타입",["사람좋아","에너지","다정함"]],AUTUMN:["사람 마음은 잘 보는데 자기 취향도 확실한 타입",["공감형","취향확실","섬세함"]],WINTER:["티 안 나게 주변 사람을 잘 챙기는 타입",["배려형","차분함","책임감"]]},
+  ISTJ:{SPRING:["새로운 것도 괜찮지만 일단 계획부터 보는 타입",["계획형","현실적","신중함"]],SUMMER:["해야 할 일은 미루지 않고 끝내는 타입",["책임감","실행력","담백함"]],AUTUMN:["익숙한 것과 오래 좋아한 취향을 소중히 하는 타입",["꾸준함","취향파","신뢰형"]],WINTER:["말은 적어도 약속은 잘 지키는 타입",["신뢰형","차분함","책임감"]]},
+  ISFJ:{SPRING:["먼저 말은 안 해도 은근 주변을 잘 보고 있는 타입",["관찰형","다정함","배려형"]],SUMMER:["친한 사람한텐 생각보다 잘 맞춰주는 타입",["다정함","현실적","친화력"]],AUTUMN:["사소한 취향과 기억을 오래 간직하는 타입",["섬세함","기억력","감성파"]],WINTER:["조용히 챙기고 생색은 잘 안 내는 타입",["배려형","차분함","신뢰형"]]},
+  ESTJ:{SPRING:["약속 잡다 보면 어느새 모임 만든 사람이 되는 타입",["주도적","현실적","친화력"]],SUMMER:["일단 만나자고 하고 계획은 이미 다 세워둔 타입",["계획형","추진력","직진형"]],AUTUMN:["친구들 사이에서 은근 중심 잡고 있는 타입",["책임감","기준확실","현실적"]],WINTER:["표현은 담백한데 챙길 건 다 챙기는 타입",["책임감","담백함","신뢰형"]]},
+  ESFJ:{SPRING:["사람들 모이면 자연스럽게 먼저 챙기는 타입",["친화력","다정함","배려형"]],SUMMER:["좋은 일 있으면 다 같이 즐겨야 하는 타입",["사람좋아","에너지","친절함"]],AUTUMN:["분위기도 사람 마음도 세심하게 보는 타입",["섬세함","감성파","배려형"]],WINTER:["자기 사람에게는 꾸준히 잘하는 타입",["신뢰형","다정함","책임감"]]}
+};
+
+function getRoomSeason(birth){
+  const raw=String(birth||"");
+  const parts=raw.split("-");
+  const month=Number(parts[1]||0);
+  if([3,4,5].includes(month)) return "SPRING";
+  if([6,7,8].includes(month)) return "SUMMER";
+  if([9,10,11].includes(month)) return "AUTUMN";
+  return "WINTER";
+}
+
+function renderRoomType(){
+  const card=document.getElementById("roomTypeCard");
+  if(!card) return;
+  const mbti=String(state?.owner?.mbti||currentRemoteRoom?.mbti||"ISTP").toUpperCase();
+  const birth=state?.owner?.birth||document.getElementById("ownerBirth")?.value||"";
+  const season=getRoomSeason(birth);
+  const result=ROOM_TYPE_DATA?.[mbti]?.[season] || ["내 ROOM만의 분위기를 만들어가는 타입",["나만의취향","친구좋아","ROOM주인"]];
+  const code=document.getElementById("roomTypeCode");
+  const copy=document.getElementById("roomTypeCopy");
+  const keywords=document.getElementById("roomTypeKeywords");
+  if(code) code.textContent=`${mbti} · ${season}`;
+  if(copy) copy.textContent=result[0];
+  if(keywords) keywords.textContent=result[1].join(" · ");
+}
+
 function renderSocialSnapshot(){
   const names=document.getElementById("todayFriendNames");
   const badge=document.getElementById("newFriendBadge");
@@ -3119,6 +3174,7 @@ function renderSocialSnapshot(){
 
   renderRoomVisitors();
   renderCollection();
+  renderRoomType();
 }
 
 
@@ -4833,5 +4889,50 @@ body.collection-open{
 .collection-row:active{
   transform:translateY(1px)!important;
   box-shadow:1px 1px 0 rgba(0,0,0,.08)!important;
+}
+</style>
+
+<style>
+/* V9.5 — MY ROOM TYPE */
+.room-type-card{
+  width:100%;
+  margin:10px 0 8px;
+  padding:12px 13px 11px;
+  border:1.5px solid #111;
+  border-radius:12px;
+  background:#fffdf7;
+  box-sizing:border-box;
+}
+.room-type-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+}
+.room-type-head .micro{
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.055em;
+}
+.room-type-code{
+  font-size:7px;
+  color:#777;
+  font-weight:800;
+  white-space:nowrap;
+}
+.room-type-copy{
+  font-size:13px;
+  line-height:1.45;
+  font-weight:800;
+  letter-spacing:-.02em;
+  color:#111;
+}
+.room-type-keywords{
+  margin-top:7px;
+  font-size:8px;
+  line-height:1.4;
+  color:#777;
+  font-weight:700;
 }
 </style>
