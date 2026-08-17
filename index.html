@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.1</title>
+<title>MY ROOM V7.2</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.1</div>
+    <div class="micro">V7.2</div>
   </div>
 
   <div class="hero-blob">
@@ -2868,10 +2868,20 @@ function renderRoomVisitors(){
 
   resizeRoomForVisitorCrowd(friends.length);
 
-  // Simple rule: 10 per row, bottom row first.
   avatars.innerHTML=friends.map((f,i)=>{
-    const row=Math.floor(i/10);
-    const col=i%10;
+    let row, col;
+
+    if(i < 8){
+      // Same floor line as the owner: 4 friends left + 4 friends right.
+      const ownerRowSlots=[0,1,2,3,6,7,8,9];
+      row=0;
+      col=ownerRowSlots[i];
+    }else{
+      // Remaining friends fill complete rows above the first row.
+      const j=i-8;
+      row=1+Math.floor(j/10);
+      col=j%10;
+    }
 
     return `
       <div class="visitor-character visitor-svg crowd-friend"
@@ -2882,7 +2892,6 @@ function renderRoomVisitors(){
       </div>`;
   }).join("");
 
-  // Debug-safe count: what DB returned is exactly what we draw.
   avatars.dataset.renderedCount=String(friends.length);
 }
 
@@ -4602,14 +4611,7 @@ body[data-room-time="night"] .v66-sky{background:linear-gradient(#26334d 0 60%,#
 }
 
 /* First three rows: reserve center lane around owner */
-#visitorAvatars .crowd-friend[style*="--crowd-row:0"][style*="--crowd-col:4"],
-#visitorAvatars .crowd-friend[style*="--crowd-row:0"][style*="--crowd-col:5"],
-#visitorAvatars .crowd-friend[style*="--crowd-row:1"][style*="--crowd-col:4"],
-#visitorAvatars .crowd-friend[style*="--crowd-row:1"][style*="--crowd-col:5"],
-#visitorAvatars .crowd-friend[style*="--crowd-row:2"][style*="--crowd-col:4"],
-#visitorAvatars .crowd-friend[style*="--crowd-row:2"][style*="--crowd-col:5"]{
-  visibility:hidden!important;
-}
+
 
 /* Header/status/stat blocks remain above room layers */
 #roomStatusBubble,#roomVisitMeta,#roomVisitMetaTop{
@@ -5270,4 +5272,119 @@ body[data-room-time="night"] .basic-window-sky{
 .room-basic-window{z-index:1!important;}
 .owner-avatar-stage{z-index:35!important;}
 #visitorAvatars{z-index:50!important;}
+</style>
+
+<style>
+/* V7.2 — fix hidden friends + owner shares the floor baseline */
+
+/* There must never be a hidden friend character. */
+#roomScene #visitorAvatars .crowd-friend,
+#roomScene #visitorAvatars .crowd-friend:nth-child(n),
+#roomScene #visitorAvatars .crowd-friend[style]{
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+/* Real wood-floor baseline */
+#visitorAvatars{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  top:auto!important;
+  bottom:16px!important;
+  height:44%!important;
+  overflow:visible!important;
+  display:block!important;
+  pointer-events:none!important;
+  z-index:40!important;
+}
+
+/* Owner now stands on exactly the same floor line as friend row 0. */
+.owner-avatar-stage{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:16px!important;
+  width:118px!important;
+  height:178px!important;
+  transform:translateX(-50%)!important;
+  z-index:85!important;
+  overflow:visible!important;
+}
+
+#profileAvatarCard{
+  height:178px!important;
+  width:118px!important;
+  margin:0!important;
+}
+
+#profileAvatarCard .svg-avatar{
+  width:110px!important;
+  height:170px!important;
+  margin:0 auto!important;
+}
+
+/* Pink pedestal stays removed. */
+#profileAvatarCard:after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Authoritative friend coordinates */
+#roomScene #visitorAvatars .crowd-friend,
+#roomScene #visitorAvatars .crowd-friend:nth-child(n),
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row"]{
+  position:absolute!important;
+  top:auto!important;
+  right:auto!important;
+  left:calc((var(--crowd-col) + .5) * 10% - 20px)!important;
+  width:40px!important;
+  height:52px!important;
+  margin:0!important;
+  margin-left:0!important;
+  transform:none!important;
+
+  /* row 0 is on the floor, later rows rise behind it */
+  bottom:calc(var(--crowd-row) * 48px)!important;
+  z-index:calc(70 - var(--crowd-row))!important;
+}
+
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:0"]{
+  bottom:0!important;
+  z-index:70!important;
+}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:1"]{
+  bottom:48px!important;
+  z-index:60!important;
+}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:2"]{
+  bottom:96px!important;
+  z-index:50!important;
+}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:3"]{
+  bottom:144px!important;
+  z-index:45!important;
+}
+#roomScene #visitorAvatars .crowd-friend[style*="--crowd-row:4"]{
+  bottom:192px!important;
+  z-index:40!important;
+}
+
+/* Character itself */
+#roomScene #visitorAvatars .crowd-friend .svg-avatar{
+  position:absolute!important;
+  left:50%!important;
+  top:auto!important;
+  bottom:4px!important;
+  width:40px!important;
+  height:50px!important;
+  transform:translateX(-50%)!important;
+}
+
+/*
+  The owner's row has an empty center because the renderer uses
+  columns 0,1,2,3 and 6,7,8,9 only.
+  No friend is hidden; those center slots simply aren't assigned.
+*/
 </style>
