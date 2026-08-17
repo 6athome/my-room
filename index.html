@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V7.5</title>
+<title>MY ROOM V7.6</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V7.5</div>
+    <div class="micro">V7.6</div>
   </div>
 
   <div class="hero-blob">
@@ -2853,6 +2853,22 @@ function getCollectionCounts(){
   return counts;
 }
 
+
+const FRIEND_MILESTONES=[
+  {count:10,label:"10 FRIENDS"},
+  {count:30,label:"30 FRIENDS"},
+  {count:50,label:"50 FRIENDS"},
+  {count:100,label:"100 FRIENDS"}
+];
+
+function getFriendTotalForCollection(){
+  const total=Number(roomSocialSnapshot?.total_participants);
+  if(Number.isFinite(total) && total>=0) return total;
+  return Array.isArray(roomSocialSnapshot?.recent_friends)
+    ? roomSocialSnapshot.recent_friends.length
+    : 0;
+}
+
 function renderCollection(){
   const counts=getCollectionCounts();
   const unlocked=COLLECTION_TYPES.filter(t=>counts[t]>0).length;
@@ -2880,6 +2896,22 @@ function renderCollection(){
         </div>
       </div>`;
   }).join("");
+
+  const friendTotal=getFriendTotalForCollection();
+  const specialGrid=document.getElementById("specialGrid");
+  if(specialGrid){
+    specialGrid.innerHTML=FRIEND_MILESTONES.map(m=>{
+      const unlocked=friendTotal>=m.count;
+      const remain=Math.max(0,m.count-friendTotal);
+      return `
+        <div class="special-card ${unlocked ? "is-unlocked" : "is-locked"}">
+          <div class="special-card-icon">${unlocked ? "★" : "🔒"}</div>
+          <b>${m.label}</b>
+          <span>${unlocked ? "UNLOCKED" : remain+"명 남음"}</span>
+        </div>`;
+    }).join("");
+  }
+
 }
 
 function openCollection(){
@@ -3922,7 +3954,16 @@ document.addEventListener("keydown",e=>{
     </div>
 
     <div class="collection-grid" id="collectionGrid"></div>
-    <p class="collection-hint">친구가 새로운 MBTI로 놀러오면 카드가 열려요.</p>
+    
+<div class="special-collection">
+  <div class="special-head">
+    <span>SPECIAL</span>
+    <small>FRIENDS MILESTONE</small>
+  </div>
+  <div class="special-grid" id="specialGrid"></div>
+</div>
+<p class="collection-hint">친구가 새로운 MBTI로 놀러오면 카드가 열려요.</p>
+
   </div>
 </div>
 
@@ -5896,5 +5937,73 @@ body.collection-open{
 .collection-row + .status-editor,
 .collection-row + #statusEditor{
   margin-top:0!important;
+}
+</style>
+
+<style>
+/* V7.6 — lightweight FRIENDS milestone cards */
+.special-collection{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px dashed rgba(0,0,0,.25);
+}
+.special-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:7px;
+}
+.special-head span{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+.special-head small{
+  font-size:6px;
+  color:#888;
+  font-weight:800;
+}
+.special-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+}
+.special-card{
+  min-width:0;
+  aspect-ratio:.9;
+  padding:7px 3px 5px;
+  border:1.5px solid #111;
+  border-radius:10px;
+  background:#fff6d8;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  text-align:center;
+}
+.special-card.is-locked{
+  border-color:#bbb;
+  background:#e7e4dd;
+  color:#999;
+}
+.special-card-icon{
+  font-size:18px;
+  line-height:1;
+}
+.special-card b{
+  font-size:7px;
+  white-space:nowrap;
+}
+.special-card span{
+  font-size:5.5px;
+  line-height:1.2;
+  color:#777;
+}
+.special-card.is-unlocked{
+  box-shadow:2px 2px 0 rgba(0,0,0,.12);
+}
+.special-card.is-unlocked .special-card-icon{
+  color:#111;
 }
 </style>
