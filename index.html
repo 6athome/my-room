@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V9.9</title>
+<title>ROOM.zip V10.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V9.9</div>
+    <div class="micro">V10.0</div>
   </div>
 
   <div class="hero-blob">
@@ -1385,10 +1385,6 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
       <div class="visitor-avatars" id="visitorAvatars"></div>
     </div>
-    <div style="padding:0 14px 14px">
-<div class="mbti-one-liner" id="mbtiOneLiner"></div>
-<div id="mbtiTraitChips"></div>
-</div>
   </div>
 
 
@@ -3249,6 +3245,16 @@ document.addEventListener("keydown",event=>{
   }
 });
 
+// Mobile/Kakao WebView safety: catch a tap on the speech bubble at capture phase.
+document.addEventListener("pointerup",event=>{
+  const bubble=event.target?.closest?.(".friend-tap-bubble");
+  if(!bubble) return;
+  event.preventDefault();
+  event.stopPropagation();
+  openFriendChemistry(0);
+},{capture:true});
+
+
 function resizeRoomForVisitorCrowd(count){
   const scene=document.getElementById("roomScene");
   if(!scene) return;
@@ -5094,4 +5100,19 @@ body.collection-open{
   transform:translateX(-50%) rotate(45deg);
 }
 .friend-tap-bubble.seen{display:none}
+</style>
+
+<style>
+/* V10.0 — old MBTI description removed; MY ROOM TYPE is the single personality summary */
+
+/* The crowd container itself stays non-interactive so empty room space remains tappable,
+   but each actual friend and its hint bubble can receive taps. */
+#roomScene #visitorAvatars .crowd-friend{
+  pointer-events:auto!important;
+}
+#roomScene #visitorAvatars .friend-tap-bubble{
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  z-index:999!important;
+}
 </style>
