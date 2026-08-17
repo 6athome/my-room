@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MY ROOM V5.5</title>
+<title>MY ROOM V5.6</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1203,7 +1203,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V5.5</div>
+    <div class="micro">V5.6</div>
   </div>
 
   <div class="hero-blob">
@@ -2108,22 +2108,7 @@ async function persistRoomToSupabase(){
   const slug=currentRemoteRoom?.slug || generateAutoSlug();
   const owner=state.owner;
 
-  const copy=MBTI_ROOM_COPY[owner.mbti]||MBTI_ROOM_COPY.ISTP;
-  const statusEl=document.getElementById("roomStatusBubble");
-  if(statusEl) statusEl.textContent=state.owner.today_status ? "TODAY · "+state.owner.today_status : copy.status;
-
-  const detailA=document.getElementById("detailA");
-  const detailB=document.getElementById("detailB");
-  const detailC=document.getElementById("detailC");
-  if(detailA) detailA.innerHTML=`<b>${copy.a[0]}</b>${copy.a[1]}`;
-  if(detailB) detailB.innerHTML=`<b>${copy.b[0]}</b>${copy.b[1]}`;
-  if(detailC) detailC.innerHTML=`<b>${copy.c[0]}</b>${copy.c[1]}`;
-
-  const line=document.getElementById("mbtiOneLiner");
-  if(line) line.textContent=copy.line;
-
-  const chips=document.getElementById("mbtiTraitChips");
-  if(chips) chips.innerHTML=copy.chips.map(x=>`<span class="mbti-trait-chip">${x}</span>`).join("");
+  applyCurrentOwnerContent();
   const birth=owner.birth||document.getElementById("ownerBirth")?.value||null;
   const lucky=parseInt((birth||"2000-01-01").split("-")[2]||1,10);
 
@@ -2410,7 +2395,12 @@ function storeCurrentRoom(){
     mbti:document.getElementById("ownerMbti")?.value||state.owner.mbti||"ENFP",
     updatedAt:new Date().toISOString()
   };
-  state.owner={name:payload.name,birth:payload.birth,mbti:payload.mbti};
+  state.owner={
+    name:payload.name,
+    birth:payload.birth,
+    mbti:payload.mbti,
+    today_status:state.owner?.today_status||""
+  };
   safeSet(ROOM_STORE_KEY,JSON.stringify(payload));
   return payload;
 }
@@ -2539,7 +2529,15 @@ function makeRoom(persist=true){
   const name=(document.getElementById("ownerName").value||"JISU").trim().toUpperCase();
   const birth=document.getElementById("ownerBirth").value||"1993-08-06";
   const mbti=document.getElementById("ownerMbti").value||"ENFP";
-  state.owner={name,birth,mbti};
+
+  // This is a brand-new ROOM preview, not the ROOM the user just visited.
+  currentRemoteRoom=null;
+  loggedInOwnRoom=null;
+  history.replaceState({}, "", window.location.pathname);
+  document.body.classList.remove("visitor-mode","chemistry-done","friend-room-preview");
+
+  state.owner={name,birth,mbti,today_status:""};
+  resetRoomRuntimeForNewOwner();
   storeCurrentRoom();
   go("loading");
   setTimeout(()=>{
@@ -3056,10 +3054,72 @@ function syncBottomShare(){
   if(el) el.style.display=canShare?"grid":"none";
 }
 
+
+function applyCurrentOwnerContent(){
+  const owner=state.owner||{};
+  const mbti=owner.mbti||"ISTP";
+  const copy=MBTI_ROOM_COPY[mbti]||MBTI_ROOM_COPY.ISTP;
+
+  const statusEl=document.getElementById("roomStatusBubble");
+  if(statusEl){
+    const custom=(owner.today_status||"").trim();
+    statusEl.textContent=custom ? "TODAY · "+custom : copy.status;
+  }
+
+  const detailA=document.getElementById("detailA");
+  const detailB=document.getElementById("detailB");
+  const detailC=document.getElementById("detailC");
+  if(detailA) detailA.innerHTML=`<b>${copy.a[0]}</b>${copy.a[1]}`;
+  if(detailB) detailB.innerHTML=`<b>${copy.b[0]}</b>${copy.b[1]}`;
+  if(detailC) detailC.innerHTML=`<b>${copy.c[0]}</b>${copy.c[1]}`;
+
+  const line=document.getElementById("mbtiOneLiner");
+  if(line) line.textContent=copy.line;
+
+  const chips=document.getElementById("mbtiTraitChips");
+  if(chips) chips.innerHTML=copy.chips.map(x=>`<span class="mbti-trait-chip">${x}</span>`).join("");
+
+  const todayValue=document.getElementById("todayValue");
+  if(todayValue) todayValue.textContent=custom ? "TODAY · "+custom : copy.status;
+}
+
+function resetRoomRuntimeForNewOwner(){
+  // A newly created ROOM must never inherit visitor/social state from the ROOM just visited.
+  roomSocialSnapshot={
+    top3:[],
+    recent_friends:[],
+    today_names:[],
+    new_count:0,
+    total_participants:0
+  };
+  roomVisitCounts={today:0,total:0};
+
+  state.friends=[];
+  state.latest=null;
+
+  const avatars=document.getElementById("visitorAvatars");
+  if(avatars) avatars.innerHTML="";
+
+  const top=document.getElementById("chemistryTop3");
+  if(top) top.innerHTML='<div class="chem-empty">아직 방문한 친구가 없어요.</div>';
+
+  const names=document.getElementById("todayFriendNames");
+  if(names) names.textContent="아직 오늘 놀러온 친구가 없어요.";
+
+  const badge=document.getElementById("newFriendBadge");
+  if(badge) badge.style.display="none";
+
+  const statusEditor=document.getElementById("statusEditorBody");
+  if(statusEditor) statusEditor.style.display="none";
+
+  updateRoomCounters();
+}
+
 function renderRoom(){
   const o=state.owner;
   refreshAvatars();
   applyRoomSkin();
+  applyCurrentOwnerContent();
 
   const setText=(id,value)=>{
     const el=document.getElementById(id);
@@ -3268,6 +3328,7 @@ async function handleVisitorPrimaryCta(){
   window.__visitorChemistry=null;
 
   state.owner={name:"",birth:"",mbti:"",today_status:""};
+  resetRoomRuntimeForNewOwner();
 
   const ownerName=document.getElementById("ownerName");
   const ownerBirth=document.getElementById("ownerBirth");
