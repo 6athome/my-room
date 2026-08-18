@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V1.1</title>
+<title>ROOM.zip V1.1.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.1</div>
+    <div class="micro">V1.1.1</div>
   </div>
 
   <div class="hero-blob">
@@ -2125,8 +2125,16 @@ async function openSharedRoomFromUrlImpl(){
     try{
       const {data}=await sb.auth.getSession();
       currentAuthUser=data?.session?.user||null;
+      // V1.1.1: keep the visitor on this shared ROOM, but resolve their own ROOM
+      // so chemistry can safely link the character back to it.
+      if(currentAuthUser){
+        try{ await fetchOwnRoom(); }catch(inner){ console.warn("visitor own room lookup failed",inner); }
+      }else{
+        loggedInOwnRoom=null;
+      }
     }catch(e){
       currentAuthUser=null;
+      loggedInOwnRoom=null;
     }
 
     let room=null;
