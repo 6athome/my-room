@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V10.3</title>
+<title>ROOM.zip V10.5</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V10.3</div>
+    <div class="micro">V10.5</div>
   </div>
 
   <div class="hero-blob">
@@ -1329,7 +1329,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 
 <div id="visitorFlow" class="visitor-only"></div>
 
-<div class="room-shell owner-only">
+<div class="room-shell">
 
 <div class="owner-social-summary owner-only" id="ownerSocialSummary">
   <div>
@@ -1398,7 +1398,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
   <div class="room-type-keywords" id="roomTypeKeywords">마이웨이 · 관찰형 · 은근다정</div>
 </div>
 
-<div class="collection-row" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
+<div class="collection-row visitor-after-chemistry" id="collectionBtn" onclick="openCollection()" role="button" tabindex="0">
   <div class="collection-row-left">
     <span class="collection-row-title">★ COLLECTION CARD</span>
     <span class="collection-row-count" id="collectionCount">0 / 16 TYPES</span>
@@ -2053,6 +2053,7 @@ function buildVisitorFlowMarkup(ownerName){
       </div>
       <div class="participation-note">생년월일은 궁합 계산에만 사용되고 저장되지 않아요.</div>
       <button class="primary" style="margin-top:10px" onclick="runVisitorChemistry()">궁합 보기 →</button>
+      <div class="visitor-room-preview-hint">↓ 궁합 보기 전에도 친구 ROOM을 구경할 수 있어요</div>
     </div>
 
     <div class="visitor-result-card" id="visitorResultCard" style="display:none">
@@ -5280,5 +5281,55 @@ body:not(.visitor-mode) #loginModal.show{
   pointer-events:auto!important;
   touch-action:manipulation;
   -webkit-tap-highlight-color:rgba(0,0,0,.08);
+}
+</style>
+
+<style>
+/* V10.4 — visitors can preview the actual ROOM before chemistry */
+body.visitor-mode .room-shell{
+  display:block!important;
+  margin-top:14px!important;
+}
+
+/* Keep all owner controls hidden while exposing the room itself. */
+body.visitor-mode .room-shell .owner-only,
+body.visitor-mode #realSaveCard,
+body.visitor-mode #accountDangerZone{
+  display:none!important;
+}
+
+/* The pre-chemistry visitor already has a dedicated chemistry form above,
+   so don't duplicate the owner's ranking panel in the preview. */
+body.visitor-mode .room-shell .chemistry-card{
+  display:none!important;
+}
+
+.visitor-room-preview-hint{
+  margin-top:13px;
+  padding-top:11px;
+  border-top:1px dashed rgba(0,0,0,.22);
+  text-align:center;
+  font-size:9px;
+  line-height:1.45;
+  font-weight:750;
+  color:#777;
+}
+
+/* Make the preview feel like one continuous visitor flow. */
+body.visitor-mode #visitorFlow{
+  margin-bottom:0!important;
+}
+body.visitor-mode .room-shell .minihome-hero{
+  margin-top:0!important;
+}
+</style>
+
+<style>
+/* V10.5 — visitor pre-chemistry is only a ROOM preview */
+body.visitor-mode:not(.chemistry-done) .visitor-after-chemistry{
+  display:none!important;
+}
+body.visitor-mode.chemistry-done .visitor-after-chemistry{
+  display:flex!important;
 }
 </style>
