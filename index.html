@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V10.5</title>
+<title>ROOM.zip V1.0</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V10.5</div>
+    <div class="micro">V1.0</div>
   </div>
 
   <div class="hero-blob">
@@ -3414,7 +3414,7 @@ function renderRoomVisitors(){
            data-friend-index="${i}"
            onclick="openFriendChemistry(${i})"
            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFriendChemistry(${i});}">
-        ${i===0 ? '<button type="button" class="friend-tap-bubble" aria-label="이 친구와의 궁합 보기" onclick="event.stopPropagation();openFriendChemistry(0)">…</button>' : ''}
+        ${i===0 ? '<button type="button" class="friend-tap-bubble" aria-label="이 친구와의 궁합 보기" onclick="event.stopPropagation();openFriendChemistry(0)">click</button>' : ''}
         ${svgAvatar(f.mbti,true)}
         <div class="visitor-name">${escapeHtml(f.name)}</div>
       </div>`;
@@ -4045,6 +4045,8 @@ async function runVisitorChemistry(){
   showVisitorStayedCard(name,mbti);
 
   document.body.classList.remove("friend-room-preview");
+  const shell=document.querySelector(".room-shell");
+  if(shell) shell.style.removeProperty("display");
   const previewActions=document.getElementById("visitorPreviewActions");
   if(previewActions) previewActions.style.display="none";
   document.body.classList.add("chemistry-done");
@@ -4089,13 +4091,18 @@ function showFriendRoomAfterChemistry(){
   try{
     renderRoom();
     if(typeof renderRoomVisitors==="function") renderRoomVisitors();
+    renderCollection();
+    renderRoomType();
   }catch(e){ console.warn("friend room render failed",e); }
 
   const actions=document.getElementById("visitorPreviewActions");
   if(actions) actions.style.display="grid";
 
   const shell=document.querySelector(".room-shell");
-  if(shell) shell.scrollIntoView({behavior:"smooth",block:"start"});
+  if(shell){
+    shell.style.removeProperty("display");
+    shell.scrollIntoView({behavior:"smooth",block:"start"});
+  }
 }
 
 function showChemistryResultAgain(){
@@ -5331,5 +5338,41 @@ body.visitor-mode:not(.chemistry-done) .visitor-after-chemistry{
 }
 body.visitor-mode.chemistry-done .visitor-after-chemistry{
   display:flex!important;
+}
+</style>
+
+<style>
+/* V10.6 — visitor flow:
+   before chemistry = preview,
+   after chemistry = result only,
+   explicit "friend ROOM 다시 보기" = room visible again */
+body.visitor-mode:not(.chemistry-done) .room-shell{
+  display:block!important;
+}
+body.visitor-mode.chemistry-done:not(.friend-room-preview) .room-shell{
+  display:none!important;
+}
+body.visitor-mode.chemistry-done.friend-room-preview .room-shell{
+  display:block!important;
+}
+
+/* After chemistry, COLLECTION is available only when the friend explicitly reopens the ROOM. */
+body.visitor-mode.chemistry-done:not(.friend-room-preview) .visitor-after-chemistry{
+  display:none!important;
+}
+body.visitor-mode.chemistry-done.friend-room-preview .visitor-after-chemistry{
+  display:flex!important;
+}
+</style>
+
+<style>
+/* V1.0 release — clearer friend-character tap hint */
+.friend-tap-bubble{
+  min-width:30px!important;
+  height:15px!important;
+  padding:0 5px!important;
+  font-size:7px!important;
+  letter-spacing:.02em!important;
+  text-transform:lowercase!important;
 }
 </style>
