@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ROOM.zip V1.0</title>
+<title>ROOM.zip V1.1</title>
 <style>
 :root{
   --cream:#f7f4ed;
@@ -1236,7 +1236,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
 <section class="page active" id="landing">
   <div class="topbar">
     <div class="brand">MY ROOM</div>
-    <div class="micro">V1.0</div>
+    <div class="micro">V1.1</div>
   </div>
 
   <div class="hero-blob">
@@ -1477,6 +1477,7 @@ body.visitor-mode.chemistry-done #visitorResultCard{display:block!important}
     <div class="friend-chem-section"><b>잘 맞을 때</b><p id="friendChemGood"></p></div>
     <div class="friend-chem-section"><b>삐걱거릴 때</b><p id="friendChemFriction"></p></div>
     <div class="friend-chem-conclusion"><b>한줄 결론</b><p id="friendChemConclusion"></p></div>
+    <button type="button" class="friend-room-jump" id="friendRoomJump" style="display:none" onclick="openLinkedFriendRoom()">친구.zip 놀러가기 →</button>
   </div>
 </div>
 
@@ -3320,11 +3321,33 @@ function openFriendChemistry(index){
   document.getElementById("friendChemFriction").textContent=friction;
   document.getElementById("friendChemConclusion").textContent=conclusion;
 
+  window.__linkedFriendRoom=friend?.room_slug ? {
+    slug:String(friend.room_slug),
+    nickname:String(friend.room_nickname||friend.name||"친구")
+  } : null;
+  const jump=document.getElementById("friendRoomJump");
+  if(jump){
+    if(window.__linkedFriendRoom){
+      jump.textContent=`${window.__linkedFriendRoom.nickname}.zip 놀러가기 →`;
+      jump.style.display="block";
+    }else{
+      jump.style.display="none";
+    }
+  }
+
   const backdrop=document.getElementById("friendChemBackdrop");
   if(backdrop){
     backdrop.classList.add("show");
     document.body.style.overflow="hidden";
   }
+}
+
+function openLinkedFriendRoom(){
+  const linked=window.__linkedFriendRoom;
+  if(!linked?.slug) return;
+  document.getElementById("friendChemBackdrop")?.classList.remove("show");
+  document.body.style.overflow="";
+  window.location.href=`https://roomzip.cloud/?room=${encodeURIComponent(linked.slug)}`;
 }
 
 function closeFriendChemistry(event){
@@ -4008,7 +4031,8 @@ async function runVisitorChemistry(){
         friend_name:name,
         friend_mbti:mbti,
         friend_birth:birth,
-        score_value:baseScore
+        score_value:baseScore,
+        visitor_room:(currentAuthUser && loggedInOwnRoom?.id) ? loggedInOwnRoom.id : null
       });
       if(error) throw error;
       rankData=data;
@@ -5374,5 +5398,13 @@ body.visitor-mode.chemistry-done.friend-room-preview .visitor-after-chemistry{
   font-size:7px!important;
   letter-spacing:.02em!important;
   text-transform:lowercase!important;
+}
+</style>
+
+<style>
+.friend-room-jump{
+  width:100%;margin-top:12px;border:1.5px solid #111;border-radius:12px;
+  padding:13px 12px;background:#111;color:#fff;font-size:11px;font-weight:900;
+  cursor:pointer;touch-action:manipulation;
 }
 </style>
